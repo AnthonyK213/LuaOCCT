@@ -9,7 +9,7 @@ add_library(
 target_include_directories(
     ${PROJECT_NAME}
     PRIVATE
-    third_party/LuaBridge/Source/
+    third_party/LuaBridge3/Source/
 )
 
 target_link_libraries(
