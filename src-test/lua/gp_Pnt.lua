@@ -1,4 +1,4 @@
-package.loadlib("/home/anthony/Documents/Repo/luaocc/build/src/Debug/libluaocc.so", "init")()
+package.loadlib("../../build/src/Debug/libluaocc.so", "init")()
 
 local point = occ.gp.Pnt(4, 5, 6)
 print(point.x)
