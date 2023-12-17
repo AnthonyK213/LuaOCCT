@@ -1,0 +1,3 @@
+[submodule "src/third_party/LuaBridge"]
+	path = src/third_party/LuaBridge
+	url = https://github.com/vinniefalco/LuaBridge
