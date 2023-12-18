@@ -21,7 +21,7 @@ find_path(LUA_INCLUDE_DIR luajit.h
 )
 
 find_library(LUA_LIBRARY
-  NAMES luajit-5.1
+  NAMES luajit-5.1 lua51
   HINTS
     ENV LUA_DIR
   PATH_SUFFIXES lib

@@ -45,17 +45,7 @@ template <class T> struct ContainerTraits<opencascade::handle<T>> {
 
 } // namespace luabridge
 
-LuaOCC_Export int32_t luaocc_init(lua_State *L);
-
-LuaOCC_Export int32_t luaocc_init_AIS(lua_State *L);
-
-LuaOCC_Export int32_t luaocc_init_BRepBuilderAPI(lua_State *L);
-
-LuaOCC_Export int32_t luaocc_init_Geom(lua_State *L);
-
-LuaOCC_Export int32_t luaocc_init_TopoDS(lua_State *L);
-
-LuaOCC_Export int32_t luaocc_init_gp(lua_State *L);
+LuaOCC_Export int32_t luaopen_luaocc(lua_State *L);
 
 #undef LuaOCC_Export
 

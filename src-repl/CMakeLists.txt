@@ -9,4 +9,6 @@ target_link_libraries(
     ${PROJECT_NAME}-repl
     PRIVATE
     ${PROJECT_NAME}
+    ${OpenCASCADE_LIBRARIES}
+    ${LUA_LIBRARIES}
     )

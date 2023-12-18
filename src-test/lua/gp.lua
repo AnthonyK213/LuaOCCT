@@ -1,4 +1,6 @@
-local occ = require("luaocc")
+require("luaocc")
+
+local occ = _LuaOCC
 
 local p0 = occ.gp_Pnt(4, 5, 6)
 local p1 = occ.gp_Pnt(1, 1, 1)

@@ -11,13 +11,6 @@
 #define Bind_Property(T, G, S) addProperty(#G, &T::G, &T::S)
 #define Bind_Method(T, M) addFunction(#M, &T::M)
 
-int32_t luaocc_init(lua_State *L) {
-  luaocc_init_Geom(L);
-  luaocc_init_gp(L);
-
-  return 0;
-}
-
 int32_t luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace()
@@ -190,3 +183,10 @@ int32_t luaocc_init_gp(lua_State *L) {
 }
 
 #undef Bind_XYZ
+
+int32_t luaopen_luaocc(lua_State *L) {
+  luaocc_init_Geom(L);
+  luaocc_init_gp(L);
+
+  return 0;
+}
