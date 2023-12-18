@@ -4,6 +4,7 @@
 #include <lua.hpp>
 
 #include <LuaBridge/LuaBridge.h>
+#include <LuaBridge/Vector.h>
 
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BoundedCurve.hxx>
@@ -21,11 +22,13 @@
 #include <gp_Dir.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Pnt.hxx>
+#include <gp_Quaternion.hxx>
 #include <gp_Trsf.hxx>
 #include <gp_Vec.hxx>
 #include <gp_XYZ.hxx>
 
 #include <cstdint>
+#include <tuple>
 
 #ifdef _WIN32
 #define LuaOCC_Export extern "C" __declspec(dllexport)

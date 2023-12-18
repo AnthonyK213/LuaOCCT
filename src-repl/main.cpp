@@ -3,7 +3,7 @@
 #include <iostream>
 
 int main() {
-  std::cout << "Hello, LuaOCC!" << std::endl;
+  std::cout << "Hello, LuaOCC!\n" << std::endl;
 
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);
