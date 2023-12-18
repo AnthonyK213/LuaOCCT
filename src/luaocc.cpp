@@ -2,7 +2,7 @@
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
 
-#define Begin_Namespace() beginNamespace("_LuaOCC")
+#define Begin_Namespace() beginNamespace("LuaOCC")
 #define End_Namespace() endNamespace()
 
 #define Begin_Class(T) beginClass<T>(#T)
