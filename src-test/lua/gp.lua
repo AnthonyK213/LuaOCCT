@@ -1,5 +1,6 @@
 require("luaocc")
-local occ = LuaOCC
+local gp = LuaOCC.gp
+local Geom = LuaOCC.Geom
 
 package.path = "../../../src-test/lua/inspect.lua;" .. package.path
 local inspect = require("inspect")
@@ -38,9 +39,9 @@ end
 --------------------------------------------------------------------------------
 
 local test_gp_Trsf = make_test("gp_Trsf", function()
-  local tf = occ.gp_Trsf()
+  local tf = gp.gp_Trsf()
 
-  local axis = occ.gp_Ax1(occ.gp_Pnt(8, 1, 0), occ.gp_Dir(1, 1, 1))
+  local axis = gp.gp_Ax1(gp.gp_Pnt(8, 1, 0), gp.gp_Dir(1, 1, 1))
   local angle = math.rad(45)
 
   tf:SetRotation(axis, angle)
@@ -49,16 +50,16 @@ local test_gp_Trsf = make_test("gp_Trsf", function()
 end)
 
 local test_gp_XYZ = make_test("gp_XYZ", function()
-  local xyz0 = occ.gp_XYZ(1, 1, 4)
-  local xyz1 = occ.gp_XYZ(5, 1, 4)
+  local xyz0 = gp.gp_XYZ(1, 1, 4)
+  local xyz1 = gp.gp_XYZ(5, 1, 4)
 
   log("xyz0 * xyz1 =", xyz0 * xyz1)
   log("xyz0 * 5 =", xyz0 * 5)
 end)
 
 local test_gp_Pnt = make_test("gp_Pnt", function()
-  local p0 = occ.gp_Pnt(4, 5, 6)
-  local p1 = occ.gp_Pnt(1, 1, 1)
+  local p0 = gp.gp_Pnt(4, 5, 6)
+  local p1 = gp.gp_Pnt(1, 1, 1)
 
   log("p0 + p1 =", p0 + p1)
   log("p0 - p1 =", p0 - p1)
@@ -68,16 +69,16 @@ local test_gp_Pnt = make_test("gp_Pnt", function()
 end)
 
 local test_gp_Pln = make_test("gp_Pln", function()
-  local the_p = occ.gp_Pnt(3, 4, 5)
-  local the_v = occ.gp_Dir(6, 7, 8)
-  local a_pln = occ.gp_Pln(the_p, the_v)
+  local the_p = gp.gp_Pnt(3, 4, 5)
+  local the_v = gp.gp_Dir(6, 7, 8)
+  local a_pln = gp.gp_Pln(the_p, the_v)
 
   log("a_pln:Coefficients() =", a_pln:Coefficients())
   log("a_pln.Axis =", a_pln.Axis)
   log("a_pln.Location =", a_pln.Location)
   log("a_pln.Position =", a_pln.Position)
 
-  a_pln:SetAxis(occ.gp_Ax1(occ.gp_Pnt(0, 9, 9), occ.gp_Dir(1, 1, 1)))
+  a_pln:SetAxis(gp.gp_Ax1(gp.gp_Pnt(0, 9, 9), gp.gp_Dir(1, 1, 1)))
   log("a_pln.Axis =", a_pln.Axis.Location, a_pln.Axis.Direction)
 end)
 

@@ -2,8 +2,12 @@
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
 
-#define Begin_Namespace() beginNamespace("LuaOCC")
-#define End_Namespace() endNamespace()
+#define Begin_Namespace0() beginNamespace("LuaOCC")
+#define Begin_Namespace1(U) beginNamespace("LuaOCC").beginNamespace(#U)
+#define Begin_Namespace2(U, V) beginNamespace("LuaOCC").beginNamespace(#U).beginNamespace(#V)
+#define End_Namespace0() endNamespace()
+#define End_Namespace1() endNamespace().endNamespace()
+#define End_Namespace2() endNamespace().endNamespace().endNamespace()
 
 #define Begin_Class(T) beginClass<T>(#T)
 #define End_Class() endClass()
@@ -18,10 +22,10 @@
 
 int32_t luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(Geom)
       .Begin_Class(Geom_Curve)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   return 0;
 }
@@ -57,8 +61,7 @@ int32_t luaocc_init_Geom(lua_State *L) {
 
 int32_t luaocc_init_gp(lua_State *L) {
   LuaBridge__G(L)
-      .Begin_Namespace()
-      .beginNamespace("gp_TrsfForm")
+      .Begin_Namespace2(gp, gp_TrsfForm)
       .Bind_Enum(gp_TrsfForm, gp_Identity)
       .Bind_Enum(gp_TrsfForm, gp_Rotation)
       .Bind_Enum(gp_TrsfForm, gp_Translation)
@@ -68,12 +71,10 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Enum(gp_TrsfForm, gp_Scale)
       .Bind_Enum(gp_TrsfForm, gp_CompoundTrsf)
       .Bind_Enum(gp_TrsfForm, gp_Other)
-      .endNamespace()
-      .End_Namespace();
+      .End_Namespace2();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
-      .beginNamespace("gp")
+      .Begin_Namespace1(gp)
       .Bind_Method(gp, Resolution)
       .Bind_Method(gp, Origin)
       .Bind_Method(gp, DX)
@@ -90,51 +91,50 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Method(gp, DY2d)
       .Bind_Method(gp, OX2d)
       .Bind_Method(gp, OY2d)
-      .endNamespace()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Ax1)
       .addConstructor<void(), void(const gp_Pnt &, const gp_Dir &)>()
       .Bind_Property(gp_Ax1, Direction, SetDirection)
       .Bind_Property(gp_Ax1, Location, SetLocation)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Ax2)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Ax3)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Quaternion)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Mat)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Trsf2d)
       .addConstructor<void(), void(const gp_Trsf &)>()
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Trsf)
       .addConstructor<void(), void(const gp_Trsf2d &)>()
       .addFunction("SetMirror",
@@ -195,10 +195,10 @@ int32_t luaocc_init_gp(lua_State *L) {
                    })
       .addFunction("__mul", &gp_Trsf::Multiplied)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_XYZ)
       .addConstructor<void(),
                       void(Standard_Real, Standard_Real, Standard_Real)>()
@@ -258,10 +258,10 @@ int32_t luaocc_init_gp(lua_State *L) {
                                        const Standard_Real, const gp_XYZ &,
                                        const gp_XYZ &>(&gp_XYZ::SetLinearForm))
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Pnt)
       .addConstructor<void(), void(const gp_XYZ &),
                       void(Standard_Real, Standard_Real, Standard_Real)>()
@@ -317,10 +317,10 @@ int32_t luaocc_init_gp(lua_State *L) {
                    luabridge::overload<const gp_Pnt &, const gp_Pnt &>(
                        &gp_Pnt::Translated))
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Vec)
       .addConstructor<void(), void(const gp_Dir &), void(const gp_XYZ &),
                       void(Standard_Real, Standard_Real, Standard_Real)>()
@@ -393,10 +393,10 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Method(gp_Vec, Transform)
       .Bind_Method(gp_Vec, Transformed)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Dir)
       .addConstructor<void(), void(const gp_Vec &), void(const gp_XYZ &),
                       void(Standard_Real, Standard_Real, Standard_Real)>()
@@ -428,10 +428,10 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Method(gp_Dir, Transform)
       .Bind_Method(gp_Dir, Transformed)
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   LuaBridge__G(L)
-      .Begin_Namespace()
+      .Begin_Namespace1(gp)
       .Begin_Class(gp_Pln)
       .addConstructor<void(), void(const gp_Ax3 &),
                       void(const gp_Pnt &, const gp_Dir &),
@@ -488,7 +488,7 @@ int32_t luaocc_init_gp(lua_State *L) {
                    luabridge::overload<const gp_Pnt &, const gp_Pnt &>(
                        &gp_Pln::Translated))
       .End_Class()
-      .End_Namespace();
+      .End_Namespace1();
 
   return 0;
 }
