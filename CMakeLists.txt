@@ -48,6 +48,7 @@ message("LuaJIT-Libs: ${LUA_LIBRARIES}")
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
+  third_party/LuaBridge3/Source/
   )
 
 link_directories(

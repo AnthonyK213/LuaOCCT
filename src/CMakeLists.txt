@@ -8,12 +8,6 @@ add_library(
     ${LUAOCC_SRCS}
     )
 
-target_include_directories(
-    ${PROJECT_NAME}
-    PRIVATE
-    third_party/LuaBridge3/Source/
-)
-
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
