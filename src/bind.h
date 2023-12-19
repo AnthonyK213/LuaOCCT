@@ -6,6 +6,21 @@
 #include <LuaBridge/LuaBridge.h>
 #include <LuaBridge/Vector.h>
 
+#include <Standard.hxx>
+#include <Standard_Handle.hxx>
+
+namespace luabridge {
+
+template <class T> struct ContainerTraits<opencascade::handle<T>> {
+  using Type = T;
+
+  static opencascade::handle<T> construct(T *c) { return c; }
+
+  static T *get(const opencascade::handle<T> &c) { return c.get(); }
+};
+
+} // namespace luabridge
+
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
 
 #define Begin_Namespace0() beginNamespace("LuaOCC")

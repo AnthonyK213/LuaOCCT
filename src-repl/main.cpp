@@ -31,9 +31,9 @@ int main() {
     if (!result) {
       std::cout << result.errorMessage() << std::endl;
     } else {
-      gp_Pnt point = result[0].unsafe_cast<gp_Pnt>();
-      std::cout << point.X() << ',' << point.Y() << ',' << point.Z()
-                << std::endl;
+      for (int i = 0; i < result.size(); ++i) {
+        result[i].print(std::cout);
+      }
     }
   } catch (const luabridge::LuaException &e) {
     std::cout << e.what() << std::endl;
