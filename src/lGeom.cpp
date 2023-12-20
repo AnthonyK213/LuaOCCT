@@ -2,6 +2,17 @@
 
 int32_t luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
+      .Begin_Namespace2(Geom, GeomAbs_Shape)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_C0)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_G1)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_C1)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_G2)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_C2)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_C3)
+      .Bind_Enum(GeomAbs_Shape, GeomAbs_CN)
+      .End_Namespace2();
+
+  LuaBridge__G(L)
       .Begin_Namespace1(Geom)
       .Begin_Derive(Geom_Geometry, Standard_Transient)
       .addFunction("Mirror",
@@ -30,7 +41,7 @@ int32_t luaocc_init_Geom(lua_State *L) {
               &Geom_Geometry::Translated))
       .Bind_Method(Geom_Geometry, Transformed)
       .Bind_Method(Geom_Geometry, Copy)
-      .End_Class()
+      .End_Derive()
       .End_Namespace1();
 
   LuaBridge__G(L)
@@ -48,10 +59,43 @@ int32_t luaocc_init_Geom(lua_State *L) {
       .Bind_Method(Geom_Curve, Period)
       .Bind_Method(Geom_Curve, Continuity)
       .Bind_Method(Geom_Curve, IsCN)
-      .Bind_Method(Geom_Curve, D0)
-      .Bind_Method(Geom_Curve, D1)
-      .Bind_Method(Geom_Curve, D2)
-      .Bind_Method(Geom_Curve, D3)
+      .addFunction(
+          "D0",
+          +[](const Geom_Curve &self, const Standard_Real u) -> gp_Pnt {
+            gp_Pnt p{};
+            self.D0(u, p);
+            return p;
+          })
+      .addFunction(
+          "D1",
+          +[](const Geom_Curve &self,
+              const Standard_Real u) -> std::tuple<gp_Pnt, gp_Vec> {
+            gp_Pnt p{};
+            gp_Vec v{};
+            self.D1(u, p, v);
+            return {p, v};
+          })
+      .addFunction(
+          "D2",
+          +[](const Geom_Curve &self,
+              const Standard_Real u) -> std::tuple<gp_Pnt, gp_Vec, gp_Vec> {
+            gp_Pnt p{};
+            gp_Vec v1{};
+            gp_Vec v2{};
+            self.D2(u, p, v1, v2);
+            return {p, v1, v2};
+          })
+      .addFunction(
+          "D3",
+          +[](const Geom_Curve &self, const Standard_Real u)
+              -> std::tuple<gp_Pnt, gp_Vec, gp_Vec, gp_Vec> {
+            gp_Pnt p{};
+            gp_Vec v1{};
+            gp_Vec v2{};
+            gp_Vec v3{};
+            self.D3(u, p, v1, v2, v3);
+            return {p, v1, v2, v3};
+          })
       .Bind_Method(Geom_Curve, DN)
       .Bind_Method(Geom_Curve, Value)
       .End_Derive()

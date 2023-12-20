@@ -53,9 +53,23 @@ local test_gp_Pln = util.make_test("gp_Pln", function()
   util.log("a_pln:Distance(test_point) =", a_pln:Distance(test_point))
 end)
 
+local test_gp_Quaternion = util.make_test("gp_Quaternion", function()
+  local q0 = gp.gp_Quaternion(gp.gp_Vec(1, 1, 4), gp.gp_Vec(5, 1, 4))
+  local q1 = gp.gp_Quaternion(gp.gp_Vec(8, 8, 9), gp.gp_Vec(4, 6, 4))
+
+  local nlerp = gp.gp_QuaternionNLerp(q0, q1)
+  util.log("nlerp:Interpolate(0.5) =", nlerp:Interpolate(0.5))
+  util.log("gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5) =", gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5))
+
+  local slerp = gp.gp_QuaternionSLerp(q0, q1)
+  util.log("slerp:Interpolate(0.5) =", slerp:Interpolate(0.5))
+  util.log("gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5) =", gp.gp_QuaternionSLerp.Interpolate_(q0, q1, 0.5))
+end)
+
 --------------------------------------------------------------------------------
 
 test_gp_Trsf()
 test_gp_XYZ()
 test_gp_Pnt()
 test_gp_Pln()
+test_gp_Quaternion()

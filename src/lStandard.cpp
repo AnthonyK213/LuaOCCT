@@ -36,7 +36,7 @@ int32_t luaocc_init_Standard(lua_State *L) {
           luabridge::overload<const Handle(Standard_Type) &>(
               &Standard_Type::SubType),
           luabridge::overload<const Standard_CString>(&Standard_Type::SubType))
-      .End_Class()
+      .End_Derive()
       .End_Namespace1();
 
   return 0;
