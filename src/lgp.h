@@ -9,7 +9,7 @@
 #include <gp_Vec.hxx>
 #include <gp_XYZ.hxx>
 
-#include "bind.h"
+#include "lbind.h"
 
 int32_t luaocc_init_gp(lua_State *L);
 

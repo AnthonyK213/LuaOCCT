@@ -3,7 +3,7 @@
 int32_t luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Geom)
-      .Begin_Class(Geom_Geometry)
+      .Begin_Derive(Geom_Geometry, Standard_Transient)
       .addFunction("Mirror",
                    luabridge::overload<const gp_Pnt &>(&Geom_Geometry::Mirror),
                    luabridge::overload<const gp_Ax1 &>(&Geom_Geometry::Mirror),
@@ -88,8 +88,9 @@ int32_t luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Geom)
       .Begin_Derive(Geom_Line, Geom_Curve)
-      .addConstructor<void(const gp_Ax1 &), void(const gp_Lin &),
-                      void(const gp_Pnt &, const gp_Dir &)>()
+      .addConstructorFrom<Handle(Geom_Line), void(const gp_Ax1 &),
+                          void(const gp_Lin &),
+                          void(const gp_Pnt &, const gp_Dir &)>()
       .Bind_Property(Geom_Line, Lin, SetLin)
       .Bind_Property(Geom_Line, Position, SetPosition)
       .Bind_Method(Geom_Line, SetDirection)

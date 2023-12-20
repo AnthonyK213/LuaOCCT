@@ -9,7 +9,7 @@
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Wire.hxx>
 
-#include "bind.h"
+#include "lbind.h"
 
 int32_t luaocc_init_TopoDS(lua_State *L);
 

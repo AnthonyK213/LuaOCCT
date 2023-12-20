@@ -5,9 +5,8 @@ namespace util {
 namespace curve {
 
 static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve) {
-  GeomAdaptor_Curve aCrv(theCurve);
-  return CPnts_AbscissaPoint::Length(aCrv, aCrv.FirstParameter(),
-                                     aCrv.LastParameter());
+  return GetLength(theCurve, theCurve->FirstParameter(),
+                   theCurve->LastParameter());
 }
 
 static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,

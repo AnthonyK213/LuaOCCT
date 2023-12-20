@@ -13,15 +13,17 @@
               &T::SetCoord),                                                   \
           luabridge::overload<Standard_Integer, Standard_Real>(&T::SetCoord))  \
       .addFunction("IsEqual", &T::IsEqual)                                     \
-      .addFunction("__unm",                                                    \
-                   [](const T &self) -> T {                                    \
-                     return {-self.X(), -self.Y(), -self.Z()};                 \
-                   })                                                          \
-      .addFunction("__eq",                                                     \
-                   [](const T &self, const T &other) -> bool {                 \
-                     return self.X() == other.X() && self.Y() == other.Y() &&  \
-                            self.Z() == other.Z();                             \
-                   })                                                          \
+      .addFunction(                                                            \
+          "__unm",                                                             \
+          +[](const T &self) -> T {                                            \
+            return {-self.X(), -self.Y(), -self.Z()};                          \
+          })                                                                   \
+      .addFunction(                                                            \
+          "__eq",                                                              \
+          +[](const T &self, const T &other) -> bool {                         \
+            return self.X() == other.X() && self.Y() == other.Y() &&           \
+                   self.Z() == other.Z();                                      \
+          })                                                                   \
       .addFunction("__tostring", [](const T &self) -> std::string {            \
         std::ostringstream oss{};                                              \
         oss << #T << "{ " << self.X() << ", " << self.Y() << ", " << self.Z()  \
@@ -143,7 +145,7 @@ int32_t luaocc_init_gp(lua_State *L) {
                    luabridge::overload<>(&gp_Trsf::GetRotation))
       .addFunction(
           "GetRotationAxisAngle",
-          [](const gp_Trsf &self) -> std::tuple<gp_XYZ, Standard_Real> {
+          +[](const gp_Trsf &self) -> std::tuple<gp_XYZ, Standard_Real> {
             gp_XYZ axis{};
             Standard_Real angle{};
             self.GetRotation(axis, angle);
@@ -159,12 +161,13 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Method(gp_Trsf, PreMultiply)
       .Bind_Method(gp_Trsf, Power)
       .Bind_Method(gp_Trsf, Powered)
-      .addFunction("Transforms",
-                   [](const gp_Trsf &self) -> gp_XYZ {
-                     gp_XYZ result{};
-                     self.Transforms(result);
-                     return result;
-                   })
+      .addFunction(
+          "Transforms",
+          +[](const gp_Trsf &self) -> gp_XYZ {
+            gp_XYZ result{};
+            self.Transforms(result);
+            return result;
+          })
       .addFunction("__mul", &gp_Trsf::Multiplied)
       .End_Class()
       .End_Namespace1();
@@ -241,28 +244,30 @@ int32_t luaocc_init_gp(lua_State *L) {
       .Bind_Property(gp_Pnt, XYZ, SetXYZ)
       .addFunction(
           "__add",
-          [](const gp_Pnt &self, const gp_Pnt &other) -> gp_Pnt {
+          +[](const gp_Pnt &self, const gp_Pnt &other) -> gp_Pnt {
             return self.XYZ() + other.XYZ();
           },
-          [](const gp_Pnt &self, const gp_Vec &other) -> gp_Pnt {
+          +[](const gp_Pnt &self, const gp_Vec &other) -> gp_Pnt {
             return self.XYZ() + other.XYZ();
           })
       .addFunction(
           "__sub",
-          [](const gp_Pnt &self, const gp_Pnt &other) -> gp_Vec {
+          +[](const gp_Pnt &self, const gp_Pnt &other) -> gp_Vec {
             return self.XYZ() - other.XYZ();
           },
-          [](const gp_Pnt &self, const gp_Vec &other) -> gp_Pnt {
+          +[](const gp_Pnt &self, const gp_Vec &other) -> gp_Pnt {
             return self.XYZ() - other.XYZ();
           })
-      .addFunction("__mul",
-                   [](const gp_Pnt &self, Standard_Real t) -> gp_Pnt {
-                     return self.XYZ() * t;
-                   })
-      .addFunction("__div",
-                   [](const gp_Pnt &self, Standard_Real t) -> gp_Pnt {
-                     return self.XYZ() / t;
-                   })
+      .addFunction(
+          "__mul",
+          +[](const gp_Pnt &self, Standard_Real t) -> gp_Pnt {
+            return self.XYZ() * t;
+          })
+      .addFunction(
+          "__div",
+          +[](const gp_Pnt &self, Standard_Real t) -> gp_Pnt {
+            return self.XYZ() / t;
+          })
       .Bind_Method(gp_Pnt, BaryCenter)
       .Bind_Method(gp_Pnt, Distance)
       .Bind_Method(gp_Pnt, SquareDistance)
@@ -409,13 +414,13 @@ int32_t luaocc_init_gp(lua_State *L) {
                       void(const gp_Pnt &, const gp_Dir &),
                       void(const Standard_Real, const Standard_Real,
                            const Standard_Real, const Standard_Real)>()
-      .addFunction("Coefficients",
-                   [](const gp_Pln &self) -> std::vector<Standard_Real> {
-                     std::vector<Standard_Real> result(4);
-                     self.Coefficients(result[0], result[1], result[2],
-                                       result[3]);
-                     return result;
-                   })
+      .addFunction(
+          "Coefficients",
+          +[](const gp_Pln &self) -> std::vector<Standard_Real> {
+            std::vector<Standard_Real> result(4);
+            self.Coefficients(result[0], result[1], result[2], result[3]);
+            return result;
+          })
       .Bind_Property(gp_Pln, Axis, SetAxis)
       .Bind_Property(gp_Pln, Location, SetLocation)
       .Bind_Property(gp_Pln, Position, SetPosition)

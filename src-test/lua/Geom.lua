@@ -14,8 +14,23 @@ local test_Geom_Line = util.make_test("Geom_Line", function()
 
   util.log("a_line:Value(10) =", a_line:Value(10))
   util.log("a_line.Position =", a_line.Position)
+  util.log("a_line:Name() =", a_line:DynamicType():Name())
 
-  util.log("a_line.Length = ", curveUtil.GetLength(a_line, -10, 10))
+  util.log("a_line:GetRefCount() =", a_line:GetRefCount())
+
+  util.log("a_line.Length =", curveUtil.GetLength(a_line, -114, 514))
+  util.log("a_line:GetRefCount() =", a_line:GetRefCount())
+
+  util.log("a_line.Length =", curveUtil.GetLength(a_line, -114, 514))
+  util.log("a_line:GetRefCount() =", a_line:GetRefCount())
+
+  util.log("a_line.Length =", curveUtil.GetLength(a_line, -114, 514))
+  util.log("a_line:GetRefCount() =", a_line:GetRefCount())
+
+  util.log("a_line.Length =", curveUtil.GetLength(a_line, -114, 514))
+  util.log("a_line:GetRefCount() =", a_line:GetRefCount())
+
+  util.log("a_line.Position =", a_line.Position)
 end)
 
 test_invoke_Geom_Line = function(the_line, the_t)

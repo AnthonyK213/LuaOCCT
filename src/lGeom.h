@@ -8,7 +8,7 @@
 #include <Geom_TrimmedCurve.hxx>
 #include <gp_Lin.hxx>
 
-#include "bind.h"
+#include "lbind.h"
 
 int32_t luaocc_init_Geom(lua_State *L);
 
