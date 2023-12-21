@@ -107,6 +107,7 @@ template <class T> struct Stack<NCollection_Array1<T>> {
     const int abs_index = lua_absindex(L, index);
 
     lua_pushnil(L);
+    Standard_Integer i = 1;
 
     while (lua_next(L, abs_index) != 0) {
       auto item = Stack<T>::get(L, -1);
@@ -116,9 +117,10 @@ template <class T> struct Stack<NCollection_Array1<T>> {
         return item.error();
       }
 
-      array1.SetValue(abs_index, *item);
+      array1.SetValue(i, *item);
 
       lua_pop(L, 1);
+      i++;
     }
 
     return array1;
