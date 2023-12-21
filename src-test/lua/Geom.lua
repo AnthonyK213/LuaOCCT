@@ -2,7 +2,7 @@ require("luaocc")
 
 local Geom = LuaOCC.Geom
 local gp = LuaOCC.gp
-local curveUtil = LuaOCC.util.curve
+local curveUtil = LuaOCC.util.Curve
 
 local util = require("util")
 
@@ -13,7 +13,7 @@ local test_Geom_Line = util.make_test("Geom_Line", function()
   local a_line = Geom.Geom_Line(ax1)
 
   util.log("a_line:Value(10) =", a_line:Value(10))
-  util.log("a_line.Position =", a_line.Position)
+  util.log("a_line.Position_ =", a_line.Position_)
   util.log("a_line:Name() =", a_line:DynamicType():Name())
 
   util.log("a_line:GetRefCount() =", a_line:GetRefCount())

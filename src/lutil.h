@@ -9,7 +9,7 @@
 
 namespace luaocc {
 namespace util {
-namespace curve {
+namespace Curve {
 
 static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve);
 

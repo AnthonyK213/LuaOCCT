@@ -42,8 +42,9 @@ template <class T> struct ContainerTraits<opencascade::handle<T>> {
 #define Bind_Enum(E, V) addVariable(#V, E::V)
 
 #define Bind_Property(T, G, S)                                                 \
-  addProperty(#G, &T::G, &T::S).addFunction(#S, &T::S)
-#define Bind_Property_Readonly(T, G) addProperty(#G, &T::G)
+  addProperty(#G "_", &T::G, &T::S).addFunction(#G, &T::G).addFunction(#S, &T::S)
+#define Bind_Property_Readonly(T, G)                                           \
+  addProperty(#G "_", &T::G).addFunction(#G, &T::G)
 
 #define Bind_Method(T, M) addFunction(#M, &T::M)
 #define Bind_Method_Static(T, M) addStaticFunction(#M, &T::M)

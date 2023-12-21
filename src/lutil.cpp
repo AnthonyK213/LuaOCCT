@@ -2,7 +2,7 @@
 
 namespace luaocc {
 namespace util {
-namespace curve {
+namespace Curve {
 
 static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve) {
   return GetLength(theCurve, theCurve->FirstParameter(),
@@ -21,15 +21,17 @@ static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,
 
 int32_t luaocc_init_util(lua_State *L) {
   LuaBridge__G(L)
-      .Begin_Namespace2(util, curve)
+      .Begin_Namespace2(util, Curve)
       .addFunction(
           "GetLength",
           luabridge::overload<const Handle(Geom_Curve) &>(
-              &luaocc::util::curve::GetLength),
+              &luaocc::util::Curve::GetLength),
           luabridge::overload<const Handle(Geom_Curve) &, const Standard_Real,
                               const Standard_Real>(
-              &luaocc::util::curve::GetLength))
+              &luaocc::util::Curve::GetLength))
       .End_Namespace2();
+
+  LuaBridge__G(L).Begin_Namespace2(util, Shape).End_Namespace2();
 
   return 0;
 }

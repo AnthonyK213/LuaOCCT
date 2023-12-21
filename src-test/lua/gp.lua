@@ -42,12 +42,12 @@ local test_gp_Pln = util.make_test("gp_Pln", function()
   local a_pln = gp.gp_Pln(the_p, the_v)
 
   util.log("a_pln:Coefficients() =", a_pln:Coefficients())
-  util.log("a_pln.Axis =", a_pln.Axis)
-  util.log("a_pln.Location =", a_pln.Location)
-  util.log("a_pln.Position =", a_pln.Position)
+  util.log("a_pln.Axis_", a_pln.Axis_)
+  util.log("a_pln.Location_", a_pln.Location_)
+  util.log("a_pln.Position_", a_pln.Position_)
 
   a_pln:SetAxis(gp.gp_Ax1(gp.gp_Pnt(0, 9, 9), gp.gp_Dir(1, 1, 1)))
-  util.log("a_pln.Axis =", a_pln.Axis.Location, a_pln.Axis.Direction)
+  util.log("a_pln.Axis_", a_pln.Axis_.Location_, a_pln.Axis_.Direction_)
 
   local test_point = gp.gp_Pnt(42, 8, -9.6)
   util.log("a_pln:Distance(test_point) =", a_pln:Distance(test_point))
