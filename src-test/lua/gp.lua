@@ -1,6 +1,6 @@
-require("luaocc")
+require("luaocct")
 
-local gp = LuaOCC.gp
+local gp = LuaOCCT.gp
 
 local util = require("util")
 

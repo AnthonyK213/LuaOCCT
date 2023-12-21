@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_lStandard_Header
-#define _LuaOCC_lStandard_Header
+#ifndef _LuaOCCT_lStandard_Header
+#define _LuaOCCT_lStandard_Header
 
 #include <Standard.hxx>
 #include <Standard_Transient.hxx>
@@ -7,6 +7,6 @@
 
 #include "lbind.h"
 
-void luaocc_init_Standard(lua_State *L);
+void luaocct_init_Standard(lua_State *L);
 
 #endif

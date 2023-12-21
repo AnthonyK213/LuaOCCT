@@ -1,11 +1,11 @@
-require("luaocc")
+require("luaocct")
 
-local BRepBuilderAPI = LuaOCC.BRepBuilderAPI
-local BRep = LuaOCC.BRep
-local BRepLib = LuaOCC.BRepLib
-local Geom = LuaOCC.Geom
-local TopoDS = LuaOCC.TopoDS
-local gp = LuaOCC.gp
+local BRepBuilderAPI = LuaOCCT.BRepBuilderAPI
+local BRep = LuaOCCT.BRep
+local BRepLib = LuaOCCT.BRepLib
+local Geom = LuaOCCT.Geom
+local TopoDS = LuaOCCT.TopoDS
+local gp = LuaOCCT.gp
 
 local util = require("util")
 

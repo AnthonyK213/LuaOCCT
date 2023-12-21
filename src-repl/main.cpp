@@ -7,7 +7,7 @@
 #include <Geom_Line.hxx>
 
 int main() {
-  std::cout << "Hello, LuaOCC!\n" << std::endl;
+  std::cout << "Hello, LuaOCCT!\n" << std::endl;
 
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);

@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_lTopoDS_Header
-#define _LuaOCC_lTopoDS_Header
+#ifndef _LuaOCCT_lTopoDS_Header
+#define _LuaOCCT_lTopoDS_Header
 
 #include <TopAbs.hxx>
 #include <TopoDS.hxx>
@@ -15,6 +15,6 @@
 
 #include "lbind.h"
 
-void luaocc_init_TopoDS(lua_State *L);
+void luaocct_init_TopoDS(lua_State *L);
 
 #endif

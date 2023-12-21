@@ -1,6 +1,6 @@
 #include "lAIS.h"
 
-int32_t luaocc_init_AIS(lua_State *L) {
+int32_t luaocct_init_AIS(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(AIS)
 

@@ -1,6 +1,6 @@
 #include "lBRepBuilderAPI.h"
 
-void luaocc_init_BRepBuilderAPI(lua_State *L) {
+void luaocct_init_BRepBuilderAPI(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(BRepBuilderAPI)
 

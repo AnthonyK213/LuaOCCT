@@ -1,8 +1,8 @@
-#ifndef _LuaOCC_lgp_Header
-#define _LuaOCC_lgp_Header
+#ifndef _LuaOCCT_lgp_Header
+#define _LuaOCCT_lgp_Header
 
 #include "lbind.h"
 
-void luaocc_init_gp(lua_State *L);
+void luaocct_init_gp(lua_State *L);
 
 #endif

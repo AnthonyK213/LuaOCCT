@@ -1,6 +1,6 @@
 #include "lGeomAbs.h"
 
-void luaocc_init_GeomAbs(lua_State *L) {
+void luaocct_init_GeomAbs(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(GeomAbs)
 

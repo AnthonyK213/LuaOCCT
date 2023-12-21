@@ -1,6 +1,6 @@
 #include "lgp.h"
 
-static inline void luaocc_init_gp_Enum(lua_State *L) {
+static inline void luaocct_init_gp_Enum(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(gp)
 
@@ -71,7 +71,7 @@ static inline void luaocc_init_gp_Enum(lua_State *L) {
           "Translated", luabridge::overload<const gp_Vec &>(&T::Translated),   \
           luabridge::overload<const gp_Pnt &, const gp_Pnt &>(&T::Translated))
 
-static inline void luaocc_init_gp_AxN(lua_State *L) {
+static inline void luaocct_init_gp_AxN(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(gp)
 
@@ -167,7 +167,7 @@ static inline void luaocc_init_gp_AxN(lua_State *L) {
                               Standard_Real>(&M::Interpolate))                 \
       .End_Class()
 
-static inline void luaocc_init_gp_LA(lua_State *L) {
+static inline void luaocct_init_gp_LA(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(gp)
 
@@ -449,7 +449,7 @@ static inline void luaocc_init_gp_LA(lua_State *L) {
             return oss.str();                                                  \
           })
 
-static inline void luaocc_init_gp_XYZ(lua_State *L) {
+static inline void luaocct_init_gp_XYZ(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(gp)
 
@@ -681,7 +681,7 @@ static inline void luaocc_init_gp_XYZ(lua_State *L) {
 
 #undef Bind_XYZ
 
-static inline void luaocc_init_gp_Geom(lua_State *L) {
+static inline void luaocct_init_gp_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(gp)
 
@@ -786,10 +786,10 @@ static inline void luaocc_init_gp_Geom(lua_State *L) {
       .End_Namespace1();
 }
 
-void luaocc_init_gp(lua_State *L) {
-  luaocc_init_gp_Enum(L);
-  luaocc_init_gp_AxN(L);
-  luaocc_init_gp_LA(L);
-  luaocc_init_gp_XYZ(L);
-  luaocc_init_gp_Geom(L);
+void luaocct_init_gp(lua_State *L) {
+  luaocct_init_gp_Enum(L);
+  luaocct_init_gp_AxN(L);
+  luaocct_init_gp_LA(L);
+  luaocct_init_gp_XYZ(L);
+  luaocct_init_gp_Geom(L);
 }

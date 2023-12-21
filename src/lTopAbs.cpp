@@ -1,6 +1,6 @@
 #include "lTopAbs.h"
 
-void luaocc_init_TopAbs(lua_State *L) {
+void luaocct_init_TopAbs(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(TopAbs)
 

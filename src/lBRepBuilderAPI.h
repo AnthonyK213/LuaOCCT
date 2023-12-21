@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_lBRepBuilderAPI_Header
-#define _LuaOCC_lBRepBuilderAPI_Header
+#ifndef _LuaOCCT_lBRepBuilderAPI_Header
+#define _LuaOCCT_lBRepBuilderAPI_Header
 
 #include <BRepBuilderAPI.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
@@ -11,6 +11,6 @@
 
 #include "lbind.h"
 
-void luaocc_init_BRepBuilderAPI(lua_State *L);
+void luaocct_init_BRepBuilderAPI(lua_State *L);
 
 #endif

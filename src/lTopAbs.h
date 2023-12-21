@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_lTopAbs_Header
-#define _LuaOCC_lTopAbs_Header
+#ifndef _LuaOCCT_lTopAbs_Header
+#define _LuaOCCT_lTopAbs_Header
 
 #include <TopAbs.hxx>
 #include <TopAbs_Orientation.hxx>
@@ -8,6 +8,6 @@
 
 #include "lbind.h"
 
-void luaocc_init_TopAbs(lua_State *L);
+void luaocct_init_TopAbs(lua_State *L);
 
 #endif

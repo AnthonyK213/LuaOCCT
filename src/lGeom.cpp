@@ -1,6 +1,6 @@
 #include "lGeom.h"
 
-void luaocc_init_Geom(lua_State *L) {
+void luaocct_init_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Geom)
       .Begin_Derive(Geom_Geometry, Standard_Transient)

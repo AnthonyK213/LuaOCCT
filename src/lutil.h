@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_util_Header
-#define _LuaOCC_util_Header
+#ifndef _LuaOCCT_util_Header
+#define _LuaOCCT_util_Header
 
 #include <CPnts_AbscissaPoint.hxx>
 #include <GeomAdaptor_Curve.hxx>
@@ -7,7 +7,7 @@
 
 #include "lbind.h"
 
-namespace luaocc {
+namespace luaocct {
 namespace util {
 namespace Curve {
 
@@ -20,6 +20,6 @@ static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,
 } // namespace util
 } // namespace luaocc
 
-void luaocc_init_util(lua_State *L);
+void luaocct_init_util(lua_State *L);
 
 #endif

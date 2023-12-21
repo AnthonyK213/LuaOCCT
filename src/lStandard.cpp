@@ -1,6 +1,6 @@
 #include "lStandard.h"
 
-void luaocc_init_Standard(lua_State *L) {
+void luaocct_init_Standard(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Standard)
       .Begin_Class(Standard_Transient)

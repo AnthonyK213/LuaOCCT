@@ -1,6 +1,6 @@
 #include "lBRep.h"
 
-void luaocc_init_BRep(lua_State *L) {
+void luaocct_init_BRep(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(BRep)
 

@@ -1,8 +1,8 @@
-require("luaocc")
+require("luaocct")
 
-local Geom = LuaOCC.Geom
-local gp = LuaOCC.gp
-local curveUtil = LuaOCC.util.Curve
+local Geom = LuaOCCT.Geom
+local gp = LuaOCCT.gp
+local curveUtil = LuaOCCT.util.Curve
 
 local util = require("util")
 

@@ -1,5 +1,5 @@
-#ifndef _LuaOCC_lGeomAbs_Header
-#define _LuaOCC_lGeomAbs_Header
+#ifndef _LuaOCCT_lGeomAbs_Header
+#define _LuaOCCT_lGeomAbs_Header
 
 #include <GeomAbs_BSplKnotDistribution.hxx>
 #include <GeomAbs_CurveType.hxx>
@@ -10,6 +10,6 @@
 
 #include "lbind.h"
 
-void luaocc_init_GeomAbs(lua_State *L);
+void luaocct_init_GeomAbs(lua_State *L);
 
 #endif

@@ -1,6 +1,6 @@
 #include "lTopExp.h"
 
-void luaocc_init_TopExp(lua_State *L) {
+void luaocct_init_TopExp(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(TopExp)
 

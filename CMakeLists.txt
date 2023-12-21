@@ -5,7 +5,7 @@ if(WIN32)
 endif()
 
 project(
-  luaocc
+  luaocct
   VERSION 0.0.1
   LANGUAGES CXX
   )
