@@ -19,7 +19,7 @@ static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,
 } // namespace util
 } // namespace luaocc
 
-int32_t luaocc_init_util(lua_State *L) {
+void luaocc_init_util(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace2(util, Curve)
       .addFunction(
@@ -32,6 +32,4 @@ int32_t luaocc_init_util(lua_State *L) {
       .End_Namespace2();
 
   LuaBridge__G(L).Begin_Namespace2(util, Shape).End_Namespace2();
-
-  return 0;
 }

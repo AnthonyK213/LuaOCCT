@@ -20,6 +20,6 @@ static Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,
 } // namespace util
 } // namespace luaocc
 
-int32_t luaocc_init_util(lua_State *L);
+void luaocc_init_util(lua_State *L);
 
 #endif

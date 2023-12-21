@@ -1,6 +1,6 @@
 #include "lStandard.h"
 
-int32_t luaocc_init_Standard(lua_State *L) {
+void luaocc_init_Standard(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Standard)
       .Begin_Class(Standard_Transient)
@@ -38,6 +38,4 @@ int32_t luaocc_init_Standard(lua_State *L) {
           luabridge::overload<const Standard_CString>(&Standard_Type::SubType))
       .End_Derive()
       .End_Namespace1();
-
-  return 0;
 }

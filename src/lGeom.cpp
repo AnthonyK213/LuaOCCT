@@ -1,17 +1,6 @@
 #include "lGeom.h"
 
-int32_t luaocc_init_Geom(lua_State *L) {
-  LuaBridge__G(L)
-      .Begin_Namespace2(Geom, GeomAbs_Shape)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_C0)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_G1)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_C1)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_G2)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_C2)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_C3)
-      .Bind_Enum(GeomAbs_Shape, GeomAbs_CN)
-      .End_Namespace2();
-
+void luaocc_init_Geom(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(Geom)
       .Begin_Derive(Geom_Geometry, Standard_Transient)
@@ -141,6 +130,4 @@ int32_t luaocc_init_Geom(lua_State *L) {
       .Bind_Method(Geom_Line, SetLocation)
       .End_Derive()
       .End_Namespace1();
-
-  return 0;
 }

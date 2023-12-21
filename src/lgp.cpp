@@ -786,12 +786,10 @@ static inline void luaocc_init_gp_Geom(lua_State *L) {
       .End_Namespace1();
 }
 
-int32_t luaocc_init_gp(lua_State *L) {
+void luaocc_init_gp(lua_State *L) {
   luaocc_init_gp_Enum(L);
   luaocc_init_gp_AxN(L);
   luaocc_init_gp_LA(L);
   luaocc_init_gp_XYZ(L);
   luaocc_init_gp_Geom(L);
-
-  return 0;
 }

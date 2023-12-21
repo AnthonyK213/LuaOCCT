@@ -11,7 +11,7 @@
 #define Bind_TopoDS_Shape_Derive(C)                                            \
   Begin_Derive(TopoDS_##C, TopoDS_Shape).addConstructor<void()>().End_Derive()
 
-int32_t luaocc_init_TopoDS(lua_State *L) {
+void luaocc_init_TopoDS(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace1(TopoDS)
 
@@ -80,6 +80,4 @@ int32_t luaocc_init_TopoDS(lua_State *L) {
       .Bind_TopoDS_Shape_Derive(Compound)
 
       .End_Namespace1();
-
-  return 0;
 }

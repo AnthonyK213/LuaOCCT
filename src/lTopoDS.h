@@ -15,6 +15,6 @@
 
 #include "lbind.h"
 
-int32_t luaocc_init_TopoDS(lua_State *L);
+void luaocc_init_TopoDS(lua_State *L);
 
 #endif
