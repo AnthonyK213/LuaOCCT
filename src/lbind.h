@@ -4,17 +4,43 @@
 #include <lua.hpp>
 
 #include <LuaBridge/LuaBridge.h>
+
+#include <LuaBridge/Array.h>
 #include <LuaBridge/Vector.h>
 
 #include <Geom2d_Curve.hxx>
+#include <GeomPlate_Surface.hxx>
 #include <Geom_BSplineCurve.hxx>
+#include <Geom_BSplineSurface.hxx>
+#include <Geom_BezierCurve.hxx>
+#include <Geom_BezierSurface.hxx>
 #include <Geom_BoundedCurve.hxx>
+#include <Geom_BoundedSurface.hxx>
+#include <Geom_CartesianPoint.hxx>
+#include <Geom_Circle.hxx>
+#include <Geom_Conic.hxx>
+#include <Geom_ConicalSurface.hxx>
 #include <Geom_Curve.hxx>
+#include <Geom_CylindricalSurface.hxx>
+#include <Geom_ElementarySurface.hxx>
+#include <Geom_Ellipse.hxx>
+#include <Geom_Hyperbola.hxx>
 #include <Geom_Line.hxx>
+#include <Geom_OffsetCurve.hxx>
+#include <Geom_OffsetSurface.hxx>
+#include <Geom_Parabola.hxx>
 #include <Geom_Plane.hxx>
+#include <Geom_Point.hxx>
+#include <Geom_RectangularTrimmedSurface.hxx>
+#include <Geom_SphericalSurface.hxx>
 #include <Geom_Surface.hxx>
+#include <Geom_SurfaceOfLinearExtrusion.hxx>
+#include <Geom_SurfaceOfRevolution.hxx>
+#include <Geom_SweptSurface.hxx>
+#include <Geom_ToroidalSurface.hxx>
 #include <Geom_TrimmedCurve.hxx>
 #include <NCollection_Array1.hxx>
+#include <NCollection_Array2.hxx>
 #include <NCollection_List.hxx>
 #include <Poly_Triangle.hxx>
 #include <Poly_Triangulation.hxx>
@@ -127,6 +153,20 @@ template <class T> struct Stack<NCollection_Array1<T>> {
   }
 };
 
+template <class T> struct Stack<NCollection_Array2<T>> {
+  static Result push(lua_State *L, const NCollection_Array2<T> &array1) {
+    return {};
+  }
+
+  static TypeResult<NCollection_Array2<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    return {};
+  }
+};
+
 } // namespace luabridge
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
@@ -158,5 +198,11 @@ template <class T> struct Stack<NCollection_Array1<T>> {
 
 #define Bind_Method(T, M) addFunction(#M, &T::M)
 #define Bind_Method_Static(T, M) addStaticFunction(#M, &T::M)
+
+#define Bind_DownCast(D)                                                    \
+  addStaticFunction(                                                           \
+      "DownCast", +[](const Handle(Standard_Transient) & h) -> Handle(D) {     \
+        return Handle(D)::DownCast(h);                                         \
+      })
 
 #endif

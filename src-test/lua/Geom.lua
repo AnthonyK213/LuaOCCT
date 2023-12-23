@@ -3,6 +3,7 @@ require("luaocct")
 local Geom = LuaOCCT.Geom
 local gp = LuaOCCT.gp
 local curveUtil = LuaOCCT.util.Curve
+local GeomConvert = LuaOCCT.GeomConvert
 
 local util = require("util")
 
@@ -44,6 +45,41 @@ local test_Geom_BSplineCurve = util.make_test("Geom_BSplineCurve", function()
   util.log("a_nurbs:Multiplicities() =", a_nurbs:Multiplicities())
   util.log("a_nurbs:Weights() =", a_nurbs:Weights())
   util.log("a_nurbs:Resolution(0.5) =", a_nurbs:Resolution(0.5))
+  util.log("a_nurbs.StartPoint_ =", a_nurbs.StartPoint_)
+  util.log("a_nurbs.EndPoint_ =", a_nurbs.EndPoint_)
+  util.log("a_nurbs.FirstParameter_ =", a_nurbs.FirstParameter_)
+  util.log("a_nurbs.LastParameter_ =", a_nurbs.LastParameter_)
+
+  local poles1             = { gp.gp_Pnt(0, 1, 0), gp.gp_Pnt(-1, 1, 0), gp.gp_Pnt(-1, 0, 0) }
+  local a_nurbs1           = Geom.Geom_BSplineCurve(poles1, weights, knots, multiplicities, degree, periodic,
+    check_rational)
+
+  local poles2             = { gp.gp_Pnt(-1, 0, 0), gp.gp_Pnt(-1, -1, 0), gp.gp_Pnt(0, -1, 0) }
+  local a_nurbs2           = Geom.Geom_BSplineCurve(poles2, weights, knots, multiplicities, degree, periodic,
+    check_rational)
+
+  local poles3             = { gp.gp_Pnt(0, -1, 0), gp.gp_Pnt(1, -1, 0), gp.gp_Pnt(1, 0, 0) }
+  local a_nurbs3           = Geom.Geom_BSplineCurve(poles3, weights, knots, multiplicities, degree, periodic,
+    check_rational)
+
+  local tol                = 0.1
+
+  local result, closedFlag = unpack(GeomConvert.GeomConvert.ConcatG1({ a_nurbs, a_nurbs1, a_nurbs2, a_nurbs3 },
+    { tol, tol, tol },
+    true, tol))
+
+  util.log("GeomConvert.ConcatG1: ", result, closedFlag)
+
+  local a_nurbs_copy = a_nurbs:Copy()
+  assert(a_nurbs_copy:IsKind("Geom_BSplineCurve"))
+  assert(a_nurbs_copy:IsKind(result[1]:DynamicType()))
+
+  local a_nurbs_copy_downcast = Geom.Geom_BSplineCurve.DownCast(a_nurbs_copy)
+
+  util.log("a_nurbs_copy:GetRefCount() =", a_nurbs_copy:GetRefCount())
+  util.log("a_nurbs_copy_downcast:GetRefCount() =", a_nurbs_copy_downcast:GetRefCount())
+
+  util.log("a_nurbs_copy_downcast.Length =", curveUtil.GetLength(a_nurbs_copy_downcast))
 end)
 
 test_invoke_Geom_Line = function(the_line, the_t)
