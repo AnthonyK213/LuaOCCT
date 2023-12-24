@@ -154,7 +154,28 @@ template <class T> struct Stack<NCollection_Array1<T>> {
 };
 
 template <class T> struct Stack<NCollection_Array2<T>> {
-  static Result push(lua_State *L, const NCollection_Array2<T> &array1) {
+  static Result push(lua_State *L, const NCollection_Array2<T> &array2) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, array2.NbRows(), 0);
+
+    for (Standard_Integer i = 0; i < array2.NbRows(); ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+
+      NCollection_Array1<T> row{
+          array2(i + array2.LowerRow(), array2.LowerCol()), 1,
+          array2.RowLength()};
+
+      auto result = Stack<NCollection_Array1<T>>::push(L, row);
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
     return {};
   }
 
@@ -163,7 +184,46 @@ template <class T> struct Stack<NCollection_Array2<T>> {
       return makeErrorCode(ErrorCode::InvalidTypeCast);
     }
 
-    return {};
+    const int init_stack_size = lua_gettop(L);
+
+    const int nb_row = get_length(L, index);
+    int row_length = 0;
+    NCollection_Array2<T> array2{};
+
+    const int abs_index = lua_absindex(L, index);
+
+    lua_pushnil(L);
+    Standard_Integer i = 1;
+    Standard_Boolean is_first = Standard_True;
+
+    while (lua_next(L, abs_index) != 0) {
+      auto item = Stack<NCollection_Array1<T>>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      if (is_first) {
+        row_length = (*item).Length();
+        array2 = NCollection_Array2<T>(1, nb_row, 1, row_length);
+        is_first = Standard_False;
+      } else {
+        if (row_length != (*item).Length()) {
+          lua_pop(L, lua_gettop(L) - init_stack_size);
+          return makeErrorCode(ErrorCode::InvalidTypeCast);
+        }
+      }
+
+      for (Standard_Integer j = 1; j <= row_length; ++j) {
+        array2.SetValue(i, j, (*item)(j));
+      }
+
+      lua_pop(L, 1);
+      i++;
+    }
+
+    return array2;
   }
 };
 
@@ -199,7 +259,7 @@ template <class T> struct Stack<NCollection_Array2<T>> {
 #define Bind_Method(T, M) addFunction(#M, &T::M)
 #define Bind_Method_Static(T, M) addStaticFunction(#M, &T::M)
 
-#define Bind_DownCast(D)                                                    \
+#define Bind_DownCast(D)                                                       \
   addStaticFunction(                                                           \
       "DownCast", +[](const Handle(Standard_Transient) & h) -> Handle(D) {     \
         return Handle(D)::DownCast(h);                                         \

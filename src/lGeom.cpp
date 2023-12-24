@@ -53,11 +53,13 @@ static inline void luaocct_init_Geom_Curve(lua_State *L) {
           })
       .Bind_Method(Geom_Curve, DN)
       .Bind_Method(Geom_Curve, Value)
+      .Bind_DownCast(Geom_Curve)
       .End_Derive()
 
       .Begin_Derive(Geom_BoundedCurve, Geom_Curve)
       .Bind_Property_Readonly(Geom_BoundedCurve, EndPoint)
       .Bind_Property_Readonly(Geom_BoundedCurve, StartPoint)
+      .Bind_DownCast(Geom_BoundedCurve)
       .End_Derive()
 
       .Begin_Derive(Geom_BSplineCurve, Geom_BoundedCurve)
@@ -277,6 +279,7 @@ static inline void luaocct_init_Geom_Curve(lua_State *L) {
       .Bind_Property_Readonly(Geom_Conic, Eccentricity)
       .Bind_Property_Readonly(Geom_Conic, XAxis)
       .Bind_Property_Readonly(Geom_Conic, YAxis)
+      .Bind_DownCast(Geom_Conic)
       .End_Derive()
 
       .Begin_Derive(Geom_Circle, Geom_Conic)
@@ -380,6 +383,7 @@ static inline void luaocct_init_Geom_Point(lua_State *L) {
       .Bind_Method(Geom_Point, Pnt)
       .Bind_Method(Geom_Point, Distance)
       .Bind_Method(Geom_Point, SquareDistance)
+      .Bind_DownCast(Geom_Point)
       .End_Class()
 
       .Begin_Derive(Geom_CartesianPoint, Geom_Point)
@@ -476,49 +480,64 @@ static inline void luaocct_init_Geom_Surface(lua_State *L) {
             return {p, d1u, d1v, d2u, d2v, d2uv, d3u, d3v, d3uuv, d3uvv};
           })
       .Bind_Method(Geom_Surface, Value)
+      .Bind_DownCast(Geom_Surface)
       .End_Class()
 
       .Begin_Derive(Geom_BoundedSurface, Geom_Surface)
+      .Bind_DownCast(Geom_BoundedSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_BSplineSurface, Geom_BoundedSurface)
       // .addConstructorFrom<Handle(Geom_BSplineSurface)>()
+      .Bind_DownCast(Geom_BSplineSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_BezierSurface, Geom_BoundedSurface)
+      .Bind_DownCast(Geom_BezierSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_RectangularTrimmedSurface, Geom_BoundedSurface)
+      .Bind_DownCast(Geom_RectangularTrimmedSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_ElementarySurface, Geom_Surface)
+      .Bind_DownCast(Geom_ElementarySurface)
       .End_Derive()
 
       .Begin_Derive(Geom_ConicalSurface, Geom_ElementarySurface)
+      .Bind_DownCast(Geom_ConicalSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_CylindricalSurface, Geom_ElementarySurface)
+      .Bind_DownCast(Geom_CylindricalSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_Plane, Geom_ElementarySurface)
+      .Bind_DownCast(Geom_Plane)
       .End_Derive()
 
       .Begin_Derive(Geom_SphericalSurface, Geom_ElementarySurface)
+      .Bind_DownCast(Geom_SphericalSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_ToroidalSurface, Geom_ElementarySurface)
+      .Bind_DownCast(Geom_ToroidalSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_OffsetSurface, Geom_Surface)
+      .Bind_DownCast(Geom_OffsetSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_SweptSurface, Geom_Surface)
+      .Bind_DownCast(Geom_SweptSurface)
       .End_Derive()
 
       .Begin_Derive(Geom_SurfaceOfLinearExtrusion, Geom_SweptSurface)
+      .Bind_DownCast(Geom_SurfaceOfLinearExtrusion)
       .End_Derive()
 
       .Begin_Derive(Geom_SurfaceOfRevolution, Geom_SweptSurface)
+      .Bind_DownCast(Geom_SurfaceOfRevolution)
       .End_Derive()
 
       .End_Namespace1();
@@ -555,6 +574,7 @@ void luaocct_init_Geom(lua_State *L) {
               &Geom_Geometry::Translated))
       .Bind_Method(Geom_Geometry, Transformed)
       .Bind_Method(Geom_Geometry, Copy)
+      .Bind_DownCast(Geom_Geometry)
       .End_Derive()
 
       .End_Namespace1();

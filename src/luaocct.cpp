@@ -15,6 +15,10 @@
 
 #include "lutil.h"
 
+#ifndef NDEBUG
+#include "ltest.h"
+#endif
+
 int32_t luaopen_luaocct(lua_State *L) {
   luaocct_init_Standard(L);
 
@@ -32,6 +36,10 @@ int32_t luaopen_luaocct(lua_State *L) {
   luaocct_init_AIS(L);
 
   luaocct_init_util(L);
+
+#ifndef NDEBUG
+  luaocct_init_test(L);
+#endif
 
   return 0;
 }

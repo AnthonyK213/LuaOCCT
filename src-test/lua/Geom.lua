@@ -82,10 +82,6 @@ local test_Geom_BSplineCurve = util.make_test("Geom_BSplineCurve", function()
   util.log("a_nurbs_copy_downcast.Length =", curveUtil.GetLength(a_nurbs_copy_downcast))
 end)
 
-test_invoke_Geom_Line = function(the_line, the_t)
-  return the_line:Value(the_t)
-end
-
 --------------------------------------------------------------------------------
 
 test_Geom_Line()
