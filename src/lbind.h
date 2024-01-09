@@ -264,5 +264,10 @@ template <class T> struct Stack<NCollection_Array2<T>> {
       "DownCast", +[](const Handle(Standard_Transient) & h) -> Handle(D) {     \
         return Handle(D)::DownCast(h);                                         \
       })
+#define Bind_DownCast1(D, B)                                                   \
+  addStaticFunction(                                                           \
+      "DownCast", +[](const Handle(B) & h) -> Handle(D) {                      \
+        return Handle(D)::DownCast(h);                                         \
+      })
 
 #endif

@@ -1,9 +1,5 @@
-#ifndef _LuaOCCT_util_Header
-#define _LuaOCCT_util_Header
-
-#include <CPnts_AbscissaPoint.hxx>
-#include <GeomAdaptor_Curve.hxx>
-#include <Geom_Curve.hxx>
+#ifndef _LuaOCCT_lutil_Header
+#define _LuaOCCT_lutil_Header
 
 #include "lbind.h"
 
