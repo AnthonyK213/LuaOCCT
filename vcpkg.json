@@ -4,7 +4,8 @@
   "dependencies": [
     {
       "name": "opencascade",
-      "host": true
+      "host": true,
+      "platform": "windows"
     },
     {
       "name": "luabridge3",
