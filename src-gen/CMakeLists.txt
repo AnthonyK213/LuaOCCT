@@ -26,9 +26,9 @@ if(WIN32)
     )
 endif()
 
-add_custom_command(
-  TARGET luaocct-gen POST_BUILD
-  COMMAND $<TARGET_PROPERTY:luaocct-gen,BINARY_DIR>/$<CONFIG>/luaocct-gen
-      "${OpenCASCADE_INCLUDE_DIR}"
-      "${CMAKE_CURRENT_SOURCE_DIR}/mod_header"
-  )
+# add_custom_command(
+#   TARGET luaocct-gen POST_BUILD
+#   COMMAND $<TARGET_PROPERTY:luaocct-gen,BINARY_DIR>/$<CONFIG>/luaocct-gen
+#       "${OpenCASCADE_INCLUDE_DIR}"
+#       "${CMAKE_CURRENT_SOURCE_DIR}/mod_header"
+#   )
