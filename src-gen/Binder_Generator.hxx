@@ -3,6 +3,8 @@
 
 #include <clang-c/Index.h>
 
+#include "Binder_Cursor.hxx"
+
 #include <iostream>
 #include <string>
 #include <vector>

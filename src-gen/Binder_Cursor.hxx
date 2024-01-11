@@ -12,9 +12,17 @@ public:
 
   ~Binder_Cursor();
 
+  operator CXCursor() { return myCursor; }
+
   CXCursorKind Kind() const { return clang_getCursorKind(myCursor); }
 
   Binder_Type Type() const { return clang_getCursorType(myCursor); }
+
+  Binder_Cursor Canonical() const { return clang_getCanonicalCursor(myCursor); }
+
+  Binder_Type UnderlyingTypedefType() const {
+    return clang_getTypedefDeclUnderlyingType(myCursor);
+  }
 
   Binder_Type ReturnType() const {
     return clang_getResultType(clang_getCursorType(myCursor));
@@ -114,23 +122,13 @@ public:
 
   bool IsAnonymous() const { return clang_Cursor_isAnonymous(myCursor); }
 
-  bool IsTransient() const {
-    if (Spelling() == "Standard_Transient")
-      return true;
+  bool IsTransient() const;
 
-    // TODO: Base
+  bool IsOperator() const;
 
-    return false;
-  }
+  bool IsGetterMethod() const;
 
-  bool IsOperator() const {
-    if (IsFunction() || IsCxxMethod()) {
-      // TODO: Lua operator table
-      return true;
-    }
-
-    return false;
-  }
+  bool IsImmutable() const;
 
   Binder_Cursor Parent() const {
     return clang_getCursorSemanticParent(myCursor);
@@ -141,14 +139,51 @@ public:
   }
 
   std::vector<Binder_Cursor> Bases() const {
-    return getChildrenOfKind(CXCursor_CXXBaseSpecifier);
+    return GetChildrenOfKind(CXCursor_CXXBaseSpecifier);
   }
 
-private:
-  std::vector<Binder_Cursor> getChildren() const;
+  std::vector<Binder_Cursor> Ctors() const {
+    return GetChildrenOfKind(CXCursor_Constructor);
+  }
+
+  std::vector<Binder_Cursor> Dtors() const {
+    return GetChildrenOfKind(CXCursor_Destructor);
+  }
+
+  bool HasPublicDtor() const {
+    return !GetChildrenOfKind(CXCursor_Destructor, true).empty();
+  }
+
+  std::vector<Binder_Cursor> Enums() const {
+    return GetChildrenOfKind(CXCursor_EnumDecl);
+  }
+
+  std::vector<Binder_Cursor> Methods() const {
+    return GetChildrenOfKind(CXCursor_CXXMethod);
+  }
+
+  std::vector<Binder_Cursor> Parameters() const {
+    return GetChildrenOfKind(CXCursor_ParmDecl);
+  }
+
+  bool NeedsInOutMethod() const;
+
+  bool NeedsDefaultCtor() const;
+
+  Binder_Cursor GetDefinition() const {
+    return clang_getCursorDefinition(myCursor);
+  }
+
+  Binder_Cursor GetSpecialization() const {
+    return clang_getSpecializedCursorTemplate(myCursor);
+  }
+
+  std::vector<Binder_Cursor> GetAllBases() const;
+
+  std::vector<Binder_Cursor> GetChildren() const;
 
   std::vector<Binder_Cursor>
-  getChildrenOfKind(CXCursorKind theKind, bool thePublicOnly = false) const;
+  GetChildrenOfKind(CXCursorKind theKind, bool thePublicOnly = false) const;
 
 private:
   CXCursor myCursor;

@@ -9,4 +9,7 @@ std::string Binder_Util_GetCString(const CXString &theStr);
 
 std::string Binder_Util_GetCString(CXString &&theStr);
 
+// template<typename T>
+
+
 #endif

@@ -40,30 +40,57 @@ bool Binder_Generator::Parse() {
 }
 
 bool Binder_Generator::Generate(const std::string &theExportDir) {
-  CXCursor aCursor = clang_getTranslationUnitCursor(myTransUnit);
+  Binder_Cursor aCursor = clang_getTranslationUnitCursor(myTransUnit);
 
-  clang_visitChildren(
-      aCursor,
-      [](CXCursor theCursor, CXCursor theParent, CXClientData theClientData) {
-        CXString aCursorInfoStr = clang_getCursorSpelling(theCursor);
-        std::string aCursorInfo{clang_getCString(aCursorInfoStr)};
+  std::vector<Binder_Cursor> aClasses =
+      aCursor.GetChildrenOfKind(CXCursor_ClassDecl);
 
-        Binder_Generator *aThis =
-            static_cast<Binder_Generator *>(theClientData);
+  std::cout << ".beginNameSpace(\"LuaOCCT\")\n";
+  std::cout << ".beginNameSpace(\"" << ModName() << "\")\n\n";
 
-        if (aCursorInfo.rfind(aThis->ModName(), 0) == 0 &&
-            clang_getCursorKind(theCursor) == CXCursor_ClassDecl) {
-          std::cout << aCursorInfo << '\n';
-        }
+  for (const auto &aClass : aClasses) {
+    std::string aClassSpelling = aClass.Spelling();
 
-        clang_disposeString(aCursorInfoStr);
+    if (aClassSpelling.rfind(ModName()) != 0 || aClass.GetChildren().empty())
+      continue;
 
-        return CXChildVisit_Continue;
-      },
-      this);
+    std::cout << "-- Binding class: " << aClassSpelling << '\n';
+
+    auto aBases = aClass.Bases();
+
+    if (aBases.empty()) {
+      std::cout << ".beginClass<" << aClassSpelling << ">(\"" << aClassSpelling
+                << "\")\n";
+    } else {
+      std::cout << ".deriveClass<" << aClassSpelling << ", "
+                << aBases[0].GetDefinition().Spelling() << ">(\""
+                << aClassSpelling << "\")\n";
+    }
+
+    // Binding ctor.
+    if (aClass.IsTransient()) {
+      std::cout << ".addConstructorFrom<opencascade::handle<" << aClassSpelling
+                << ">"
+                << ">()\n";
+    } else {
+      std::cout << ".addConstructor<"
+                << ">()\n";
+    }
+
+    // Binding methods.
+
+    // Binding properties.
+
+    std::cout << ".endClass()\n";
+
+    std::cout << '\n';
+  }
+
+  std::cout << ".endNameSpace()\n";
+  std::cout << ".endNameSpace();\n";
 
   std::string theExportFilePath = theExportDir + "/l" + myModName + ".h";
-  std::cout << "Export module to: " << theExportFilePath << std::endl;
+  std::cout << "\nExport module to: " << theExportFilePath << std::endl;
 
   return true;
 }
