@@ -120,6 +120,19 @@ public:
     return clang_CXXConstructor_isDefaultConstructor(myCursor);
   }
 
+  bool IsOverride() const {
+    if (!IsVirtualMethod())
+      return false;
+
+    unsigned int nbOverridden = 0;
+    CXCursor *aCursors = nullptr;
+
+    clang_getOverriddenCursors(myCursor, &aCursors, &nbOverridden);
+    clang_disposeOverriddenCursors(aCursors);
+
+    return nbOverridden > 0;
+  }
+
   bool IsAnonymous() const { return clang_Cursor_isAnonymous(myCursor); }
 
   bool IsTransient() const;

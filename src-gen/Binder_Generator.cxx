@@ -39,58 +39,138 @@ bool Binder_Generator::Parse() {
   return true;
 }
 
+struct ClassAttachment {
+  std::string mySpelling;
+  std::ostream &myStream;
+};
+
+static bool generateCtor(const Binder_Cursor &theClass,
+                         std::ostream &theStream) {
+  std::string aClassSpelling = theClass.Spelling();
+  int anIndex = 0;
+
+  if (theClass.IsTransient()) {
+    theStream << ".addConstructorFrom<opencascade::handle<" << aClassSpelling
+              << ">";
+    anIndex++;
+  } else {
+    theStream << ".addConstructor<";
+  }
+
+  if (theClass.NeedsDefaultCtor()) {
+    if (anIndex > 0) {
+      theStream << ", ";
+    }
+
+    theStream << "void()";
+    anIndex++;
+  }
+
+  std::vector<Binder_Cursor> aCtors =
+      theClass.GetChildrenOfKind(CXCursor_Constructor, true);
+
+  for (const auto &aCtor : aCtors) {
+    if (anIndex > 0) {
+      theStream << ", ";
+    }
+
+    theStream << "void()";
+    anIndex++;
+  }
+
+  theStream << ">()\n";
+
+  return true;
+}
+
+static bool isIgnoredMethod(const Binder_Cursor &theMethod) {
+  if (theMethod.IsOverride())
+    return true;
+
+  std::string aFuncSpelling = theMethod.Spelling();
+
+  if (aFuncSpelling == "DumpJson" || aFuncSpelling == "get_type_name" ||
+      aFuncSpelling == "get_type_descriptor") {
+    return true;
+  }
+
+  // TODO: Operator overload
+
+  return false;
+}
+
+static bool generateMethods(const Binder_Cursor &theClass,
+                            std::ostream &theStream) {
+  std::string aClassSpelling = theClass.Spelling();
+  std::vector<Binder_Cursor> aMethods =
+      theClass.GetChildrenOfKind(CXCursor_CXXMethod, true);
+
+  for (const auto &aMethod : aMethods) {
+    std::string aFuncSpelling = aMethod.Spelling();
+
+    if (isIgnoredMethod(aMethod))
+      continue;
+
+    theStream << ".addFunction(\"" << aFuncSpelling << "\", &" << aClassSpelling
+              << "::" << aFuncSpelling << ")\n";
+  }
+
+  if (theClass.IsTransient()) {
+    theStream << ".addStaticFunction(\"DownCast\", +[](const "
+                 "Handle(Standard_Transient) &h) { return Handle("
+              << aClassSpelling << ")::DownCast(h); })\n";
+  }
+
+  return true;
+}
+
+static bool generateClass(const Binder_Cursor &theClass,
+                          std::ostream &theStream) {
+  std::string aClassSpelling = theClass.Spelling();
+  theStream << "-- Binding class: " << aClassSpelling << '\n';
+  std::vector<Binder_Cursor> aBases = theClass.Bases();
+
+  if (aBases.empty()) {
+    theStream << ".beginClass<" << aClassSpelling << ">(\"" << aClassSpelling
+              << "\")\n";
+  } else {
+    theStream << ".deriveClass<" << aClassSpelling << ", "
+              << aBases[0].GetDefinition().Spelling() << ">(\""
+              << aClassSpelling << "\")\n";
+  }
+
+  generateCtor(theClass, theStream);
+  generateMethods(theClass, theStream);
+
+  theStream << ".endClass()\n\n";
+
+  return true;
+}
+
 bool Binder_Generator::Generate(const std::string &theExportDir) {
   Binder_Cursor aCursor = clang_getTranslationUnitCursor(myTransUnit);
+  std::ostream &aStream = std::cout;
 
   std::vector<Binder_Cursor> aClasses =
       aCursor.GetChildrenOfKind(CXCursor_ClassDecl);
 
-  std::cout << ".beginNameSpace(\"LuaOCCT\")\n";
-  std::cout << ".beginNameSpace(\"" << ModName() << "\")\n\n";
+  aStream << ".beginNameSpace(\"LuaOCCT\")\n";
+  aStream << ".beginNameSpace(\"" << myModName << "\")\n\n";
 
   for (const auto &aClass : aClasses) {
     std::string aClassSpelling = aClass.Spelling();
 
-    if (aClassSpelling.rfind(ModName()) != 0 || aClass.GetChildren().empty())
+    if (aClassSpelling.rfind(myModName, 0) != 0 || aClass.GetChildren().empty())
       continue;
 
-    std::cout << "-- Binding class: " << aClassSpelling << '\n';
-
-    auto aBases = aClass.Bases();
-
-    if (aBases.empty()) {
-      std::cout << ".beginClass<" << aClassSpelling << ">(\"" << aClassSpelling
-                << "\")\n";
-    } else {
-      std::cout << ".deriveClass<" << aClassSpelling << ", "
-                << aBases[0].GetDefinition().Spelling() << ">(\""
-                << aClassSpelling << "\")\n";
-    }
-
-    // Binding ctor.
-    if (aClass.IsTransient()) {
-      std::cout << ".addConstructorFrom<opencascade::handle<" << aClassSpelling
-                << ">"
-                << ">()\n";
-    } else {
-      std::cout << ".addConstructor<"
-                << ">()\n";
-    }
-
-    // Binding methods.
-
-    // Binding properties.
-
-    std::cout << ".endClass()\n";
-
-    std::cout << '\n';
+    generateClass(aClass, std::cout);
   }
 
-  std::cout << ".endNameSpace()\n";
-  std::cout << ".endNameSpace();\n";
+  aStream << ".endNameSpace()\n";
+  aStream << ".endNameSpace();\n";
 
   std::string theExportFilePath = theExportDir + "/l" + myModName + ".h";
-  std::cout << "\nExport module to: " << theExportFilePath << std::endl;
+  aStream << "\nExport module to: " << theExportFilePath << std::endl;
 
   return true;
 }
