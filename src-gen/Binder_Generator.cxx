@@ -74,7 +74,20 @@ static bool generateCtor(const Binder_Cursor &theClass,
       theStream << ", ";
     }
 
-    theStream << "void()";
+    theStream << "void(";
+
+    std::vector<Binder_Cursor> aParams = aCtor.Parameters();
+
+    int anIdx = 0;
+    for (const auto &aParam : aParams) {
+      if (anIdx > 0)
+        theStream << ", ";
+
+      theStream << aParam.Type().Spelling();
+      anIdx++;
+    }
+
+    theStream << ")";
     anIndex++;
   }
 
@@ -127,7 +140,7 @@ static bool generateMethods(const Binder_Cursor &theClass,
 static bool generateClass(const Binder_Cursor &theClass,
                           std::ostream &theStream) {
   std::string aClassSpelling = theClass.Spelling();
-  theStream << "-- Binding class: " << aClassSpelling << '\n';
+  theStream << "-- Class: " << aClassSpelling << '\n';
   std::vector<Binder_Cursor> aBases = theClass.Bases();
 
   if (aBases.empty()) {
