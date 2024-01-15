@@ -59,7 +59,9 @@ bool Binder_Cursor::IsImmutable() const {
 bool Binder_Cursor::NeedsInOutMethod() const {
   for (auto &p : Parameters()) {
     Binder_Type aType = p.Type();
-    if (IsImmutable() && !aType.IsConstQualified() && aType.IsPointerLike()) {
+
+    if (/*p.IsImmutable() &&*/ !aType.IsConstQualified() &&
+        aType.IsPointerLike()) {
       return true;
     }
   }
@@ -71,17 +73,19 @@ bool Binder_Cursor::NeedsDefaultCtor() const {
   if (IsAbstract())
     return false;
 
-  std::vector<Binder_Cursor> anAllBases = GetAllBases();
-  anAllBases.push_back(*this);
+  return Ctors().empty();
 
-  for (const auto &anItem : anAllBases) {
-    Binder_Cursor aDef = anItem.GetDefinition();
+  // std::vector<Binder_Cursor> anAllBases = GetAllBases();
+  // anAllBases.push_back(*this);
 
-    if (!aDef.Ctors().empty())
-      return false;
-  }
+  // for (const auto &anItem : anAllBases) {
+  //   Binder_Cursor aDef = anItem.GetDefinition();
 
-  return true;
+  //   if (!aDef.Ctors().empty())
+  //     return false;
+  // }
+
+  // return true;
 }
 
 static void getBases(const Binder_Cursor &theCursor,

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <fstream>
 #include <iterator>
+#include <map>
+#include <vector>
 
 Binder_Module::Binder_Module(const std::string &theName,
                              Binder_Generator &theParent)
@@ -56,6 +58,13 @@ static bool generateCtor(const Binder_Cursor &theClass,
     return true;
 
   std::string aClassSpelling = theClass.Spelling();
+
+  std::vector<Binder_Cursor> aCtors =
+      theClass.GetChildrenOfKind(CXCursor_Constructor, true);
+
+  if (aCtors.empty())
+    return true;
+
   int anIndex = 0;
 
   if (theClass.IsTransient()) {
@@ -74,9 +83,6 @@ static bool generateCtor(const Binder_Cursor &theClass,
     theStream << "void()";
     anIndex++;
   }
-
-  std::vector<Binder_Cursor> aCtors =
-      theClass.GetChildrenOfKind(CXCursor_Constructor, true);
 
   for (const auto &aCtor : aCtors) {
     if (anIndex > 0) {
@@ -106,10 +112,19 @@ static bool generateCtor(const Binder_Cursor &theClass,
 }
 
 static bool isIgnoredMethod(const Binder_Cursor &theMethod) {
-  if (theMethod.IsOverride())
+  if (theMethod.IsOverride() || !theMethod.IsPublic() ||
+      theMethod.IsFunctionTemplate())
+    return true;
+
+  // TODO: IN/OUT parameter
+  if (theMethod.NeedsInOutMethod())
     return true;
 
   std::string aFuncSpelling = theMethod.Spelling();
+
+  // FIXME: Poly_Trangulation::createNewEntity??????????
+  if (!std::isupper(aFuncSpelling.c_str()[0]))
+    return true;
 
   if (aFuncSpelling == "DumpJson" || aFuncSpelling == "get_type_name" ||
       aFuncSpelling == "get_type_descriptor") {
@@ -128,16 +143,64 @@ static bool generateMethods(const Binder_Cursor &theClass,
                             std::ostream &theStream) {
   std::string aClassSpelling = theClass.Spelling();
   std::vector<Binder_Cursor> aMethods =
-      theClass.GetChildrenOfKind(CXCursor_CXXMethod, true);
+      theClass.GetChildrenOfKind(CXCursor_CXXMethod);
+
+  std::map<std::string, std::vector<Binder_Cursor>> aGroups{};
+  std::map<std::string, int> aOverloads{};
 
   for (const auto &aMethod : aMethods) {
     std::string aFuncSpelling = aMethod.Spelling();
 
-    if (isIgnoredMethod(aMethod))
+    if (aGroups.find(aFuncSpelling) != aGroups.end()) {
+      if (!isIgnoredMethod(aMethod)) {
+        aGroups[aFuncSpelling].push_back(aMethod);
+      }
+    } else {
+      aOverloads.insert({aFuncSpelling, 0});
+
+      if (!isIgnoredMethod(aMethod)) {
+        aGroups.insert({aFuncSpelling, std::vector<Binder_Cursor>{aMethod}});
+      }
+    }
+
+    aOverloads[aFuncSpelling]++;
+  }
+
+  for (auto anIter = aGroups.cbegin(); anIter != aGroups.cend(); ++anIter) {
+    const std::vector<Binder_Cursor> aMethodGroup = anIter->second;
+    const int aOverload = aOverloads[anIter->first];
+
+    if (aMethodGroup.empty())
       continue;
 
-    theStream << ".addFunction(\"" << aFuncSpelling << "\", &" << aClassSpelling
-              << "::" << aFuncSpelling << ")\n";
+    std::string anBindFunc =
+        aMethodGroup[0].IsStaticMethod() ? "addStaticFunction" : "addFunction";
+
+    theStream << '.' << anBindFunc << "(\"" << anIter->first << "\", ";
+
+    if (aMethodGroup.size() == 1 && aOverload == 1) {
+      theStream << '&' << aClassSpelling << "::" << anIter->first;
+    } else {
+      for (int anIdx = 0; anIdx < aMethodGroup.size(); ++anIdx) {
+        if (anIdx > 0)
+          theStream << ", ";
+
+        theStream << "luabridge::overload<";
+
+        std::vector<Binder_Cursor> aParams = aMethodGroup[anIdx].Parameters();
+
+        for (int anI = 0; anI < aParams.size(); ++anI) {
+          if (anI > 0)
+            theStream << ", ";
+
+          theStream << aParams[anI].Type().Spelling();
+        }
+
+        theStream << ">(&" << aClassSpelling << "::" << anIter->first << ')';
+      }
+    }
+
+    theStream << ")\n";
   }
 
   if (theClass.IsTransient()) {
@@ -197,6 +260,9 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   for (const auto &aClass : aClasses) {
     std::string aClassSpelling = aClass.Spelling();
 
+    if (aClassSpelling.rfind(myName, 0) != 0)
+      continue;
+
     if (aClassSpelling.rfind("Handle", 0) == 0)
       continue;
 
@@ -204,6 +270,18 @@ bool Binder_Module::generate(const std::string &theExportDir) {
       continue;
 
     if (aClassSpelling.rfind("TCol", 0) == 0)
+      continue;
+
+    if (aClassSpelling.find("Sequence") != std::string::npos)
+      continue;
+
+    if (aClassSpelling.find("Array") != std::string::npos)
+      continue;
+
+    if (aClassSpelling.find("List") != std::string::npos)
+      continue;
+
+    if (aClassSpelling == "Standard")
       continue;
 
     if (aClass.GetChildren().empty())

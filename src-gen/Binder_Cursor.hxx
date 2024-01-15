@@ -84,7 +84,9 @@ public:
 
   bool IsTypeRef() const { return Kind() == CXCursor_TypeRef; }
 
-  bool IsPublic() const { return !(IsPrivate() || IsProtected()); }
+  bool IsPublic() const {
+    return clang_getCXXAccessSpecifier(myCursor) == CX_CXXPublic;
+  }
 
   bool IsPrivate() const {
     return clang_getCXXAccessSpecifier(myCursor) == CX_CXXPrivate;

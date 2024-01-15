@@ -18,9 +18,13 @@ int main(int argc, char const *argv[]) {
   //                                        "-DWIN32",
   //                                        "-D_WINDOWS"};
 
+  // std::vector<std::string> aLinuxArgs = {"-fpermissive",
+  // "-fvisibility=hidden",
+  //                                        "-fvisibility-inlines-hidden"};
+
   aGenerator.SetModDir(argv[2])
       .SetOcctIncDir(argv[1])
-      .SetClangArgs({"-x", "c++", "-std=c++11", "-D__CODE_GENERATOR__",
+      .SetClangArgs({"-x", "c++", "-std=c++17", "-D__CODE_GENERATOR__",
                      "-Wno-deprecated-declarations", "-ferror-limit=0",
                      "-DCSFDB", "-DHAVE_CONFIG_H"})
       .SetExportDir(argv[3]);

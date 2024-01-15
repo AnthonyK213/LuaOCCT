@@ -33,7 +33,7 @@ public:
 
   bool IsRvalue() const { return Kind() == CXType_RValueReference; }
 
-  bool IsPointerLike() const { return IsPointer() && IsLvalue() && IsRvalue(); }
+  bool IsPointerLike() const { return IsPointer() || IsLvalue() || IsRvalue(); }
 
   bool IsArrayLike() const {
     return Kind() == CXType_ConstantArray || Kind() == CXType_IncompleteArray ||
