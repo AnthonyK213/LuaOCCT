@@ -4,6 +4,7 @@
 #include <clang-c/Index.h>
 
 #include "Binder_Cursor.hxx"
+#include "Binder_Module.hxx"
 
 #include <iostream>
 #include <string>
@@ -15,20 +16,21 @@ public:
 
   ~Binder_Generator();
 
-  Binder_Generator &SetModName(const std::string &theModName) {
-    myModName = theModName;
-    return *this;
-  }
+  const std::string &ModDir() const { return myModDir; }
 
   Binder_Generator &SetModDir(const std::string &theModDir) {
     myModDir = theModDir;
     return *this;
   }
 
+  const std::string &OcctIncDir() const { return myOcctIncDir; }
+
   Binder_Generator &SetOcctIncDir(const std::string &theOcctIncDir) {
     myOcctIncDir = theOcctIncDir;
     return *this;
   }
+
+  const std::vector<std::string> &IncludeDirs() const { return myIncludeDirs; }
 
   Binder_Generator &
   SetIncludeDirs(const std::vector<std::string> &theIncludeDirs) {
@@ -36,12 +38,18 @@ public:
     return *this;
   }
 
+  const std::vector<std::string> &ClangArgs() const { return myClangArgs; }
+
   Binder_Generator &SetClangArgs(const std::vector<std::string> &theClangArgs) {
     myClangArgs = theClangArgs;
     return *this;
   }
 
-  const std::string &ModName() const { return myModName; }
+  const std::shared_ptr<Binder_Module> &Module() const { return myCurMod; }
+
+  void SetModule(const std::shared_ptr<Binder_Module> &theModule) {
+    myCurMod = theModule;
+  }
 
   bool Parse();
 
@@ -52,17 +60,12 @@ public:
   bool Load(const std::string &theFilePath);
 
 private:
-  void Dispose();
-
-private:
-  std::string myModName{};
   std::string myModDir{};
   std::string myOcctIncDir{};
   std::vector<std::string> myIncludeDirs{};
   std::vector<std::string> myClangArgs{};
 
-  CXIndex myIndex;
-  CXTranslationUnit myTransUnit;
+  std::shared_ptr<Binder_Module> myCurMod;
 };
 
 #endif

@@ -9,6 +9,7 @@ int main(int argc, char const *argv[]) {
   }
 
   Binder_Generator aGenerator{};
+  auto aMod = std::make_shared<Binder_Module>("Geom", aGenerator);
 
   // std::vector<std::string> aWin32Args = {"-fms-compatibility",
   //                                        "-fms-extensions",
@@ -18,12 +19,12 @@ int main(int argc, char const *argv[]) {
   //                                        "-DWIN32",
   //                                        "-D_WINDOWS"};
 
-  aGenerator.SetModName("Geom")
-      .SetModDir(argv[2])
+  aGenerator.SetModDir(argv[2])
       .SetOcctIncDir(argv[1])
       .SetClangArgs({"-x", "c++", "-std=c++11", "-D__CODE_GENERATOR__",
                      "-Wno-deprecated-declarations", "-ferror-limit=0",
-                     "-DCSFDB", "-DHAVE_CONFIG_H"});
+                     "-DCSFDB", "-DHAVE_CONFIG_H"})
+      .SetModule(aMod);
 
   if (!aGenerator.Parse()) {
     return 1;
