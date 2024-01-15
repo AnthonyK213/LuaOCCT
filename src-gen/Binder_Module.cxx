@@ -2,14 +2,15 @@
 #include "Binder_Generator.hxx"
 
 #include <algorithm>
+#include <fstream>
 #include <iterator>
 
 Binder_Module::Binder_Module(const std::string &theName,
-                             const Binder_Generator &theParent)
+                             Binder_Generator &theParent)
     : myName(theName), myParent(&theParent), myIndex(nullptr),
       myTransUnit(nullptr) {}
 
-Binder_Module::~Binder_Module() {}
+Binder_Module::~Binder_Module() { dispose(); }
 
 bool Binder_Module::parse() {
   dispose();
@@ -51,6 +52,9 @@ struct ClassAttachment {
 
 static bool generateCtor(const Binder_Cursor &theClass,
                          std::ostream &theStream) {
+  if (theClass.IsAbstract())
+    return true;
+
   std::string aClassSpelling = theClass.Spelling();
   int anIndex = 0;
 
@@ -112,6 +116,9 @@ static bool isIgnoredMethod(const Binder_Cursor &theMethod) {
     return true;
   }
 
+  if (aFuncSpelling.rfind("operator", 0) == 0)
+    return true;
+
   // TODO: Operator overload
 
   return false;
@@ -145,7 +152,7 @@ static bool generateMethods(const Binder_Cursor &theClass,
 static bool generateClass(const Binder_Cursor &theClass,
                           std::ostream &theStream) {
   std::string aClassSpelling = theClass.Spelling();
-  theStream << "-- Class: " << aClassSpelling << '\n';
+  std::cout << "Binding class: " << aClassSpelling << '\n';
   std::vector<Binder_Cursor> aBases = theClass.Bases();
 
   if (aBases.empty()) {
@@ -167,28 +174,52 @@ static bool generateClass(const Binder_Cursor &theClass,
 
 bool Binder_Module::generate(const std::string &theExportDir) {
   Binder_Cursor aCursor = clang_getTranslationUnitCursor(myTransUnit);
-  std::ostream &aStream = std::cout;
+  std::string theExportName = theExportDir + "/l" + myName;
 
+  std::ofstream aStream{theExportName + ".h"};
+  std::string aGuard = "_LuaOCCT_l" + myName + "_HeaderFile";
+  aStream << "#ifndef " << aGuard << "\n#define " << aGuard << '\n';
+  aStream << "#include <lbind.h>\n";
+  aStream << "void luaocct_init_" << myName << "(lua_State *L);\n";
+  aStream << "#endif\n";
+
+  aStream = std::ofstream(theExportName + ".cpp");
   std::vector<Binder_Cursor> aClasses =
       aCursor.GetChildrenOfKind(CXCursor_ClassDecl);
 
-  aStream << ".beginNameSpace(\"LuaOCCT\")\n";
-  aStream << ".beginNameSpace(\"" << myName << "\")\n\n";
+  aStream << "#include \"l" << myName << ".h\"\n\n";
+  aStream << "void luaocct_init_" << myName << "(lua_State *L) {\n";
+  aStream << "luabridge::getGlobalNamespace(L)\n";
+
+  aStream << ".beginNamespace(\"LuaOCCT\")\n";
+  aStream << ".beginNamespace(\"" << myName << "\")\n\n";
 
   for (const auto &aClass : aClasses) {
     std::string aClassSpelling = aClass.Spelling();
 
-    if (aClassSpelling.rfind(myName, 0) != 0 || aClass.GetChildren().empty())
+    if (aClassSpelling.rfind("Handle", 0) == 0)
       continue;
 
-    generateClass(aClass, std::cout);
+    if (aClassSpelling.rfind("NCollection", 0) == 0)
+      continue;
+
+    if (aClassSpelling.rfind("TCol", 0) == 0)
+      continue;
+
+    if (aClass.GetChildren().empty())
+      continue;
+
+    if (!myParent->AddVisitedClass(aClassSpelling))
+      continue;
+
+    generateClass(aClass, aStream);
   }
 
-  aStream << ".endNameSpace()\n";
-  aStream << ".endNameSpace();\n";
+  aStream << ".endNamespace()\n";
+  aStream << ".endNamespace();\n";
+  aStream << "}";
 
-  std::string theExportFilePath = theExportDir + "/l" + myName + ".h";
-  aStream << "\nExport module to: " << theExportFilePath << std::endl;
+  std::cout << "\nExport module to: " << theExportName << std::endl;
 
   return true;
 }

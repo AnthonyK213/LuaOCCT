@@ -12,7 +12,7 @@ class Binder_Module {
   friend class Binder_Generator;
 
 public:
-  Binder_Module(const std::string &theName, const Binder_Generator &theParent);
+  Binder_Module(const std::string &theName, Binder_Generator &theParent);
 
   ~Binder_Module();
 
@@ -29,7 +29,7 @@ protected:
 
 private:
   std::string myName;
-  const Binder_Generator *myParent;
+  Binder_Generator *myParent;
 
   CXIndex myIndex;
   CXTranslationUnit myTransUnit;

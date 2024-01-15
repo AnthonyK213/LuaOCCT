@@ -2,7 +2,6 @@
 #define _LuaOCCT_mod_header_Geom_HeaderFile
 
 // clang-format off
-
 #include <Geom_Geometry.hxx>
 #include <Geom_Curve.hxx>
 #include <Geom_BoundedCurve.hxx>
@@ -35,5 +34,6 @@
 #include <Geom_SurfaceOfLinearExtrusion.hxx>
 #include <Geom_SurfaceOfRevolution.hxx>
 #include <Geom_OsculatingSurface.hxx>
+// clang-format on
 
 #endif

@@ -7,6 +7,7 @@
 #include "Binder_Module.hxx"
 
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -27,6 +28,13 @@ public:
 
   Binder_Generator &SetOcctIncDir(const std::string &theOcctIncDir) {
     myOcctIncDir = theOcctIncDir;
+    return *this;
+  }
+
+  const std::string &ExportDir() const { return myExportDir; }
+
+  Binder_Generator &SetExportDir(const std::string &theExportDir) {
+    myExportDir = theExportDir;
     return *this;
   }
 
@@ -51,6 +59,8 @@ public:
     myCurMod = theModule;
   }
 
+  bool AddVisitedClass(const std::string &theClass);
+
   bool Parse();
 
   bool Generate(const std::string &theExportDir = ".");
@@ -62,10 +72,13 @@ public:
 private:
   std::string myModDir{};
   std::string myOcctIncDir{};
+  std::string myExportDir{};
   std::vector<std::string> myIncludeDirs{};
   std::vector<std::string> myClangArgs{};
 
   std::shared_ptr<Binder_Module> myCurMod;
+
+  std::set<std::string> myVisitedClasses{};
 };
 
 #endif
