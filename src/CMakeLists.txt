@@ -1,7 +1,7 @@
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bind-gen)
 
 execute_process(
-  COMMAND ${CMAKE_BINARY_DIR}/src-gen/Debug/luaocct-gen
+  COMMAND $ENV{LUAOCCT_BINDER_DIR}/luaocct-gen
       ${OpenCASCADE_INCLUDE_DIR}
       ${CMAKE_SOURCE_DIR}/src/mod_header
       ${CMAKE_BINARY_DIR}/bind-gen

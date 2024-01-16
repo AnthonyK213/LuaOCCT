@@ -63,7 +63,6 @@ link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
   )
 
-add_subdirectory(src-gen)
 add_subdirectory(src)
 add_subdirectory(src-repl)
 
