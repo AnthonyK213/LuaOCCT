@@ -23,6 +23,7 @@
 #include <NCollection_Array1.hxx>
 #include <NCollection_Array2.hxx>
 #include <NCollection_List.hxx>
+#include <OSD_FileSystem.hxx>
 #include <TopLoc_Location.hxx>
 
 #include <tuple>
