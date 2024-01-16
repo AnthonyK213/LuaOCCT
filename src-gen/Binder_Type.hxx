@@ -1,9 +1,9 @@
-#ifndef _LuaOCCT_Binder_Type_HeaderFile
+﻿#ifndef _LuaOCCT_Binder_Type_HeaderFile
 #define _LuaOCCT_Binder_Type_HeaderFile
 
 #include <clang-c/Index.h>
 
-#include "Binder_Util.hxx"
+#include <string>
 
 class Binder_Cursor;
 
@@ -15,9 +15,7 @@ public:
 
   operator CXType() { return myType; }
 
-  std::string Spelling() const {
-    return Binder_Util_GetCString(clang_getTypeSpelling(myType));
-  }
+  std::string Spelling() const;
 
   CXTypeKind Kind() const { return myType.kind; }
 

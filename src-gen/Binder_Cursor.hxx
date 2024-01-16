@@ -1,8 +1,7 @@
-#ifndef _LuaOCCT_Binder_Cursor_HeaderFile
+﻿#ifndef _LuaOCCT_Binder_Cursor_HeaderFile
 #define _LuaOCCT_Binder_Cursor_HeaderFile
 
 #include "Binder_Type.hxx"
-#include "Binder_Util.hxx"
 
 #include <vector>
 
@@ -28,9 +27,7 @@ public:
     return clang_getResultType(clang_getCursorType(myCursor));
   }
 
-  std::string Spelling() const {
-    return Binder_Util_GetCString(clang_getCursorSpelling(myCursor));
-  }
+  std::string Spelling() const;
 
   bool NoDecl() const { return Kind() == CXCursor_NoDeclFound; }
 
@@ -149,9 +146,7 @@ public:
     return clang_getCursorSemanticParent(myCursor);
   }
 
-  std::string Docs() const {
-    return Binder_Util_GetCString(clang_Cursor_getBriefCommentText(myCursor));
-  }
+  std::string Docs() const;
 
   std::vector<Binder_Cursor> Bases() const {
     return GetChildrenOfKind(CXCursor_CXXBaseSpecifier);

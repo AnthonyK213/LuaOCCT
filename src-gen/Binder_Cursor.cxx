@@ -1,4 +1,5 @@
 #include "Binder_Cursor.hxx"
+#include "Binder_Util.hxx"
 
 #include <algorithm>
 #include <iostream>
@@ -7,6 +8,10 @@
 Binder_Cursor::Binder_Cursor(const CXCursor &theCursor) : myCursor(theCursor) {}
 
 Binder_Cursor::~Binder_Cursor() {}
+
+std::string Binder_Cursor::Spelling() const {
+  return Binder_Util_GetCString(clang_getCursorSpelling(myCursor));
+}
 
 bool Binder_Cursor::IsTransient() const {
   if (Spelling() == "Standard_Transient")
@@ -74,18 +79,6 @@ bool Binder_Cursor::NeedsDefaultCtor() const {
     return false;
 
   return Ctors().empty();
-
-  // std::vector<Binder_Cursor> anAllBases = GetAllBases();
-  // anAllBases.push_back(*this);
-
-  // for (const auto &anItem : anAllBases) {
-  //   Binder_Cursor aDef = anItem.GetDefinition();
-
-  //   if (!aDef.Ctors().empty())
-  //     return false;
-  // }
-
-  // return true;
 }
 
 static void getBases(const Binder_Cursor &theCursor,
@@ -180,4 +173,8 @@ Binder_Cursor::GetChildrenOfKind(CXCursorKind theKind,
                });
 
   return aChildrenQualified;
+}
+
+std::string Binder_Cursor::Docs() const {
+  return Binder_Util_GetCString(clang_Cursor_getBriefCommentText(myCursor));
 }

@@ -1,4 +1,4 @@
-#include "Binder_Generator.hxx"
+﻿#include "Binder_Generator.hxx"
 #include "Binder_Module.hxx"
 
 Binder_Generator::Binder_Generator() : myCurMod(nullptr), myExportDir(".") {}

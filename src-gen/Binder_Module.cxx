@@ -1,10 +1,12 @@
 #include "Binder_Module.hxx"
 #include "Binder_Generator.hxx"
+#include "Binder_Util.hxx"
 
 #include <algorithm>
 #include <fstream>
 #include <iterator>
 #include <map>
+#include <sstream>
 #include <vector>
 
 Binder_Module::Binder_Module(const std::string &theName,
@@ -47,63 +49,44 @@ bool Binder_Module::parse() {
   return true;
 }
 
-struct ClassAttachment {
-  std::string mySpelling;
-  std::ostream &myStream;
-};
-
 static bool generateCtor(const Binder_Cursor &theClass,
                          std::ostream &theStream) {
   if (theClass.IsAbstract())
     return true;
 
   std::string aClassSpelling = theClass.Spelling();
+  bool needsDefaultCtor = theClass.NeedsDefaultCtor();
 
   std::vector<Binder_Cursor> aCtors =
       theClass.GetChildrenOfKind(CXCursor_Constructor, true);
 
-  if (aCtors.empty())
+  // if no public ctor but non-public, do not bind any ctor.
+  if (aCtors.empty() && !needsDefaultCtor)
     return true;
 
-  int anIndex = 0;
-
   if (theClass.IsTransient()) {
+    // Intrusive container is gooooooooooooooooooooooooood!
     theStream << ".addConstructorFrom<opencascade::handle<" << aClassSpelling
-              << ">";
-    anIndex++;
+              << ">, ";
   } else {
     theStream << ".addConstructor<";
   }
 
-  if (theClass.NeedsDefaultCtor()) {
-    if (anIndex > 0) {
-      theStream << ", ";
-    }
-
+  if (needsDefaultCtor) {
     theStream << "void()";
-    anIndex++;
-  }
-
-  for (const auto &aCtor : aCtors) {
-    if (anIndex > 0) {
-      theStream << ", ";
-    }
-
-    theStream << "void(";
-
-    std::vector<Binder_Cursor> aParams = aCtor.Parameters();
-
-    int anIdx = 0;
-    for (const auto &aParam : aParams) {
-      if (anIdx > 0)
-        theStream << ", ";
-
-      theStream << aParam.Type().Spelling();
-      anIdx++;
-    }
-
-    theStream << ")";
-    anIndex++;
+  } else {
+    theStream << Binder_Util_Join(
+        aCtors.cbegin(), aCtors.cend(), [](const Binder_Cursor &theCtor) {
+          std::ostringstream oss{};
+          oss << "void(";
+          std::vector<Binder_Cursor> aParams = theCtor.Parameters();
+          oss << Binder_Util_Join(aParams.cbegin(), aParams.cend(),
+                                  [](const Binder_Cursor &theParam) {
+                                    return theParam.Type().Spelling();
+                                  })
+              << ')';
+          return oss.str();
+        });
   }
 
   theStream << ">()\n";
@@ -122,19 +105,21 @@ static bool isIgnoredMethod(const Binder_Cursor &theMethod) {
 
   std::string aFuncSpelling = theMethod.Spelling();
 
-  // FIXME: Poly_Trangulation::createNewEntity??????????
+  // FIXME: Poly_Trangulation::createNewEntity is public??????????
+  // This is a workaround, since OCCT made a public cxxmethod's first
+  // character capitalized.
   if (!std::isupper(aFuncSpelling.c_str()[0]))
     return true;
 
+  // Any one uses these methods?
   if (aFuncSpelling == "DumpJson" || aFuncSpelling == "get_type_name" ||
       aFuncSpelling == "get_type_descriptor") {
     return true;
   }
 
+  // TODO: Operator overload
   if (aFuncSpelling.rfind("operator", 0) == 0)
     return true;
-
-  // TODO: Operator overload
 
   return false;
 }
@@ -148,6 +133,9 @@ static bool generateMethods(const Binder_Cursor &theClass,
   std::map<std::string, std::vector<Binder_Cursor>> aGroups{};
   std::map<std::string, int> aOverloads{};
 
+  // Group cxxmethods by name.
+  // An "ignored" method only increases the count in `aOverloads`, but won't be
+  // added to `aGroups`.
   for (const auto &aMethod : aMethods) {
     std::string aFuncSpelling = aMethod.Spelling();
 
@@ -166,43 +154,42 @@ static bool generateMethods(const Binder_Cursor &theClass,
     aOverloads[aFuncSpelling]++;
   }
 
+  // Bind methods.
   for (auto anIter = aGroups.cbegin(); anIter != aGroups.cend(); ++anIter) {
     const std::vector<Binder_Cursor> aMethodGroup = anIter->second;
-    const int aOverload = aOverloads[anIter->first];
 
     if (aMethodGroup.empty())
       continue;
 
-    std::string anBindFunc =
-        aMethodGroup[0].IsStaticMethod() ? "addStaticFunction" : "addFunction";
+    theStream << '.'
+              << (aMethodGroup[0].IsStaticMethod() ? "addStaticFunction"
+                                                   : "addFunction")
+              << "(\"" << anIter->first << "\", ";
 
-    theStream << '.' << anBindFunc << "(\"" << anIter->first << "\", ";
-
-    if (aMethodGroup.size() == 1 && aOverload == 1) {
+    if (aMethodGroup.size() == 1 &&
+        aOverloads[anIter->first] ==
+            1) { /* Make sure there is no any overload method */
       theStream << '&' << aClassSpelling << "::" << anIter->first;
-    } else {
-      for (int anIdx = 0; anIdx < aMethodGroup.size(); ++anIdx) {
-        if (anIdx > 0)
-          theStream << ", ";
-
-        theStream << "luabridge::overload<";
-
-        std::vector<Binder_Cursor> aParams = aMethodGroup[anIdx].Parameters();
-
-        for (int anI = 0; anI < aParams.size(); ++anI) {
-          if (anI > 0)
-            theStream << ", ";
-
-          theStream << aParams[anI].Type().Spelling();
-        }
-
-        theStream << ">(&" << aClassSpelling << "::" << anIter->first << ')';
-      }
+    } else { /* Handle the overloads */
+      theStream << Binder_Util_Join(
+          aMethodGroup.cbegin(), aMethodGroup.cend(),
+          [&](const Binder_Cursor &theMethod) {
+            std::ostringstream oss{};
+            oss << "luabridge::overload<";
+            std::vector<Binder_Cursor> aParams = theMethod.Parameters();
+            oss << Binder_Util_Join(aParams.cbegin(), aParams.cend(),
+                                    [](const Binder_Cursor &theParam) {
+                                      return theParam.Type().Spelling();
+                                    });
+            oss << ">(&" << aClassSpelling << "::" << anIter->first << ')';
+            return oss.str();
+          });
     }
 
     theStream << ")\n";
   }
 
+  // DownCast from Standard_Transient
   if (theClass.IsTransient()) {
     theStream << ".addStaticFunction(\"DownCast\", +[](const "
                  "Handle(Standard_Transient) &h) { return Handle("
@@ -239,6 +226,7 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   Binder_Cursor aCursor = clang_getTranslationUnitCursor(myTransUnit);
   std::string theExportName = theExportDir + "/l" + myName;
 
+  // The header file.
   std::ofstream aStream{theExportName + ".h"};
   std::string aGuard = "_LuaOCCT_l" + myName + "_HeaderFile";
   aStream << "#ifndef " << aGuard << "\n#define " << aGuard << '\n';
@@ -246,6 +234,7 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   aStream << "void luaocct_init_" << myName << "(lua_State *L);\n";
   aStream << "#endif\n";
 
+  // The source file.
   aStream = std::ofstream(theExportName + ".cpp");
   std::vector<Binder_Cursor> aClasses =
       aCursor.GetChildrenOfKind(CXCursor_ClassDecl);
@@ -253,10 +242,12 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   aStream << "#include \"l" << myName << ".h\"\n\n";
   aStream << "void luaocct_init_" << myName << "(lua_State *L) {\n";
   aStream << "luabridge::getGlobalNamespace(L)\n";
-
   aStream << ".beginNamespace(\"LuaOCCT\")\n";
   aStream << ".beginNamespace(\"" << myName << "\")\n\n";
+  
+  // TODO: Bind enumerators.
 
+  // Bind classes.
   for (const auto &aClass : aClasses) {
     std::string aClassSpelling = aClass.Spelling();
 
@@ -293,11 +284,8 @@ bool Binder_Module::generate(const std::string &theExportDir) {
     generateClass(aClass, aStream);
   }
 
-  aStream << ".endNamespace()\n";
-  aStream << ".endNamespace();\n";
-  aStream << "}";
-
-  std::cout << "\nExport module to: " << theExportName << std::endl;
+  aStream << ".endNamespace()\n.endNamespace();\n}\n";
+  std::cout << "Module exported: " << theExportName << '\n' << std::endl;
 
   return true;
 }
