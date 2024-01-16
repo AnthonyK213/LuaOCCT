@@ -156,7 +156,7 @@ static bool generateMethods(const Binder_Cursor &theClass,
 
   // Bind methods.
   for (auto anIter = aGroups.cbegin(); anIter != aGroups.cend(); ++anIter) {
-    const std::vector<Binder_Cursor> aMethodGroup = anIter->second;
+    const std::vector<Binder_Cursor> &aMethodGroup = anIter->second;
 
     if (aMethodGroup.empty())
       continue;
@@ -230,7 +230,7 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   std::ofstream aStream{theExportName + ".h"};
   std::string aGuard = "_LuaOCCT_l" + myName + "_HeaderFile";
   aStream << "#ifndef " << aGuard << "\n#define " << aGuard << '\n';
-  aStream << "#include <lbind.h>\n";
+  aStream << "#include \"lbind.h\"\n";
   aStream << "void luaocct_init_" << myName << "(lua_State *L);\n";
   aStream << "#endif\n";
 
@@ -244,7 +244,7 @@ bool Binder_Module::generate(const std::string &theExportDir) {
   aStream << "luabridge::getGlobalNamespace(L)\n";
   aStream << ".beginNamespace(\"LuaOCCT\")\n";
   aStream << ".beginNamespace(\"" << myName << "\")\n\n";
-  
+
   // TODO: Bind enumerators.
 
   // Bind classes.
