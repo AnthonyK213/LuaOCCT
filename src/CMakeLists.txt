@@ -51,7 +51,7 @@ install(
 
 install(
   DIRECTORY ${CMAKE_BINARY_DIR}/bind-gen/ ${CMAKE_CURRENT_SOURCE_DIR}/
-  DESTINATION include
+  DESTINATION include/luaocct
   COMPONENT header_files
   FILES_MATCHING PATTERN "*.h"
   )

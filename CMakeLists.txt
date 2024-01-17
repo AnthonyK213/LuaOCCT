@@ -48,15 +48,10 @@ message("LuaJIT-Libs: ${LUA_LIBRARIES}")
 find_path(LuaBridge3_INCLUDE_DIR NAMES LuaBridge PATH_SUFFIXES luabridge3)
 message("LuaBridge3-Include-Dir: ${LuaBridge3_INCLUDE_DIR}")
 
-find_package(libclang REQUIRED)
-message("LIBCLANG-Include-Dir: ${LIBCLANG_INCLUDE_DIR}")
-message("LIBCLANG-Libs: ${LIBCLANG_LIBRARIES}")
-
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
   ${LUA_INCLUDE_DIR}
   ${LuaBridge3_INCLUDE_DIR}
-  ${LIBCLANG_INCLUDE_DIR}
   )
 
 link_directories(
