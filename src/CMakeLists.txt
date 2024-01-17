@@ -7,8 +7,6 @@ execute_process(
       ${CMAKE_BINARY_DIR}/bind-gen
   )
 
-set(CMAKE_SHARED_LIBRARY_PREFIX "")
-
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} LUAOCCT_SRCS)
 aux_source_directory(${CMAKE_BINARY_DIR}/bind-gen LUAOCCT_GEN_SRCS)
 
