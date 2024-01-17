@@ -58,11 +58,15 @@ local test_gp_Quaternion = util.make_test("gp_Quaternion", function()
   local q1 = gp.gp_Quaternion(gp.gp_Vec(8, 8, 9), gp.gp_Vec(4, 6, 4))
 
   local nlerp = gp.gp_QuaternionNLerp(q0, q1)
-  -- util.log("nlerp:Interpolate(0.5) =", nlerp:Interpolate(0.5))
+  local qNLerpRes = gp.gp_Quaternion()
+  nlerp:Interpolate(0.5, qNLerpRes)
+  util.log("nlerp:Interpolate(0.5) =", qNLerpRes)
   util.log("gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5) =", gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5))
 
   local slerp = gp.gp_QuaternionSLerp(q0, q1)
-  -- util.log("slerp:Interpolate(0.5) =", slerp:Interpolate(0.5))
+  local qSLerpRes = gp.gp_Quaternion()
+  slerp:Interpolate(0.5, qSLerpRes)
+  util.log("slerp:Interpolate(0.5) =", qSLerpRes)
   util.log("gp.gp_QuaternionNLerp.Interpolate_(q0, q1, 0.5) =", gp.gp_QuaternionSLerp.Interpolate_(q0, q1, 0.5))
 end)
 

@@ -1,7 +1,7 @@
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bind-gen)
 
 execute_process(
-  COMMAND $ENV{LUAOCCT_BINDER_DIR}/luaocct-gen
+  COMMAND $ENV{LUAOCCT_BINDER_DIR}/luaocct-binder
       ${OpenCASCADE_INCLUDE_DIR}
       ${CMAKE_SOURCE_DIR}/src/mod_header
       ${CMAKE_BINARY_DIR}/bind-gen
@@ -17,6 +17,13 @@ add_library(
   SHARED
   ${LUAOCCT_SRCS}
   ${LUAOCCT_GEN_SRCS}
+  )
+
+target_compile_options(
+  luaocct
+  PRIVATE
+  $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+  $<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
   )
 
 target_include_directories(
