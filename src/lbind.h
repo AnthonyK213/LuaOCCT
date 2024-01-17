@@ -8,6 +8,7 @@
 #include <LuaBridge/Vector.h>
 // clang-format on
 
+#include "mod_header/_BRep.h"
 #include "mod_header/_BRepBuilderAPI.h"
 #include "mod_header/_BRepLib.h"
 #include "mod_header/_Geom.h"
@@ -16,6 +17,7 @@
 #include "mod_header/_Standard.h"
 #include "mod_header/_TopAbs.h"
 #include "mod_header/_TopExp.h"
+#include "mod_header/_TopLoc.h"
 #include "mod_header/_TopoDS.h"
 #include "mod_header/_gp.h"
 

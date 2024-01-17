@@ -17,9 +17,18 @@ add_dependencies(
   luaocct
   )
 
-add_custom_command(
-  TARGET ${PROJECT_NAME}-repl POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-    "$<TARGET_PROPERTY:luaocct,BINARY_DIR>/$<CONFIG>"
-    "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>"
-  )
+if(WIN32)
+  add_custom_command(
+    TARGET ${PROJECT_NAME}-repl POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      "$<TARGET_PROPERTY:luaocct,BINARY_DIR>/$<CONFIG>"
+      "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>"
+    )
+elseif(UNIX AND NOT APPLE)
+  add_custom_command(
+    TARGET ${PROJECT_NAME}-repl POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+      "$<TARGET_PROPERTY:luaocct,BINARY_DIR>/$<CONFIG>/libluaocct.so"
+      "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>/luaocct.so"
+    )
+endif()
