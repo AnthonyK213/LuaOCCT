@@ -11,9 +11,11 @@
 #include "mod_header/_BRep.h"
 #include "mod_header/_BRepBuilderAPI.h"
 #include "mod_header/_BRepLib.h"
+#include "mod_header/_Bnd.h"
 #include "mod_header/_Geom.h"
 #include "mod_header/_GeomAbs.h"
 #include "mod_header/_Poly.h"
+#include "mod_header/_Precision.h"
 #include "mod_header/_Standard.h"
 #include "mod_header/_TopAbs.h"
 #include "mod_header/_TopExp.h"
@@ -26,7 +28,6 @@
 #include <NCollection_Array2.hxx>
 #include <NCollection_List.hxx>
 #include <OSD_FileSystem.hxx>
-#include <TopLoc_Location.hxx>
 
 #include <tuple>
 #include <vector>
