@@ -1,0 +1,3 @@
+[submodule "binder/LuaOCCT-binder"]
+	path = binder/LuaOCCT-binder
+	url = https://github.com/AnthonyK213/LuaOCCT-binder.git
