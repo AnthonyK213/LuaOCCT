@@ -58,6 +58,7 @@ link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
   )
 
+add_subdirectory(binder/LuaOCCT-binder)
 add_subdirectory(src)
 add_subdirectory(src-repl)
 

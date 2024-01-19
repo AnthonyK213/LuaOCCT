@@ -1,14 +1,34 @@
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/bind-gen)
+set(BINDER_GEN_DIR ${CMAKE_BINARY_DIR}/binder-gen)
+file(MAKE_DIRECTORY ${BINDER_GEN_DIR})
+
+function(FIND_BINDER_EXEC_ CUR_DIR_ RESULT_)
+  if(WIN32)
+    set(BINDER_EXEC_ luaocct-binder.exe)
+  else()
+    set(BINDER_EXEC_ luaocct-binder)
+  endif()
+  set(CANDS_ ${CUR_DIR_} ${CUR_DIR_}/Release ${CUR_DIR_}/RelWithDebInfo ${CUR_DIR_}/Debug)
+  foreach(CAND_ ${CANDS_})
+    set(BINDER_EXEC_PATH_ ${CAND_}/${BINDER_EXEC_})
+    if(IS_DIRECTORY ${CAND_} AND EXISTS ${BINDER_EXEC_PATH_} AND NOT IS_DIRECTORY ${BINDER_EXEC_PATH_})
+      set(${RESULT_} ${BINDER_EXEC_PATH_} PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+  set(${RESULT_} ${CUR_DIR_}/${BINDER_EXEC_} PARENT_SCOPE)
+endfunction()
+
+FIND_BINDER_EXEC_(${CMAKE_BINARY_DIR}/binder/LuaOCCT-binder/src/ BINDER_EXEC)
 
 execute_process(
-  COMMAND $ENV{LUAOCCT_BINDER_DIR}/luaocct-binder
+  COMMAND ${BINDER_EXEC}
       ${OpenCASCADE_INCLUDE_DIR}
       ${CMAKE_SOURCE_DIR}/src/mod_header
-      ${CMAKE_BINARY_DIR}/bind-gen
+      ${BINDER_GEN_DIR}
   )
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} LUAOCCT_SRCS)
-aux_source_directory(${CMAKE_BINARY_DIR}/bind-gen LUAOCCT_GEN_SRCS)
+aux_source_directory(${BINDER_GEN_DIR} LUAOCCT_GEN_SRCS)
 
 add_library(
   luaocct
@@ -27,7 +47,7 @@ target_compile_options(
 target_include_directories(
   luaocct
   PRIVATE
-  ${CMAKE_BINARY_DIR}/bind-gen
+  ${BINDER_GEN_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
@@ -48,7 +68,7 @@ install(
   )
 
 install(
-  DIRECTORY ${CMAKE_BINARY_DIR}/bind-gen/ ${CMAKE_CURRENT_SOURCE_DIR}/
+  DIRECTORY ${BINDER_GEN_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/
   DESTINATION include/luaocct
   COMPONENT header_files
   FILES_MATCHING PATTERN "*.h"
