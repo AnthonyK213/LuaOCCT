@@ -18,7 +18,6 @@
 #include <Geom_Point.hxx>
 #include <Geom_CartesianPoint.hxx>
 #include <Geom_Surface.hxx>
-#include <GeomPlate_Surface.hxx>
 #include <Geom_BoundedSurface.hxx>
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_BezierSurface.hxx>

@@ -1,0 +1,6 @@
+#ifndef _LuaOCCT_mod_header_Geom2dAdaptor_HeaderFile
+#define _LuaOCCT_mod_header_Geom2dAdaptor_HeaderFile
+
+
+
+#endif

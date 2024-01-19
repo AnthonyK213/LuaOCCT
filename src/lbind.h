@@ -8,12 +8,21 @@
 #include <LuaBridge/Vector.h>
 // clang-format on
 
+#include "mod_header/_Adaptor2d.h"
+#include "mod_header/_Adaptor3d.h"
 #include "mod_header/_BRep.h"
 #include "mod_header/_BRepBuilderAPI.h"
 #include "mod_header/_BRepLib.h"
 #include "mod_header/_Bnd.h"
+#include "mod_header/_CPnts.h"
+#include "mod_header/_Convert.h"
 #include "mod_header/_Geom.h"
+#include "mod_header/_Geom2d.h"
+#include "mod_header/_Geom2dAdaptor.h"
+#include "mod_header/_Geom2dConvert.h"
 #include "mod_header/_GeomAbs.h"
+#include "mod_header/_GeomAdaptor.h"
+#include "mod_header/_GeomConvert.h"
 #include "mod_header/_Poly.h"
 #include "mod_header/_Precision.h"
 #include "mod_header/_Standard.h"
