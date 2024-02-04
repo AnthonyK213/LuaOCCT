@@ -1,0 +1,4 @@
+#ifndef _LuaOCCT_mod_header_XCAFDoc_HeaderFile
+#define _LuaOCCT_mod_header_XCAFDoc_HeaderFile
+
+#endif

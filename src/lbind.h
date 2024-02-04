@@ -26,10 +26,15 @@
 #include "mod_header/_Poly.h"
 #include "mod_header/_Precision.h"
 #include "mod_header/_Standard.h"
+#include "mod_header/_TCollection.h"
+#include "mod_header/_TDF.h"
+#include "mod_header/_TDocStd.h"
 #include "mod_header/_TopAbs.h"
 #include "mod_header/_TopExp.h"
 #include "mod_header/_TopLoc.h"
 #include "mod_header/_TopoDS.h"
+#include "mod_header/_XCAFDoc.h"
+#include "mod_header/_XCAFPrs.h"
 #include "mod_header/_gp.h"
 
 #include <Geom2d_Curve.hxx>
@@ -49,6 +54,57 @@ template <class T> struct ContainerTraits<opencascade::handle<T>> {
   static opencascade::handle<T> construct(T *c) { return c; }
 
   static T *get(const opencascade::handle<T> &c) { return c.get(); }
+};
+
+template <> struct Stack<TCollection_AsciiString> {
+  static Result push(lua_State *L, const TCollection_AsciiString &tStr) {
+    lua_pushstring(L, tStr.ToCString());
+    return {};
+  }
+
+  static TypeResult<TCollection_AsciiString> get(lua_State *L, int index) {
+    if (lua_type(L, index) != LUA_TSTRING)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    std::size_t length = 0;
+    const char *str = lua_tolstring(L, index, &length);
+    if (str == nullptr)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    return TCollection_AsciiString(str);
+  }
+
+  static bool isInstance(lua_State *L, int index) {
+    return lua_type(L, index) == LUA_TSTRING;
+  }
+};
+
+template <> struct Stack<TCollection_ExtendedString> {
+  static Result push(lua_State *L, const TCollection_ExtendedString &tStr) {
+    Standard_Integer length = tStr.LengthOfCString();
+    std::string str;
+    str.reserve(length);
+    Standard_PCharacter p = str.data();
+    tStr.ToUTF8CString(p);
+    lua_pushstring(L, str.c_str());
+    return {};
+  }
+
+  static TypeResult<TCollection_ExtendedString> get(lua_State *L, int index) {
+    if (lua_type(L, index) != LUA_TSTRING)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    std::size_t length = 0;
+    const char *str = lua_tolstring(L, index, &length);
+    if (str == nullptr)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    return TCollection_ExtendedString(str);
+  }
+
+  static bool isInstance(lua_State *L, int index) {
+    return lua_type(L, index) == LUA_TSTRING;
+  }
 };
 
 template <class T> struct Stack<NCollection_Array1<T>> {
