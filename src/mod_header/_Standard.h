@@ -4,5 +4,7 @@
 #include <Standard.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>
+#include <Standard_UUID.hxx>
+#include <Standard_GUID.hxx>
 
 #endif
