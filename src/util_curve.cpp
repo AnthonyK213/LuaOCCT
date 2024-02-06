@@ -15,6 +15,7 @@
 namespace luaocct {
 namespace util {
 namespace Curve {
+
 Handle(Geom_Curve) Duplicate(const Handle(Geom_Curve) & theCurve) {
   return Handle(Geom_Curve)::DownCast(theCurve->Copy());
 }

@@ -26,6 +26,7 @@
 #include "mod_header/_GeomAbs.h"
 #include "mod_header/_GeomAdaptor.h"
 #include "mod_header/_GeomConvert.h"
+#include "mod_header/_IMeshTools.h"
 #include "mod_header/_IntTools.h"
 #include "mod_header/_Message.h"
 #include "mod_header/_Poly.h"
@@ -260,7 +261,9 @@ template <class T> struct Stack<NCollection_Array2<T>> {
 #define Begin_Derive(D, B) deriveClass<D, B>(#D)
 #define End_Derive() End_Class()
 
-#define Bind_Enum(E, V) addVariable(#V, E::V)
+#define Bind_Enum(E, V)                                                        \
+  addProperty(                                                                 \
+      #V, +[]() { return E::V; })
 
 #define Bind_Property(T, G, S)                                                 \
   addProperty(#G "_", &T::G, &T::S)                                            \

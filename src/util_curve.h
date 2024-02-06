@@ -18,7 +18,7 @@ namespace luaocct {
 namespace util {
 namespace Curve {
 
-enum class CurveEnd : Standard_Integer { None, Start, End, Both };
+enum class CurveEnd : Standard_Integer { None = 0, Start, End, Both };
 
 Standard_EXPORT Handle(Geom_Curve)
     Duplicate(const Handle(Geom_Curve) & theCurve);

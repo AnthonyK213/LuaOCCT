@@ -2,16 +2,34 @@
 
 #include "util_curve.h"
 #include "util_math.h"
+#include "util_shape.h"
 
-#include <tuple>
+template <>
+struct luabridge::Stack<luaocct::util::Curve::CurveEnd>
+    : luabridge::Enum<luaocct::util::Curve::CurveEnd,
+                      luaocct::util::Curve::CurveEnd::None,
+                      luaocct::util::Curve::CurveEnd::Start,
+                      luaocct::util::Curve::CurveEnd::End,
+                      luaocct::util::Curve::CurveEnd::Both> {};
 
 void luaocct_init_util(lua_State *L) {
   LuaBridge__G(L)
       .Begin_Namespace2(util, Math)
-      .Bind_Method(luaocct::util::Math, EpsilonEquals)
-      .End_Namespace2()
 
+      .Bind_Method(luaocct::util::Math, EpsilonEquals)
+
+      .End_Namespace2();
+
+  LuaBridge__G(L)
       .Begin_Namespace2(util, Curve)
+
+      .Begin_Namespace(CurveEnd)
+      .Bind_Enum(luaocct::util::Curve::CurveEnd, None)
+      .Bind_Enum(luaocct::util::Curve::CurveEnd, Start)
+      .Bind_Enum(luaocct::util::Curve::CurveEnd, End)
+      .Bind_Enum(luaocct::util::Curve::CurveEnd, Both)
+      .End_Namespace()
+
       .Bind_Method(luaocct::util::Curve, Duplicate)
       .Bind_Method(luaocct::util::Curve, IsClosed)
       .addFunction(
@@ -62,5 +80,10 @@ void luaocct_init_util(lua_State *L) {
       .Bind_Method(luaocct::util::Curve, Explode)
       .End_Namespace2();
 
-  LuaBridge__G(L).Begin_Namespace2(util, Shape).End_Namespace2();
+  LuaBridge__G(L)
+      .Begin_Namespace2(util, Shape)
+
+      .Bind_Method(luaocct::util::Shape, ToMesh)
+
+      .End_Namespace2();
 }
