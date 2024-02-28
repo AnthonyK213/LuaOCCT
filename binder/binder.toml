@@ -1,0 +1,125 @@
+immutable_type = [
+  "Standard_Boolean",
+  "Standard_CString",
+  "Standard_Integer",
+  "Standard_Real",
+  "NCollection_Array1",
+  "NCollection_Array2",
+  "NCollection_List",
+  "NCollection_Map",
+  "handle",
+  "TCollection_AsciiString",
+  "TCollection_ExtendedString",
+  "TDF_Label",
+]
+
+[lua_operators]
+"operator+" = "__add"
+"operator-" = "__sub"
+"operator*" = "__mul"
+"operator/" = "__div"
+"operator==" = "__eq"
+
+[black_list]
+class = [
+  "Standard",
+  "CPnts_MyGaussFunction",
+  "CPnts_MyRootFunction",
+  "Message_ProgressScope",
+]
+method_by_name = [
+  "DumpJson",
+  "get_type_name",
+  "get_type_descriptor",
+]
+method = [
+  "Standard_GUID::ToCString",
+  "Standard_GUID::ToExtString",
+  "Standard_GUID::ShallowDump",
+  "IntTools_PntOnFace::IsValid",
+  "IntTools_PntOn2Faces::IsValid",
+  "BOPAlgo_PaveFiller::Iterator",
+]
+copyable = [
+  "Geom_SweptSurface",
+]
+
+[extra_method]
+gp_XYZ = '''
+.addFunction("__tostring",+[](const gp_XYZ &theSelf){
+    std::ostringstream oss{};
+    oss << "gp_XYZ{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+    return oss.str();
+    })
+'''
+gp_Pnt = '''
+.addFunction("__unm",+[](const gp_Pnt &theSelf){
+    return gp_Pnt(-theSelf.X(), -theSelf.Y(), -theSelf.Z());
+    })
+.addFunction("__tostring",+[](const gp_Pnt &theSelf){
+    std::ostringstream oss{};
+    oss << "gp_Pnt{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+    return oss.str();
+    })
+'''
+gp_Dir = '''
+.addFunction("__tostring",+[](const gp_Dir &theSelf){
+    std::ostringstream oss{};
+    oss << "gp_Dir{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+    return oss.str();
+    })
+'''
+gp_Vec='''
+.addFunction("__tostring",+[](const gp_Vec &theSelf){
+    std::ostringstream oss{};
+    oss << "gp_Vec{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+    return oss.str();
+    })
+'''
+gp_Quaternion = '''
+.addFunction("__tostring",+[](const gp_Quaternion &theSelf){
+    std::ostringstream oss{};
+    oss << "gp_Quaternion{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << ',' << theSelf.W() << '}';
+    return oss.str();
+    })
+'''
+Standard_GUID = '''
+.addFunction("__tostring",+[](const Standard_GUID &theSelf) -> std::string {
+    char s[37];
+    theSelf.ToCString(s);
+    return s;
+    })
+'''
+
+[manual_method]
+"Bnd_OBB::ReBuild" = '''
++[](Bnd_OBB &__theSelf__,const TColgp_Array1OfPnt &theListOfPoints,const Standard_Boolean theIsOptimal){
+  TColgp_Array1OfPnt thePnts{theListOfPoints.First(),0,theListOfPoints.Length()-1};
+  __theSelf__.ReBuild(thePnts, nullptr, theIsOptimal);
+},
+  +[](Bnd_OBB &__theSelf__,const TColgp_Array1OfPnt &theListOfPoints,const TColStd_Array1OfReal &theListOfTolerance,const Standard_Boolean theIsOptimal){ 
+    TColgp_Array1OfPnt thePnts{theListOfPoints.First(),0,theListOfPoints.Length()-1};
+    TColStd_Array1OfReal theTols{theListOfTolerance.First(),0,theListOfTolerance.Length()-1};
+    __theSelf__.ReBuild(thePnts,&theTols,theIsOptimal);
+  }
+'''
+"Bnd_OBB::GetVertex" = '''
++[](const Bnd_OBB &theSelf){
+  std::array<gp_Pnt,8> theResult{};
+  theSelf.GetVertex(theResult.data());
+  return theResult;
+}
+'''
+"GeomConvert::ConcatG1" = '''
++[](const TColGeom_Array1OfBSplineCurve &arrayOfCurve,const TColStd_Array1OfReal &arrayOfToler,const Standard_Boolean closeFlag,const Standard_Real closedTolerance)->std::tuple<TColGeom_Array1OfBSplineCurve, Standard_Boolean> {
+  Standard_Boolean closedG1Flag = closeFlag;
+  Handle(TColGeom_HArray1OfBSplineCurve) arrayOfConcatenated = nullptr;
+  TColGeom_Array1OfBSplineCurve inputs(arrayOfCurve.First(),0,arrayOfCurve.Length()-1);
+  TColStd_Array1OfReal tolers(arrayOfToler.First(), 0, arrayOfToler.Length()-1);
+  try { GeomConvert::ConcatG1(inputs,tolers,arrayOfConcatenated,closedG1Flag,closedTolerance); }
+  catch (const Standard_Failure &f) { throw std::runtime_error(f.GetMessageString()); }
+  catch (...) { throw std::runtime_error("Unkonw error"); }
+  TColGeom_Array1OfBSplineCurve result = arrayOfConcatenated->Array1();
+  return {result, closedG1Flag};
+}
+'''

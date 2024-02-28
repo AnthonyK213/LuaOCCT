@@ -25,6 +25,7 @@ execute_process(
       ${OpenCASCADE_INCLUDE_DIR}
       ${CMAKE_SOURCE_DIR}/src/mod_header
       ${BINDER_GEN_DIR}
+      ${CMAKE_SOURCE_DIR}/binder/binder.toml
   )
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} LUAOCCT_SRCS)
