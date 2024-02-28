@@ -1,3 +1,36 @@
+# NOTE: Keep the order correct!!
+modules = [
+  "Standard",
+  "GeomAbs",
+  "TopAbs",
+  "Precision",
+  # "TCollection",
+  "gp",
+  "Geom2d",
+  "Geom",
+  "TopoDS",
+  "TopExp",
+  "TopLoc",
+  "Poly",
+  "Message",
+  "BRepBuilderAPI",
+  "IntTools",
+  "BOPDS",
+  "BOPAlgo",
+  "BRepAlgoAPI",
+  "BRep",
+  "BRepLib",
+  "Bnd",
+  "CPnts",
+  "GeomConvert",
+  "IMeshTools",
+  "BRepGProp",
+  "GProp",
+  # "TDocStd",
+  # "TDF",
+  # "XCAFPrs",
+]
+
 immutable_type = [
   "Standard_Boolean",
   "Standard_CString",
@@ -27,11 +60,7 @@ class = [
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
 ]
-method_by_name = [
-  "DumpJson",
-  "get_type_name",
-  "get_type_descriptor",
-]
+method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
   "Standard_GUID::ToCString",
   "Standard_GUID::ToExtString",
@@ -40,56 +69,48 @@ method = [
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
 ]
-copyable = [
-  "Geom_SweptSurface",
-]
+copyable = ["Geom_SweptSurface"]
 
 [extra_method]
 gp_XYZ = '''
 .addFunction("__tostring",+[](const gp_XYZ &theSelf){
-    std::ostringstream oss{};
-    oss << "gp_XYZ{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
-    return oss.str();
-    })
-'''
+  std::ostringstream oss{};
+  oss << "gp_XYZ{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+  return oss.str();
+})'''
 gp_Pnt = '''
 .addFunction("__unm",+[](const gp_Pnt &theSelf){
-    return gp_Pnt(-theSelf.X(), -theSelf.Y(), -theSelf.Z());
-    })
+  return gp_Pnt(-theSelf.X(), -theSelf.Y(), -theSelf.Z());
+})
 .addFunction("__tostring",+[](const gp_Pnt &theSelf){
-    std::ostringstream oss{};
-    oss << "gp_Pnt{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
-    return oss.str();
-    })
-'''
+  std::ostringstream oss{};
+  oss << "gp_Pnt{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+  return oss.str();
+})'''
 gp_Dir = '''
 .addFunction("__tostring",+[](const gp_Dir &theSelf){
-    std::ostringstream oss{};
-    oss << "gp_Dir{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
-    return oss.str();
-    })
-'''
-gp_Vec='''
+  std::ostringstream oss{};
+  oss << "gp_Dir{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+  return oss.str();
+})'''
+gp_Vec = '''
 .addFunction("__tostring",+[](const gp_Vec &theSelf){
-    std::ostringstream oss{};
-    oss << "gp_Vec{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
-    return oss.str();
-    })
-'''
+  std::ostringstream oss{};
+  oss << "gp_Vec{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << '}';
+  return oss.str();
+})'''
 gp_Quaternion = '''
 .addFunction("__tostring",+[](const gp_Quaternion &theSelf){
-    std::ostringstream oss{};
-    oss << "gp_Quaternion{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << ',' << theSelf.W() << '}';
-    return oss.str();
-    })
-'''
+  std::ostringstream oss{};
+  oss << "gp_Quaternion{" << theSelf.X() << ',' << theSelf.Y() << ',' << theSelf.Z() << ',' << theSelf.W() << '}';
+  return oss.str();
+})'''
 Standard_GUID = '''
 .addFunction("__tostring",+[](const Standard_GUID &theSelf) -> std::string {
-    char s[37];
-    theSelf.ToCString(s);
-    return s;
-    })
-'''
+  char s[37];
+  theSelf.ToCString(s);
+  return s;
+})'''
 
 [manual_method]
 "Bnd_OBB::ReBuild" = '''
@@ -97,19 +118,17 @@ Standard_GUID = '''
   TColgp_Array1OfPnt thePnts{theListOfPoints.First(),0,theListOfPoints.Length()-1};
   __theSelf__.ReBuild(thePnts, nullptr, theIsOptimal);
 },
-  +[](Bnd_OBB &__theSelf__,const TColgp_Array1OfPnt &theListOfPoints,const TColStd_Array1OfReal &theListOfTolerance,const Standard_Boolean theIsOptimal){ 
-    TColgp_Array1OfPnt thePnts{theListOfPoints.First(),0,theListOfPoints.Length()-1};
-    TColStd_Array1OfReal theTols{theListOfTolerance.First(),0,theListOfTolerance.Length()-1};
-    __theSelf__.ReBuild(thePnts,&theTols,theIsOptimal);
-  }
-'''
++[](Bnd_OBB &__theSelf__,const TColgp_Array1OfPnt &theListOfPoints,const TColStd_Array1OfReal &theListOfTolerance,const Standard_Boolean theIsOptimal){ 
+  TColgp_Array1OfPnt thePnts{theListOfPoints.First(),0,theListOfPoints.Length()-1};
+  TColStd_Array1OfReal theTols{theListOfTolerance.First(),0,theListOfTolerance.Length()-1};
+  __theSelf__.ReBuild(thePnts,&theTols,theIsOptimal);
+}'''
 "Bnd_OBB::GetVertex" = '''
 +[](const Bnd_OBB &theSelf){
   std::array<gp_Pnt,8> theResult{};
   theSelf.GetVertex(theResult.data());
   return theResult;
-}
-'''
+}'''
 "GeomConvert::ConcatG1" = '''
 +[](const TColGeom_Array1OfBSplineCurve &arrayOfCurve,const TColStd_Array1OfReal &arrayOfToler,const Standard_Boolean closeFlag,const Standard_Real closedTolerance)->std::tuple<TColGeom_Array1OfBSplineCurve, Standard_Boolean> {
   Standard_Boolean closedG1Flag = closeFlag;
@@ -121,5 +140,4 @@ Standard_GUID = '''
   catch (...) { throw std::runtime_error("Unkonw error"); }
   TColGeom_Array1OfBSplineCurve result = arrayOfConcatenated->Array1();
   return {result, closedG1Flag};
-}
-'''
+}'''
