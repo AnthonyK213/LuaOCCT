@@ -45,6 +45,8 @@ target_compile_options(
   $<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
   )
 
+add_dependencies(luaocct luaocct-binder)
+
 target_include_directories(
   luaocct
   PRIVATE
