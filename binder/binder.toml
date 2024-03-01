@@ -26,6 +26,7 @@ modules = [
   "IMeshTools",
   "BRepGProp",
   "GProp",
+  "GeomLib",
   # "TDocStd",
   # "TDF",
   # "XCAFPrs",
