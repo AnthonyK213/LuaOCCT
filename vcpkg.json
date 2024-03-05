@@ -10,6 +10,10 @@
     {
       "name": "luabridge3",
       "host": true
+    },
+    {
+      "name": "luajit",
+      "host": true
     }
   ],
   "overrides": [
@@ -20,6 +24,10 @@
     {
       "name": "luabridge3",
       "version": "3.0-rc3#0"
+    },
+    {
+      "name": "luajit",
+      "version": "2023-01-04#5"
     }
   ]
 }

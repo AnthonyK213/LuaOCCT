@@ -58,7 +58,7 @@ target_link_libraries(
   luaocct
   PRIVATE
   ${OpenCASCADE_LIBRARIES}
-  ${LUA_LIBRARIES}
+  PkgConfig::LuaJIT
   )
 
 install(

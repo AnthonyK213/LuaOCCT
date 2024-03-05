@@ -29,7 +29,7 @@ if(EXISTS "${LOC_PATH}")
   build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles.")
 endif()
 
-option(ENABLE_UNIT_TESTS "Enable unit tests" OFF)
+# option(ENABLE_UNIT_TESTS "Enable unit tests" OFF)
 option(INSTALL_GTEST "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)" OFF)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
@@ -43,16 +43,15 @@ message("OCC-Include-Dir: ${OpenCASCADE_INCLUDE_DIR}")
 message("OCC-Lib-Dir: ${OpenCASCADE_LIBRARY_DIR}")
 message("OCC-Libs: ${OpenCASCADE_LIBRARIES}")
 
-find_package(LuaJIT REQUIRED)
-message("LuaJIT-Include-Dir: ${LUA_INCLUDE_DIR}")
-message("LuaJIT-Libs: ${LUA_LIBRARIES}")
+find_package(PkgConfig REQUIRED)  
+pkg_check_modules(LuaJIT REQUIRED IMPORTED_TARGET luajit)
 
 find_path(LuaBridge3_INCLUDE_DIR NAMES LuaBridge PATH_SUFFIXES luabridge3)
 message("LuaBridge3-Include-Dir: ${LuaBridge3_INCLUDE_DIR}")
 
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
-  ${LUA_INCLUDE_DIR}
+  # ${LUA_INCLUDE_DIR}
   ${LuaBridge3_INCLUDE_DIR}
   )
 
