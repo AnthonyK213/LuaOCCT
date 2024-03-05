@@ -1,5 +1,5 @@
-#include "util_curve.h"
-#include "util_math.h"
+#include <luaocct/util_curve.h>
+#include <luaocct/util_math.h>
 
 #include <Extrema_ExtPC.hxx>
 #include <GCPnts_UniformAbscissa.hxx>

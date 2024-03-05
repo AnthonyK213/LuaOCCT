@@ -1,8 +1,8 @@
-#include "lutil.h"
+#include <luaocct/lutil.h>
 
-#include "util_curve.h"
-#include "util_math.h"
-#include "util_shape.h"
+#include <luaocct/util_curve.h>
+#include <luaocct/util_math.h>
+#include <luaocct/util_shape.h>
 
 template <>
 struct luabridge::Stack<luaocct::util::Curve::CurveEnd>

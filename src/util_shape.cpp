@@ -1,4 +1,4 @@
-#include "util_shape.h"
+#include <luaocct/util_shape.h>
 
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <BRep_TFace.hxx>

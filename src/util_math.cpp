@@ -1,4 +1,4 @@
-#include "util_math.h"
+#include <luaocct/util_math.h>
 
 #include <cmath>
 #include <limits>

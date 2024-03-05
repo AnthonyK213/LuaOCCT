@@ -8,6 +8,7 @@ FetchContent_Declare(
   )
 
 # FetchContent_MakeAvailable(binder)
+FetchContent_GetProperties(binder)
 if(NOT binder_POPULATED)
   FetchContent_Populate(binder)
   add_subdirectory(

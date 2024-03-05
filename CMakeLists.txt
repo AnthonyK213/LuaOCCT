@@ -55,6 +55,8 @@ message("binder_SOURCE_DIR: ${binder_SOURCE_DIR}")
 message("binder_BINARY_DIR: ${binder_BINARY_DIR}")
 
 include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/luaocct/
   ${OpenCASCADE_INCLUDE_DIR}
   ${LuaBridge3_INCLUDE_DIR}
   )

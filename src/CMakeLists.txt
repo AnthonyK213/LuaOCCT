@@ -19,13 +19,14 @@ function(FIND_BINDER_EXEC_ CUR_DIR_ RESULT_)
 endfunction()
 
 FIND_BINDER_EXEC_(${binder_BINARY_DIR}/src/ BINDER_EXEC)
+message("BINDER_EXEC: ${BINDER_EXEC}")
 
 execute_process(
   COMMAND ${BINDER_EXEC}
       ${OpenCASCADE_INCLUDE_DIR}
-      ${CMAKE_SOURCE_DIR}/src/mod_header
+      ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/mod_header
       ${BINDER_GEN_DIR}
-      ${CMAKE_SOURCE_DIR}/binder/binder.toml
+      ${CMAKE_CURRENT_SOURCE_DIR}/binder.toml
   )
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} LUAOCCT_SRCS)
@@ -71,7 +72,7 @@ install(
   )
 
 install(
-  DIRECTORY ${BINDER_GEN_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/
+  DIRECTORY ${BINDER_GEN_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/
   DESTINATION include/luaocct
   COMPONENT header_files
   FILES_MATCHING PATTERN "*.h"
