@@ -33,6 +33,8 @@ endif()
 option(INSTALL_GTEST "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)" OFF)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
+include(cmake/FetchDeps.cmake)
+
 find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingAlgorithms REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
@@ -49,9 +51,11 @@ pkg_check_modules(LuaJIT REQUIRED IMPORTED_TARGET luajit)
 find_path(LuaBridge3_INCLUDE_DIR NAMES LuaBridge PATH_SUFFIXES luabridge3)
 message("LuaBridge3-Include-Dir: ${LuaBridge3_INCLUDE_DIR}")
 
+message("binder_SOURCE_DIR: ${binder_SOURCE_DIR}")
+message("binder_BINARY_DIR: ${binder_BINARY_DIR}")
+
 include_directories(
   ${OpenCASCADE_INCLUDE_DIR}
-  # ${LUA_INCLUDE_DIR}
   ${LuaBridge3_INCLUDE_DIR}
   )
 
@@ -59,7 +63,6 @@ link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
   )
 
-add_subdirectory(binder/LuaOCCT-binder)
 add_subdirectory(src)
 add_subdirectory(src-repl)
 

@@ -5,10 +5,8 @@ A LuaJIT binding for [OCCT](https://dev.opencascade.org/), powered by [LuaBridge
 ## Build
 - Clone the repository
   ```sh
-  git clone https://github.com/AnthonyK213/LuaOCCT --recursive
+  git clone https://github.com/AnthonyK213/LuaOCCT
   ```
-- Build submodules
-  - [LuaOCCT-binder](https://github.com/AnthonyK213/LuaOCCT-binder)
 - Install dependencies
   - Install the latest release of [vcpkg](https://github.com/microsoft/vcpkg)
     - Set environment variable `VCPKG_ROOT`
@@ -20,5 +18,6 @@ A LuaJIT binding for [OCCT](https://dev.opencascade.org/), powered by [LuaBridge
     since the vcpkg port on Linux is not usable.
     - Build & Install (on Linux)
     - Set environment variable `OCCT_DIR` (on Linux)
-- Configure with cmake
-- Build
+- Build [LuaOCCT-binder](https://github.com/AnthonyK213/LuaOCCT-binder)
+- Configure with cmake, generate source files.
+- Build.

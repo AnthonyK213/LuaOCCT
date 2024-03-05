@@ -18,7 +18,7 @@ function(FIND_BINDER_EXEC_ CUR_DIR_ RESULT_)
   set(${RESULT_} ${CUR_DIR_}/${BINDER_EXEC_} PARENT_SCOPE)
 endfunction()
 
-FIND_BINDER_EXEC_(${CMAKE_BINARY_DIR}/binder/LuaOCCT-binder/src/ BINDER_EXEC)
+FIND_BINDER_EXEC_(${binder_BINARY_DIR}/src/ BINDER_EXEC)
 
 execute_process(
   COMMAND ${BINDER_EXEC}
