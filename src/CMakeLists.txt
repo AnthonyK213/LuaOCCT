@@ -21,13 +21,18 @@ endfunction()
 FIND_BINDER_EXEC_(${binder_BINARY_DIR}/src/ BINDER_EXEC)
 message("BINDER_EXEC: ${BINDER_EXEC}")
 
-execute_process(
-  COMMAND ${BINDER_EXEC}
-      ${OpenCASCADE_INCLUDE_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/mod_header
-      ${BINDER_GEN_DIR}
-      ${CMAKE_CURRENT_SOURCE_DIR}/binder.toml
-  )
+file(GLOB BINDER_GEN_DIR_FILES "${BINDER_GEN_DIR}/*")
+list(LENGTH BINDER_GEN_DIR_FILES BINDER_GEN_DIR_LENGTH)
+
+if(NOT LUAOCCT_BINDER_SUPPRESS_REGENERATION OR BINDER_GEN_DIR_LENGTH EQUAL 0)
+  execute_process(
+    COMMAND ${BINDER_EXEC}
+        ${OpenCASCADE_INCLUDE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/mod_header
+        ${BINDER_GEN_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/binder.toml
+    )
+endif()
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} LUAOCCT_SRCS)
 aux_source_directory(${BINDER_GEN_DIR} LUAOCCT_GEN_SRCS)
