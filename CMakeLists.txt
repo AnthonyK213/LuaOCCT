@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-list(APPEND CMAKE_PREFIX_PATH "$ENV{OCCT_DIR}/lib/cmake/opencascade")
+list(APPEND CMAKE_PREFIX_PATH "$ENV{OCCT_DIR}")
 
 project(
   luaocct
