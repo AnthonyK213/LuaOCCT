@@ -33,6 +33,9 @@ endif()
 option(INSTALL_GTEST "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)" OFF)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
+set(LUAJIT_DIR ${CMAKE_BINARY_DIR}/deps/LuaJIT_Source CACHE STRING "Path of LuaJIT 2.1 source dir")
+set(LUAJIT_BUILD_EXE ON CACHE BOOL "")
+option(LUAOCCT_BINDER_SUPPRESS_REGENERATION "Suppress regeneration of LuaOCCT-binder" ON)
 include(cmake/FetchDeps.cmake)
 
 find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
@@ -40,22 +43,21 @@ find_package(OpenCASCADE COMPONENTS ModelingAlgorithms REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingData REQUIRED)
 find_package(OpenCASCADE COMPONENTS DataExchange REQUIRED)
 find_package(OpenCASCADE COMPONENTS Visualization REQUIRED)
-
 message("OCC-Include-Dir: ${OpenCASCADE_INCLUDE_DIR}")
 message("OCC-Lib-Dir: ${OpenCASCADE_LIBRARY_DIR}")
 message("OCC-Libs: ${OpenCASCADE_LIBRARIES}")
 
-find_package(PkgConfig REQUIRED)  
-pkg_check_modules(LuaJIT REQUIRED IMPORTED_TARGET luajit)
-
 message("binder_SOURCE_DIR: ${binder_SOURCE_DIR}")
 message("binder_BINARY_DIR: ${binder_BINARY_DIR}")
+message("luajit_SOURCE_DIR: ${luajit_SOURCE_DIR}")
+message("luajit_BINARY_DIR: ${luajit_BINARY_DIR}")
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include/
   ${CMAKE_CURRENT_SOURCE_DIR}/include/luaocct/
   ${OpenCASCADE_INCLUDE_DIR}
   ${luabridge3_SOURCE_DIR}/Source
+  ${luajit_BINARY_DIR}
   )
 
 link_directories(

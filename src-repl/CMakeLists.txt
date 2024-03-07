@@ -9,7 +9,8 @@ target_link_libraries(
   ${PROJECT_NAME}-repl
   PRIVATE
   ${OpenCASCADE_LIBRARIES}
-  PkgConfig::LuaJIT
+  luajit::lib
+  luajit::header
   )
 
 add_dependencies(

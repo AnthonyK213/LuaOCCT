@@ -6,20 +6,12 @@
       "name": "opencascade",
       "host": true,
       "platform": "windows"
-    },
-    {
-      "name": "luajit",
-      "host": true
     }
   ],
   "overrides": [
     {
       "name": "opencascade",
       "version": "7.6.2#7"
-    },
-    {
-      "name": "luajit",
-      "version": "2023-01-04#5"
     }
   ]
 }
