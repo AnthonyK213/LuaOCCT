@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-
-if(UNIX)
-  list(APPEND CMAKE_PREFIX_PATH "$ENV{OCCT_DIR}/lib/cmake/opencascade")
-endif()
+list(APPEND CMAKE_PREFIX_PATH "$ENV{OCCT_DIR}/lib/cmake/opencascade")
 
 project(
   luaocct
@@ -36,7 +32,10 @@ message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 set(LUAJIT_DIR ${CMAKE_BINARY_DIR}/deps/LuaJIT_Source CACHE STRING "Path of LuaJIT 2.1 source dir")
 set(LUAJIT_BUILD_EXE ON CACHE BOOL "")
 option(LUAOCCT_BINDER_SUPPRESS_REGENERATION "Suppress regeneration of LuaOCCT-binder" ON)
-include(cmake/FetchDeps.cmake)
+
+include(cmake/FetchBinder.cmake)
+include(cmake/FetchLuaBridge3.cmake)
+include(cmake/FetchLuaJIT.cmake)
 
 find_package(OpenCASCADE COMPONENTS FoundationClasses REQUIRED)
 find_package(OpenCASCADE COMPONENTS ModelingAlgorithms REQUIRED)
