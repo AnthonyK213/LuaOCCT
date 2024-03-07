@@ -48,9 +48,6 @@ message("OCC-Libs: ${OpenCASCADE_LIBRARIES}")
 find_package(PkgConfig REQUIRED)  
 pkg_check_modules(LuaJIT REQUIRED IMPORTED_TARGET luajit)
 
-find_path(LuaBridge3_INCLUDE_DIR NAMES LuaBridge PATH_SUFFIXES luabridge3)
-message("LuaBridge3-Include-Dir: ${LuaBridge3_INCLUDE_DIR}")
-
 message("binder_SOURCE_DIR: ${binder_SOURCE_DIR}")
 message("binder_BINARY_DIR: ${binder_BINARY_DIR}")
 
@@ -58,7 +55,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/include/
   ${CMAKE_CURRENT_SOURCE_DIR}/include/luaocct/
   ${OpenCASCADE_INCLUDE_DIR}
-  ${LuaBridge3_INCLUDE_DIR}
+  ${luabridge3_SOURCE_DIR}/Source
   )
 
 link_directories(

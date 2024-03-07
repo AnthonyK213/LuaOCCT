@@ -8,10 +8,6 @@
       "platform": "windows"
     },
     {
-      "name": "luabridge3",
-      "host": true
-    },
-    {
       "name": "luajit",
       "host": true
     }
@@ -20,10 +16,6 @@
     {
       "name": "opencascade",
       "version": "7.6.2#7"
-    },
-    {
-      "name": "luabridge3",
-      "version": "3.0-rc3#0"
     },
     {
       "name": "luajit",
