@@ -73,4 +73,6 @@ if(NOT luajit_POPULATED)
     PRIVATE
     ${luajit_BINARY_DIR}
     )
+
+  set_target_properties(libluajit PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
