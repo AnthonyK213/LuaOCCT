@@ -81,7 +81,9 @@ install(
   DIRECTORY ${BINDER_GEN_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/
   DESTINATION include/luaocct
   COMPONENT header_files
-  FILES_MATCHING PATTERN "*.h"
+  FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.lua"
   )
 
 install(
