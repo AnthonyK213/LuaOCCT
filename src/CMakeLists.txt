@@ -83,6 +83,7 @@ install(
   COMPONENT header_files
   FILES_MATCHING
     PATTERN "*.h"
+    PATTERN "*.hxx"
     PATTERN "*.lua"
   )
 

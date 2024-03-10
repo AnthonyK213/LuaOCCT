@@ -1,5 +1,5 @@
-#include <luaocct/util_curve.h>
-#include <luaocct/util_math.h>
+#include <luaocct/LOUtil_Curve.hxx>
+#include <luaocct/LOUtil_Math.hxx>
 
 #include <Extrema_ExtPC.hxx>
 #include <GCPnts_UniformAbscissa.hxx>
@@ -12,34 +12,31 @@
 
 #include <limits>
 
-namespace luaocct {
-namespace util {
-namespace Curve {
-
-Handle(Geom_Curve) Duplicate(const Handle(Geom_Curve) & theCurve) {
+Handle(Geom_Curve) LOUtil_Curve::Duplicate(const Handle(Geom_Curve) &
+                                           theCurve) {
   return Handle(Geom_Curve)::DownCast(theCurve->Copy());
 }
 
-Standard_Boolean IsClosed(const Handle(Geom_Curve) & theCurve,
-                          const Standard_Real theTolerance) {
+Standard_Boolean LOUtil_Curve::IsClosed(const Handle(Geom_Curve) & theCurve,
+                                        const Standard_Real theTolerance) {
   return ShapeAnalysis_Curve::IsClosed(theCurve, theTolerance);
 }
 
-Standard_Real GetLength(const Handle(Geom_Curve) & theCurve,
-                        const Standard_Real t0, const Standard_Real t1) {
+Standard_Real LOUtil_Curve::GetLength(const Handle(Geom_Curve) & theCurve,
+                                      const Standard_Real t0,
+                                      const Standard_Real t1) {
   GeomAdaptor_Curve aCrv(theCurve);
   return CPnts_AbscissaPoint::Length(aCrv, t0, t1);
 }
 
-Standard_Real GetLength(const Handle(Geom_Curve) & theCurve) {
+Standard_Real LOUtil_Curve::GetLength(const Handle(Geom_Curve) & theCurve) {
   return GetLength(theCurve, theCurve->FirstParameter(),
                    theCurve->LastParameter());
 }
 
-Standard_Boolean LengthParameter(const Handle(Geom_Curve) & theCurve,
-                                 const Standard_Real theSegmentLength,
-                                 Standard_Real &theT,
-                                 const Standard_Real theTolerance) {
+Standard_Boolean LOUtil_Curve::LengthParameter(
+    const Handle(Geom_Curve) & theCurve, const Standard_Real theSegmentLength,
+    Standard_Real &theT, const Standard_Real theTolerance) {
   Standard_Real aLength = GetLength(theCurve);
 
   if (theSegmentLength > aLength || theSegmentLength < 0.0 ||
@@ -60,18 +57,17 @@ Standard_Boolean LengthParameter(const Handle(Geom_Curve) & theCurve,
   return Standard_True;
 }
 
-Standard_Boolean NormalizedLengthParameter(const Handle(Geom_Curve) & theCurve,
-                                           const Standard_Real theS,
-                                           Standard_Real &theT,
-                                           const Standard_Real theTolerance) {
+Standard_Boolean LOUtil_Curve::NormalizedLengthParameter(
+    const Handle(Geom_Curve) & theCurve, const Standard_Real theS,
+    Standard_Real &theT, const Standard_Real theTolerance) {
   Standard_Real aSegmentLength = GetLength(theCurve) * theS;
   return LengthParameter(theCurve, aSegmentLength, theT, theTolerance);
 }
 
-Standard_Boolean PointAtNormalizedLength(const Handle(Geom_Curve) & theCurve,
-                                         const Standard_Real theS,
-                                         gp_Pnt &thePnt,
-                                         const Standard_Real theTolerance) {
+Standard_Boolean
+LOUtil_Curve::PointAtNormalizedLength(const Handle(Geom_Curve) & theCurve,
+                                      const Standard_Real theS, gp_Pnt &thePnt,
+                                      const Standard_Real theTolerance) {
   Standard_Real t;
 
   if (!NormalizedLengthParameter(theCurve, theS, t, theTolerance))
@@ -83,49 +79,46 @@ Standard_Boolean PointAtNormalizedLength(const Handle(Geom_Curve) & theCurve,
 }
 
 static Handle(Geom_Curve)
-    extend(const Handle(Geom_Curve) & theCurve, CurveEnd theSide,
+    extend(const Handle(Geom_Curve) & theCurve, LOAbs_CurveEnd theSide,
            const Standard_Real theLength, const Standard_Integer theCont) {
   if (theLength < gp::Resolution()) {
-    return Duplicate(theCurve);
+    return LOUtil_Curve::Duplicate(theCurve);
   }
 
-  Standard_Real t = theSide == CurveEnd::Start ? theCurve->FirstParameter()
-                                               : theCurve->LastParameter();
+  Standard_Real t = theSide == LOAbs_AtStart ? theCurve->FirstParameter()
+                                           : theCurve->LastParameter();
 
   gp_Pnt pntEnd;
   gp_Vec dirEnd;
   theCurve->D1(t, pntEnd, dirEnd);
   dirEnd.Normalize();
 
-  if (theSide == CurveEnd::Start)
+  if (theSide == LOAbs_AtStart)
     dirEnd.Reverse();
 
   gp_Pnt target = pntEnd.XYZ() + dirEnd.XYZ() * theLength;
   auto aCurve = Handle(Geom_BoundedCurve)::DownCast(theCurve->Copy());
 
   if (aCurve.IsNull()) {
-    return Duplicate(aCurve);
+    return LOUtil_Curve::Duplicate(aCurve);
   } else {
-    GeomLib::ExtendCurveToPoint(aCurve, target, 1, theSide == CurveEnd::End);
+    GeomLib::ExtendCurveToPoint(aCurve, target, 1, theSide == LOAbs_AtEnd);
     return aCurve;
   }
 }
 
-Handle(Geom_Curve)
-    Extend(const Handle(Geom_Curve) & theCurve, CurveEnd theSide,
-           const Standard_Real theLength, const Standard_Integer theCont) {
+Handle(Geom_Curve) LOUtil_Curve::Extend(const Handle(Geom_Curve) & theCurve,
+                                        LOAbs_CurveEnd theSide,
+                                        const Standard_Real theLength,
+                                        const Standard_Integer theCont) {
   if (IsClosed(theCurve)) {
     return Duplicate(theCurve);
   }
 
   switch (theSide) {
-  case CurveEnd::None:
-    return nullptr;
-
-  case CurveEnd::Both: {
-    Handle(Geom_Curve) aCrv =
-        extend(theCurve, CurveEnd::Start, theLength, theCont);
-    return extend(aCrv, CurveEnd::End, theLength, theCont);
+  case LOAbs_AtBoth: {
+    Handle(Geom_Curve) aCrv = extend(theCurve, LOAbs_AtStart, theLength, theCont);
+    return extend(aCrv, LOAbs_AtEnd, theLength, theCont);
   }
 
   default:
@@ -133,9 +126,10 @@ Handle(Geom_Curve)
   }
 }
 
-Handle(Geom_TrimmedCurve)
-    Trim(const Handle(Geom_Curve) & theCurve, const Standard_Real theT0,
-         const Standard_Real theT1) {
+Handle(Geom_TrimmedCurve) LOUtil_Curve::Trim(const Handle(Geom_Curve) &
+                                                 theCurve,
+                                             const Standard_Real theT0,
+                                             const Standard_Real theT1) {
   if (theT1 - theT0 <= Precision::Confusion() ||
       theT0 < theCurve->FirstParameter() || theT1 > theCurve->LastParameter()) {
     return nullptr;
@@ -145,12 +139,12 @@ Handle(Geom_TrimmedCurve)
 }
 
 static Handle(Geom_TrimmedCurve)
-    trimByLength(const Handle(Geom_Curve) & theCurve, CurveEnd theSide,
+    trimByLength(const Handle(Geom_Curve) & theCurve, LOAbs_CurveEnd theSide,
                  const Standard_Real theLength) {
   GeomAdaptor_Curve aCurve(theCurve);
-  Standard_Real abscissa = theSide == CurveEnd::Start
-                               ? theLength
-                               : (GetLength(theCurve) - theLength);
+  Standard_Real abscissa =
+      theSide == LOAbs_AtStart ? theLength
+                             : (LOUtil_Curve::GetLength(theCurve) - theLength);
   GCPnts_AbscissaPoint aPnt{aCurve, abscissa, aCurve.FirstParameter()};
 
   if (!aPnt.IsDone())
@@ -158,23 +152,20 @@ static Handle(Geom_TrimmedCurve)
 
   Standard_Real t = aPnt.Parameter();
 
-  if (theSide == CurveEnd::Start) {
-    return Trim(theCurve, t, theCurve->LastParameter());
+  if (theSide == LOAbs_AtStart) {
+    return LOUtil_Curve::Trim(theCurve, t, theCurve->LastParameter());
   } else {
-    return Trim(theCurve, theCurve->FirstParameter(), t);
+    return LOUtil_Curve::Trim(theCurve, theCurve->FirstParameter(), t);
   }
 }
 
-Handle(Geom_TrimmedCurve)
-    TrimByLength(const Handle(Geom_Curve) & theCurve, CurveEnd theSide,
-                 const Standard_Real theLength) {
+Handle(Geom_TrimmedCurve) LOUtil_Curve::TrimByLength(
+    const Handle(Geom_Curve) & theCurve, LOAbs_CurveEnd theSide,
+    const Standard_Real theLength) {
   switch (theSide) {
-  case CurveEnd::None:
-    return nullptr;
-
-  case CurveEnd::Both: {
-    auto aCrv = trimByLength(theCurve, CurveEnd::Start, theLength);
-    return trimByLength(aCrv, CurveEnd::End, theLength);
+  case LOAbs_AtBoth: {
+    auto aCrv = trimByLength(theCurve, LOAbs_AtStart, theLength);
+    return trimByLength(aCrv, LOAbs_AtEnd, theLength);
   }
 
   default:
@@ -182,8 +173,8 @@ Handle(Geom_TrimmedCurve)
   }
 }
 
-Standard_Boolean IsLinear(const Handle(Geom_Curve) & theCurve,
-                          const Standard_Real theTolerance) {
+Standard_Boolean LOUtil_Curve::IsLinear(const Handle(Geom_Curve) & theCurve,
+                                        const Standard_Real theTolerance) {
   if (theCurve.IsNull()) {
     return false;
   }
@@ -262,7 +253,8 @@ Standard_Boolean IsLinear(const Handle(Geom_Curve) & theCurve,
 }
 
 std::vector<Standard_Real>
-ClosestParameters(const Handle(Geom_Curve) & theCurve, const gp_Pnt &thePoint) {
+LOUtil_Curve::ClosestParameters(const Handle(Geom_Curve) & theCurve,
+                                const gp_Pnt &thePoint) {
   std::vector<Standard_Real> aResult{};
 
   Standard_Real t0 = theCurve->FirstParameter();
@@ -329,9 +321,10 @@ ClosestParameters(const Handle(Geom_Curve) & theCurve, const gp_Pnt &thePoint) {
   return aResult;
 }
 
-TColStd_Array1OfReal DivideByCount(const Handle(Geom_Curve) & theCurve,
-                                   const Standard_Integer &theNbSegments,
-                                   const Standard_Boolean theIncludeEnds) {
+TColStd_Array1OfReal
+LOUtil_Curve::DivideByCount(const Handle(Geom_Curve) & theCurve,
+                            const Standard_Integer &theNbSegments,
+                            const Standard_Boolean theIncludeEnds) {
   TColStd_Array1OfReal aResult{};
 
   if (theNbSegments <= 0)
@@ -374,12 +367,12 @@ isG2(const gp_Pnt &thisStart, const gp_Dir &thisTangentStart,
      const gp_Dir &prevTangentEnd, double prevCurvatureEnd) {
   return thisStart.Distance(prevEnd) < Precision::Confusion() &&
          thisTangentStart.IsParallel(prevTangentEnd, Precision::Confusion()) &&
-         luaocct::util::Math::EpsilonEquals(
-             thisCurvatureStart, prevCurvatureEnd, Precision::Confusion());
+         LOUtil_Math::EpsilonEquals(thisCurvatureStart, prevCurvatureEnd,
+                                    Precision::Confusion());
 }
 
-std::vector<Handle(Geom_BoundedCurve)> Explode(const Handle(Geom_Curve) &
-                                               theCurve) {
+std::vector<Handle(Geom_BoundedCurve)>
+LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
   std::vector<Handle(Geom_BoundedCurve)> aResult{};
 
   ShapeUpgrade_SplitCurve3dContinuity aSplitter{};
@@ -477,7 +470,3 @@ std::vector<Handle(Geom_BoundedCurve)> Explode(const Handle(Geom_Curve) &
 
   return aResult;
 }
-
-} // namespace Curve
-} // namespace util
-} // namespace luaocct

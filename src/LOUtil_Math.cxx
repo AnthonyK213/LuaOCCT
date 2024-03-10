@@ -1,14 +1,11 @@
-#include <luaocct/util_math.h>
+#include <luaocct/LOUtil_Math.hxx>
 
 #include <cmath>
 #include <limits>
 
-namespace luaocct {
-namespace util {
-namespace Math {
-
-Standard_Boolean EpsilonEquals(Standard_Real theX, Standard_Real theY,
-                               Standard_Real theEpsilon) {
+Standard_Boolean LOUtil_Math::EpsilonEquals(Standard_Real theX,
+                                            Standard_Real theY,
+                                            Standard_Real theEpsilon) {
   if (std::isnan(theX) || std::isnan(theY))
     return Standard_False;
 
@@ -26,7 +23,3 @@ Standard_Boolean EpsilonEquals(Standard_Real theX, Standard_Real theY,
 
   return Standard_False;
 }
-
-} // namespace Math
-} // namespace util
-} // namespace luaocct

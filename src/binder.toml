@@ -30,6 +30,9 @@ modules = [
   # "TDocStd",
   # "TDF",
   # "XCAFPrs",
+  "LOAbs",
+  "LOBase",
+  "LOUtil",
 ]
 
 immutable_type = [
@@ -46,6 +49,8 @@ immutable_type = [
   "TCollection_ExtendedString",
   "TDF_Label",
 ]
+
+extra_modules = []
 
 [lua_operators]
 "operator+" = "__add"

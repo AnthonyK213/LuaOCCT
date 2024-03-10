@@ -46,6 +46,10 @@
 #include "mod_header/XCAFPrs.h"
 #include "mod_header/gp.h"
 
+#include "mod_header/LOAbs.h"
+#include "mod_header/LOBase.h"
+#include "mod_header/LOUtil.h"
+
 #include <Geom2d_Curve.hxx>
 #include <NCollection_Array1.hxx>
 #include <NCollection_Array2.hxx>
