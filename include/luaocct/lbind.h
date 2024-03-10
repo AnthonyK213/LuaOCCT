@@ -47,7 +47,7 @@
 #include "mod_header/gp.h"
 
 #include "mod_header/LOAbs.h"
-#include "mod_header/LOBase.h"
+#include "mod_header/LODoc.h"
 #include "mod_header/LOUtil.h"
 
 #include <Geom2d_Curve.hxx>
