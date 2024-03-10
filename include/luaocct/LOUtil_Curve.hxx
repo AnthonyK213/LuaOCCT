@@ -12,7 +12,7 @@
 #include <Geom_TrimmedCurve.hxx>
 #include <TColGeom_Array1OfCurve.hxx>
 
-#include <LOAbs_CurveEnd.hxx>
+#include "LOAbs_CurveEnd.hxx"
 #include <vector>
 
 class LOUtil_Curve {
