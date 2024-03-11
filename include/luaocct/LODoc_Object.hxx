@@ -3,10 +3,9 @@
 
 #include <AIS_InteractiveObject.hxx>
 #include <TDF_Label.hxx>
+#include <vector>
 
-using LODoc_Object = AIS_InteractiveObject;
-using LODoc_ObjectList = std::vector<Handle(LODoc_Object)>;
-using LODoc_Id = TDF_Label;
-using LODoc_IdList = std::vector<TDF_Label>;
+typedef AIS_InteractiveObject LODoc_Object;
+typedef std::vector<Handle(AIS_InteractiveObject)> LODoc_ObjectList;
 
 #endif

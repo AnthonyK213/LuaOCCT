@@ -12,6 +12,7 @@
 
 #include <luaocct/LODoc_Attribute.hxx>
 #include <luaocct/LODoc_Document.hxx>
+#include <luaocct/LODoc_DocumentExplorer.hxx>
 #include <luaocct/LODoc_ObjectTable.hxx>
 #include <luaocct/LOUtil_AIS.hxx>
 
@@ -33,8 +34,8 @@ const Handle(AIS_InteractiveContext) & LODoc_ObjectTable::Context() const {
   return myDoc->Context();
 }
 
-LODoc_Id LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
-                                     Standard_Boolean theToUpdate) {
+TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
+                                      Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND({});
 
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
@@ -52,8 +53,8 @@ LODoc_Id LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
   return aLabel;
 }
 
-LODoc_Id LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
-                                    Standard_Boolean theToUpdate) {
+TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
+                                     Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND({});
 
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
@@ -76,7 +77,7 @@ LODoc_Id LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
 
 void LODoc_ObjectTable::Clear(Standard_Boolean theToUpdate) {}
 
-Handle(LODoc_Object) LODoc_ObjectTable::Find(const LODoc_Id &theId) const {
+Handle(LODoc_Object) LODoc_ObjectTable::Find(const TDF_Label &theId) const {
   Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(theId);
   if (aPrs.IsNull())
     return nullptr;
@@ -84,9 +85,11 @@ Handle(LODoc_Object) LODoc_ObjectTable::Find(const LODoc_Id &theId) const {
   return aPrs->GetAIS();
 }
 
-Standard_Boolean LODoc_ObjectTable::DeleteObject(const LODoc_Id &theId,
+Standard_Boolean LODoc_ObjectTable::DeleteObject(const TDF_Label &theId,
                                                  Standard_Boolean theToUpdate) {
-  return DeleteObjects({theId}, theToUpdate) == 1;
+  TDF_LabelList aList{};
+  aList.Append(theId);
+  return DeleteObjects(aList, theToUpdate) == 1;
 }
 
 Standard_Boolean LODoc_ObjectTable::DeleteObject(const Handle(LODoc_Object) &
@@ -96,14 +99,14 @@ Standard_Boolean LODoc_ObjectTable::DeleteObject(const Handle(LODoc_Object) &
 }
 
 Standard_Integer
-LODoc_ObjectTable::DeleteObjects(const LODoc_IdList &theIds,
+LODoc_ObjectTable::DeleteObjects(const TDF_LabelList &theIds,
                                  Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND(0);
 
   Standard_Integer nbDelete = 0;
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
 
-  for (const LODoc_Id &theId : theIds) {
+  for (const TDF_Label &theId : theIds) {
     auto aPrs = LODoc_Attribute::GetPrs(theId);
     if (aPrs.IsNull())
       continue;
@@ -129,7 +132,7 @@ LODoc_ObjectTable::DeleteObjects(const LODoc_ObjectList &theObjects,
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
 
   for (const auto &theObject : theObjects) {
-    LODoc_Id anId = LODoc_Attribute::GetId(theObject);
+    TDF_Label anId = LODoc_Attribute::GetId(theObject);
     if (anId.IsNull())
       continue;
 
@@ -149,9 +152,11 @@ LODoc_ObjectTable::DeleteObjects(const LODoc_ObjectList &theObjects,
   return nbDelete;
 }
 
-Standard_Boolean LODoc_ObjectTable::ShowObject(const LODoc_Id &theId,
+Standard_Boolean LODoc_ObjectTable::ShowObject(const TDF_Label &theId,
                                                Standard_Boolean theToUpdate) {
-  return ShowObjects({theId}, theToUpdate) == 1;
+  TDF_LabelList aList{};
+  aList.Append(theId);
+  return ShowObjects(aList, theToUpdate) == 1;
 }
 
 Standard_Boolean LODoc_ObjectTable::ShowObject(const Handle(LODoc_Object) &
@@ -160,13 +165,13 @@ Standard_Boolean LODoc_ObjectTable::ShowObject(const Handle(LODoc_Object) &
   return ShowObjects({theObject}, theToUpdate) == 1;
 }
 
-Standard_Integer LODoc_ObjectTable::ShowObjects(const LODoc_IdList &theIds,
+Standard_Integer LODoc_ObjectTable::ShowObjects(const TDF_LabelList &theIds,
                                                 Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND(0);
 
   Standard_Integer nbShow = 0;
 
-  for (const LODoc_Id &theId : theIds) {
+  for (const TDF_Label &theId : theIds) {
     auto aPrs = LODoc_Attribute::GetPrs(theId);
     if (aPrs.IsNull())
       continue;
@@ -212,8 +217,9 @@ Standard_Integer LODoc_ObjectTable::ShowAll(Standard_Boolean theToUpdate) {
 
   Standard_Integer nbShow = 0;
 
-  for (auto anIter = myDoc->GetXcafExplorer(); anIter.More(); anIter.Next()) {
-    auto aPrs = LODoc_Attribute::GetPrs(anIter.Current().Label);
+  for (auto anIter = myDoc->DocumentExplorer(0); anIter->More();
+       anIter->Next()) {
+    auto aPrs = LODoc_Attribute::GetPrs(anIter->Current().Label);
     if (aPrs.IsNull())
       continue;
 
@@ -229,10 +235,11 @@ Standard_Integer LODoc_ObjectTable::ShowAll(Standard_Boolean theToUpdate) {
   return nbShow;
 }
 
-Standard_Boolean LODoc_ObjectTable::HideObject(const LODoc_Id &theId,
+Standard_Boolean LODoc_ObjectTable::HideObject(const TDF_Label &theId,
                                                Standard_Boolean theToUpdate) {
-  LODoc_IdList anIdList{theId};
-  return HideObjects(anIdList, theToUpdate) == 1;
+  TDF_LabelList aList{};
+  aList.Append(theId);
+  return HideObjects(aList, theToUpdate) == 1;
 }
 
 Standard_Boolean LODoc_ObjectTable::HideObject(const Handle(LODoc_Object) &
@@ -242,13 +249,13 @@ Standard_Boolean LODoc_ObjectTable::HideObject(const Handle(LODoc_Object) &
   return HideObjects(anObjectList, theToUpdate) == 1;
 }
 
-Standard_Integer LODoc_ObjectTable::HideObjects(const LODoc_IdList &theIds,
+Standard_Integer LODoc_ObjectTable::HideObjects(const TDF_LabelList &theIds,
                                                 Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND(0);
 
   Standard_Integer nbHide = 0;
 
-  for (const LODoc_Id &anId : theIds) {
+  for (const TDF_Label &anId : theIds) {
     Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(anId);
     if (aPrs.IsNull())
       continue;
@@ -299,7 +306,7 @@ LODoc_ObjectTable::PurgeObjects(const LODoc_ObjectList &theObjects,
   return 0;
 }
 
-Standard_Boolean LODoc_ObjectTable::SelectObject(const LODoc_Id &theId,
+Standard_Boolean LODoc_ObjectTable::SelectObject(const TDF_Label &theId,
                                                  Standard_Boolean theSelect,
                                                  Standard_Boolean theToUpdate) {
   return SelectObject(Find(theId), theSelect, theToUpdate);
@@ -319,12 +326,12 @@ Standard_Boolean LODoc_ObjectTable::SelectObject(const Handle(LODoc_Object) &
 }
 
 Standard_Integer
-LODoc_ObjectTable::SelectObjects(const LODoc_IdList &theIds,
+LODoc_ObjectTable::SelectObjects(const TDF_LabelList &theIds,
                                  Standard_Boolean theSelect,
                                  Standard_Boolean theToUpdate) {
   Standard_Integer aCount = 0;
 
-  for (const LODoc_Id &anId : theIds) {
+  for (const TDF_Label &anId : theIds) {
     if (SelectObject(anId, theSelect, Standard_False))
       aCount++;
   }
@@ -356,8 +363,9 @@ Standard_Integer LODoc_ObjectTable::SelectAll(Standard_Boolean theToUpdate) {
   Context()->ClearSelected(Standard_False);
   Standard_Integer nbSelect = 0;
 
-  for (auto anIter = myDoc->GetXcafExplorer(); anIter.More(); anIter.Next()) {
-    auto aPrs = LODoc_Attribute::GetPrs(anIter.Current().Label);
+  for (auto anIter = myDoc->DocumentExplorer(0); anIter->More();
+       anIter->Next()) {
+    auto aPrs = LODoc_Attribute::GetPrs(anIter->Current().Label);
     if (aPrs.IsNull())
       continue;
     Handle(LODoc_Object) anObj = aPrs->GetAIS();

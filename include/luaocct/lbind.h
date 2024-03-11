@@ -248,6 +248,56 @@ template <class T> struct Stack<NCollection_Array2<T>> {
   }
 };
 
+template <class T> struct Stack<NCollection_List<T>> {
+  static Result push(lua_State *L, const NCollection_List<T> &list) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, list.Size(), 0);
+
+    Standard_Integer i = 0;
+    for (auto it = list.cbegin(); it != list.cend(); ++it, ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+
+      auto result = Stack<T>::push(L, *it);
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
+    return {};
+  }
+
+  static TypeResult<NCollection_List<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    const int init_stack_size = lua_gettop(L);
+    NCollection_List<T> list{};
+    const int abs_index = lua_absindex(L, index);
+    lua_pushnil(L);
+
+    while (lua_next(L, abs_index) != 0) {
+      auto item = Stack<T>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      list.Append(*item);
+
+      lua_pop(L, 1);
+    }
+
+    return list;
+  }
+};
+
 } // namespace luabridge
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)

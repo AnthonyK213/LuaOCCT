@@ -8,10 +8,10 @@
 
 class LODoc_Attribute {
 public:
-  Standard_EXPORT static LODoc_Id GetId(const Handle(LODoc_Object) & theObj);
+  Standard_EXPORT static TDF_Label GetId(const Handle(LODoc_Object) & theObj);
 
   Standard_EXPORT static TCollection_ExtendedString
-  GetName(const LODoc_Id &theId,
+  GetName(const TDF_Label &theId,
           Standard_Boolean theIsInstanceName = Standard_False);
 
   Standard_EXPORT static TCollection_ExtendedString
@@ -19,18 +19,18 @@ public:
           Standard_Boolean theIsInstanceName = Standard_False);
 
   Standard_EXPORT static Handle(TPrsStd_AISPresentation)
-      GetPrs(const LODoc_Id &theId);
+      GetPrs(const TDF_Label &theId);
 
   Standard_EXPORT static Handle(TPrsStd_AISPresentation)
       GetPrs(const Handle(LODoc_Object) & theObj);
 
-  Standard_EXPORT static TopoDS_Shape GetShape(const LODoc_Id &theId);
+  Standard_EXPORT static TopoDS_Shape GetShape(const TDF_Label &theId);
 
   Standard_EXPORT static TopoDS_Shape
   GetShape(const Handle(LODoc_Object) & theObj, TopLoc_Location &theLoc);
 
   Standard_EXPORT static Standard_Boolean
-  GetInteger(const LODoc_Id &theObj, const Standard_GUID &theGuid,
+  GetInteger(const TDF_Label &theObj, const Standard_GUID &theGuid,
              Standard_Integer &theValue);
 
   Standard_EXPORT static Standard_Boolean
@@ -38,7 +38,7 @@ public:
              Standard_Integer &theValue);
 
   Standard_EXPORT static Standard_Boolean
-  SetInteger(const LODoc_Id &theId, const Standard_GUID &theGuid,
+  SetInteger(const TDF_Label &theId, const Standard_GUID &theGuid,
              Standard_Integer theValue);
 
   Standard_EXPORT static Standard_Boolean

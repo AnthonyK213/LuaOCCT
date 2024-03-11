@@ -21,9 +21,6 @@ public:
                        Standard_Boolean theIsInstanceName,
                        Standard_Integer theLowerDepth);
 
-  Standard_EXPORT static Standard_Boolean
-  ImportStep(Handle(TDocStd_Document) & theDoc, Standard_CString theFilePath);
-
   Standard_EXPORT static Handle(TPrsStd_AISViewer)
       InitAISViewer(const Handle(TDocStd_Document) & theDoc,
                     const Handle(AIS_InteractiveContext) & theCtx);

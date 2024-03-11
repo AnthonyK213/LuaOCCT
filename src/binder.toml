@@ -28,10 +28,10 @@ modules = [
   "GProp",
   "GeomLib",
   # "TDocStd",
-  # "TDF",
-  # "XCAFPrs",
+  "TDF",
+  "XCAFPrs",
   "LOAbs",
-  # "LODoc",
+  "LODoc",
   "LOUtil",
 ]
 
@@ -47,7 +47,6 @@ immutable_type = [
   "handle",
   "TCollection_AsciiString",
   "TCollection_ExtendedString",
-  "TDF_Label",
 ]
 
 extra_modules = []
@@ -65,6 +64,11 @@ class = [
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
+  "TDF_Attribute",
+  "TDF_Data",
+  "TDF_LabelNode",
+  "TDF_TagSource",
+  "XCAFPrs_Style",
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -74,6 +78,20 @@ method = [
   "IntTools_PntOnFace::IsValid",
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
+  "LODoc_Document::Context",
+  "LODoc_Document::SetContext",
+  "LODoc_Document::Document",
+  "TDF_Label::Data",
+  "TDF_Label::Father",
+  "TDF_Label::Root",
+  "TDF_Label::AddAttribute",
+  "TDF_Label::FindAttribute",
+  "TDF_Label::ForgetAttribute",
+  "TDF_Label::ForgetAllAttributes",
+  "TDF_Label::ResumeAttribute",
+  "TDF_Label::Dump",
+  "TDF_Label::ExtendedDump",
+  "TDF_Label::EntryDump",
 ]
 copyable = ["Geom_SweptSurface"]
 

@@ -2,7 +2,7 @@ require("luaocct")
 
 local Geom = LuaOCCT.Geom
 local gp = LuaOCCT.gp
-local curveUtil = LuaOCCT.util.Curve
+local LOUtil_Curve = LuaOCCT.LOUtil.LOUtil_Curve
 local GeomConvert = LuaOCCT.GeomConvert
 
 local util = require("util")
@@ -14,11 +14,11 @@ local test_Geom_Line = util.make_test("Geom_Line", function()
   local a_line = Geom.Geom_Line(ax1)
 
   util.log("a_line:Value(10) =", a_line:Value(10))
-  util.log("a_line.Position_ =", a_line.Position_)
+  util.log("a_line:Position() =", a_line:Position())
   util.log("a_line:DynamicType():Name() =", a_line:DynamicType():Name())
 
   util.log("a_line:GetRefCount() =", a_line:GetRefCount())
-  util.log("a_line.Length =", curveUtil.GetLength(a_line, -114, 514))
+  util.log("a_line.Length =", LOUtil_Curve.GetLength(a_line, -114, 514))
   util.log("a_line:GetRefCount() =", a_line:GetRefCount())
 end)
 
@@ -36,19 +36,19 @@ local test_Geom_BSplineCurve = util.make_test("Geom_BSplineCurve", function()
 
   util.log("a_nurbs:DynamicType():Name() =", a_nurbs:DynamicType():Name())
   util.log("a_nurbs:Degree() =", a_nurbs:Degree())
-  util.log("a_nurbs.Length =", curveUtil.GetLength(a_nurbs))
+  util.log("a_nurbs.Length =", LOUtil_Curve.GetLength(a_nurbs))
   util.log("a_nurbs.Mid =", a_nurbs:Value(0.5))
-  util.log("a_nurbs.NbPoles_ =", a_nurbs.NbPoles_)
-  util.log("a_nurbs.NbKnots_ =", a_nurbs.NbKnots_)
+  util.log("a_nurbs:NbPoles() =", a_nurbs:NbPoles())
+  util.log("a_nurbs:NbKnots() =", a_nurbs:NbKnots())
   util.log("a_nurbs:Poles() =", a_nurbs:Poles())
   util.log("a_nurbs:KnotSequence() =", a_nurbs:KnotSequence())
   util.log("a_nurbs:Multiplicities() =", a_nurbs:Multiplicities())
   util.log("a_nurbs:Weights() =", a_nurbs:Weights())
   util.log("a_nurbs:Resolution(0.5) =", a_nurbs:Resolution(0.5))
-  util.log("a_nurbs.StartPoint_ =", a_nurbs.StartPoint_)
-  util.log("a_nurbs.EndPoint_ =", a_nurbs.EndPoint_)
-  util.log("a_nurbs.FirstParameter_ =", a_nurbs.FirstParameter_)
-  util.log("a_nurbs.LastParameter_ =", a_nurbs.LastParameter_)
+  util.log("a_nurbs:StartPoint() =", a_nurbs:StartPoint())
+  util.log("a_nurbs:EndPoint() =", a_nurbs:EndPoint())
+  util.log("a_nurbs:FirstParameter() =", a_nurbs:FirstParameter())
+  util.log("a_nurbs:LastParameter() =", a_nurbs:LastParameter())
 
   local poles1             = { gp.gp_Pnt(0, 1, 0), gp.gp_Pnt(-1, 1, 0), gp.gp_Pnt(-1, 0, 0) }
   local a_nurbs1           = Geom.Geom_BSplineCurve(poles1, weights, knots, multiplicities, degree, periodic,
@@ -79,7 +79,7 @@ local test_Geom_BSplineCurve = util.make_test("Geom_BSplineCurve", function()
   util.log("a_nurbs_copy:GetRefCount() =", a_nurbs_copy:GetRefCount())
   util.log("a_nurbs_copy_downcast:GetRefCount() =", a_nurbs_copy_downcast:GetRefCount())
 
-  util.log("a_nurbs_copy_downcast.Length =", curveUtil.GetLength(a_nurbs_copy_downcast))
+  util.log("a_nurbs_copy_downcast.Length =", LOUtil_Curve.GetLength(a_nurbs_copy_downcast))
 end)
 
 --------------------------------------------------------------------------------

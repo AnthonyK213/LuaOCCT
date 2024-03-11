@@ -3,7 +3,7 @@
 
 // clang-format off
 #include <XCAFPrs_DocumentNode.hxx>
-#include <XCAFPrs_DocumentExplorer.hxx>
+// #include <XCAFPrs_DocumentExplorer.hxx>
 // clang-format on
 
 #endif

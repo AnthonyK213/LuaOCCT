@@ -25,6 +25,7 @@
 #include <XCAFPrs_DocumentNode.hxx>
 
 #include "LOApp_Application.hxx"
+#include "LODoc_DocumentExplorer.hxx"
 #include "LODoc_Object.hxx"
 #include "LODoc_ObjectTable.hxx"
 
@@ -32,57 +33,69 @@ using LODoc_DocumentNode = XCAFPrs_DocumentNode;
 
 class LODoc_Document : public Standard_Transient {
 public:
-  LODoc_Document();
+  Standard_EXPORT LODoc_Document();
 
 public:
-  const Handle(LODoc_ObjectTable) & Objects() const { return myObjects; }
+  Standard_EXPORT const Handle(LODoc_ObjectTable) & Objects() const {
+    return myObjects;
+  }
 
-  const Handle(AIS_InteractiveContext) & Context() const { return myContext; }
+  Standard_EXPORT const Handle(AIS_InteractiveContext) & Context() const {
+    return myContext;
+  }
 
-  void SetContext(const Handle(AIS_InteractiveContext) & theContext);
+  Standard_EXPORT void SetContext(const Handle(AIS_InteractiveContext) &
+                                  theContext);
 
-  const Handle(TDocStd_Document) & Document() const { return myDoc; }
+  Standard_EXPORT const Handle(TDocStd_Document) & Document() const {
+    return myDoc;
+  }
 
-  Standard_Boolean ImportStep(Standard_CString theFilePath);
+  Standard_EXPORT Standard_Boolean ImportStep(Standard_CString theFilePath);
 
-  Standard_Boolean ExportStep(Standard_CString theFilePath);
+  Standard_EXPORT Standard_Boolean ExportStep(Standard_CString theFilePath);
 
-  Handle(Poly_Triangulation) ImportStl(Standard_CString theFilePath);
+  Standard_EXPORT Handle(Poly_Triangulation)
+      ImportStl(Standard_CString theFilePath);
 
-  Standard_Boolean ExportStl(Standard_CString theFilePath,
-                             const Handle(Poly_Triangulation) & theMesh);
+  Standard_EXPORT Standard_Boolean ExportStl(Standard_CString theFilePath,
+                                             const Handle(Poly_Triangulation) &
+                                                 theMesh);
 
-  void DumpXcafDocumentTree() const;
+  Standard_EXPORT void Undo();
 
-  void Undo();
+  Standard_EXPORT void Redo();
 
-  void Redo();
+  Standard_EXPORT void UpdateView();
 
-  void UpdateView();
+  Standard_EXPORT void Close();
 
-  XCAFPrs_DocumentExplorer
-  GetXcafExplorer(const XCAFPrs_DocumentExplorerFlags theFlags =
-                      XCAFPrs_DocumentExplorerFlags_None) const;
+  Standard_EXPORT void DumpXcafDocumentTree() const;
+
+  Standard_EXPORT Handle(LODoc_DocumentExplorer)
+      DocumentExplorer(const Standard_Integer theFlags) const;
 
   DEFINE_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
 public:
-  virtual void AddObjectEvent(const Handle(LODoc_Document) & theDoc) {}
+  Standard_EXPORT virtual void AddObjectEvent(const Handle(LODoc_Document) &
+                                              theDoc) {}
 
-  virtual void DeleteObjectEvent() {}
+  Standard_EXPORT virtual void DeleteObjectEvent() {}
 
-  virtual void UndeleteObjectEvent() {}
+  Standard_EXPORT virtual void UndeleteObjectEvent() {}
 
 protected:
-  Standard_Boolean createXcafApp();
+  Standard_EXPORT Standard_Boolean createXcafApp();
 
-  Handle(TDocStd_Document)
+  Standard_EXPORT Handle(TDocStd_Document)
       newDocument(Standard_Boolean theEmpty = Standard_False);
 
-  void closeDocument(Handle(TDocStd_Document) & theDoc,
-                     Standard_Boolean theToUpdate = Standard_False);
+  Standard_EXPORT void
+  closeDocument(Handle(TDocStd_Document) & theDoc,
+                Standard_Boolean theToUpdate = Standard_False);
 
-  void displayXcafDoc();
+  Standard_EXPORT void displayXcafDoc();
 
 protected:
   Handle(LOApp_Application) myApp;

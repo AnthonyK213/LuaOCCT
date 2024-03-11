@@ -22,7 +22,7 @@ local test_TopoDS_Edge = util.make_test("test_TopoDS_Edge", function()
   local edge = make_edge:Edge()
   BRepLib.BRepLib.BuildCurves3d(edge)
 
-  local line, first, last = unpack(BRep.BRep_Tool.Curve(edge))
+  local line --[[@type Geom_Curve]], first, last = unpack(BRep.BRep_Tool.Curve(edge))
 
   util.log("Edge line:", line:DynamicType():Name(), first, last)
 end)

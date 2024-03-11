@@ -34,7 +34,35 @@ Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
   createXcafApp();
   Handle(TDocStd_Document) aDoc = newDocument(Standard_True);
 
-  if (!LOUtil_OCAF::ImportStep(aDoc, theFilePath)) {
+  if (aDoc.IsNull()) {
+    std::cout << "Error: The document is null\n";
+    return Standard_False;
+  }
+
+  STEPCAFControl_Controller::Init();
+  STEPControl_Controller::Init();
+
+  STEPCAFControl_Reader aReader;
+
+  aReader.SetColorMode(Standard_True);
+  aReader.SetNameMode(Standard_True);
+  aReader.SetLayerMode(Standard_True);
+  aReader.SetSHUOMode(Standard_True);
+
+  try {
+    if (aReader.ReadFile(theFilePath) != IFSelect_RetDone) {
+      std::cout << "Error: On reading STEP file " << theFilePath << '\n';
+      return Standard_False;
+    }
+
+    if (!aReader.Transfer(aDoc)) {
+      std::cout << "Error: On transferring STEP file " << theFilePath << '\n';
+      return Standard_False;
+    }
+  } catch (const Standard_Failure &theFailure) {
+    std::cout << "Exception raised during STEP import: "
+              << theFailure.GetMessageString() << '\n';
+
     return Standard_False;
   }
 
@@ -70,8 +98,6 @@ Standard_Boolean LODoc_Document::ExportStep(Standard_CString theFilePath) {
     return Standard_False;
   }
 
-  std::cout << "File " << theFilePath << " is exported successfully" << '\n';
-
   return Standard_True;
 }
 
@@ -106,7 +132,7 @@ void LODoc_Document::DumpXcafDocumentTree() const {
   if (myDoc.IsNull())
     return;
 
-  for (XCAFPrs_DocumentExplorer aDocExpl = GetXcafExplorer(); aDocExpl.More();
+  for (XCAFPrs_DocumentExplorer aDocExpl(myDoc, 0); aDocExpl.More();
        aDocExpl.Next()) {
     TCollection_AsciiString aName = LOUtil_OCAF::GetXcafNodePathNames(
         aDocExpl, Standard_False, aDocExpl.CurrentDepth());
@@ -162,7 +188,7 @@ void LODoc_Document::closeDocument(Handle(TDocStd_Document) & theDoc,
       theDoc->AbortCommand();
 
     /// To keep the TPrsStd_AISViewer alive while removing the
-    /// AIS_InteractiveObjects, do ForgetAllAttributes on children before
+    /// LODoc_Objects, do ForgetAllAttributes on children before
     /// the root.
     theDoc->Main().ForgetAllAttributes(Standard_True);
     theDoc->Main().Root().ForgetAllAttributes(Standard_True);
@@ -182,7 +208,7 @@ void LODoc_Document::displayXcafDoc() {
   Standard_Boolean skip = Standard_False;
   Standard_Integer skipDepth = 0;
 
-  for (XCAFPrs_DocumentExplorer aDocExpl = GetXcafExplorer(); aDocExpl.More();
+  for (XCAFPrs_DocumentExplorer aDocExpl(myDoc, 0); aDocExpl.More();
        aDocExpl.Next()) {
     Standard_Integer aDepth = aDocExpl.CurrentDepth();
 
@@ -222,7 +248,7 @@ void LODoc_Document::displayXcafDoc() {
 
     aPrs->SetMode(AIS_Shaded);
     aPrs->Display();
-    Handle(AIS_InteractiveObject) anObj = aPrs->GetAIS();
+    Handle(LODoc_Object) anObj = aPrs->GetAIS();
 
     if (anObj.IsNull())
       continue;
@@ -246,7 +272,9 @@ void LODoc_Document::Redo() {
 
 void LODoc_Document::UpdateView() { Context()->UpdateCurrentViewer(); }
 
-XCAFPrs_DocumentExplorer LODoc_Document::GetXcafExplorer(
-    const XCAFPrs_DocumentExplorerFlags theFlags) const {
-  return XCAFPrs_DocumentExplorer{myDoc, theFlags};
+void LODoc_Document::Close() { closeDocument(myDoc); }
+
+Handle(LODoc_DocumentExplorer)
+    LODoc_Document::DocumentExplorer(const Standard_Integer theFlags) const {
+  return new LODoc_DocumentExplorer(this, theFlags);
 }

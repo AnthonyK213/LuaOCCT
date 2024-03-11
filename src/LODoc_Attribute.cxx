@@ -5,7 +5,7 @@
 #include <XCAFDoc_ShapeTool.hxx>
 #include <XCAFPrs_AISObject.hxx>
 
-LODoc_Id LODoc_Attribute::GetId(const Handle(LODoc_Object) & theObj) {
+TDF_Label LODoc_Attribute::GetId(const Handle(LODoc_Object) & theObj) {
   Handle(TPrsStd_AISPresentation) aPrs = GetPrs(theObj);
   if (aPrs.IsNull())
     return {};
@@ -14,7 +14,7 @@ LODoc_Id LODoc_Attribute::GetId(const Handle(LODoc_Object) & theObj) {
 }
 
 TCollection_ExtendedString
-LODoc_Attribute::GetName(const LODoc_Id &theId,
+LODoc_Attribute::GetName(const TDF_Label &theId,
                          Standard_Boolean theIsInstanceName) {
   if (theId.IsNull())
     return {};
@@ -38,7 +38,7 @@ LODoc_Attribute::GetName(const Handle(LODoc_Object) & theObj,
   return GetName(GetId(theObj), theIsInstanceName);
 }
 
-Handle(TPrsStd_AISPresentation) LODoc_Attribute::GetPrs(const LODoc_Id &theId) {
+Handle(TPrsStd_AISPresentation) LODoc_Attribute::GetPrs(const TDF_Label &theId) {
   if (theId.IsNull())
     return nullptr;
 
@@ -55,7 +55,7 @@ Handle(TPrsStd_AISPresentation)
   return Handle(TPrsStd_AISPresentation)::DownCast(theObj->GetOwner());
 }
 
-TopoDS_Shape LODoc_Attribute::GetShape(const LODoc_Id &theId) {
+TopoDS_Shape LODoc_Attribute::GetShape(const TDF_Label &theId) {
   return XCAFDoc_ShapeTool::GetShape(theId);
 }
 
@@ -69,7 +69,7 @@ TopoDS_Shape LODoc_Attribute::GetShape(const Handle(LODoc_Object) & theObj,
   return anObj->Shape();
 }
 
-Standard_Boolean LODoc_Attribute::GetInteger(const LODoc_Id &theId,
+Standard_Boolean LODoc_Attribute::GetInteger(const TDF_Label &theId,
                                              const Standard_GUID &theGuid,
                                              Standard_Integer &theValue) {
   if (theId.IsNull())
@@ -90,7 +90,7 @@ Standard_Boolean LODoc_Attribute::GetInteger(const Handle(LODoc_Object) &
   return GetInteger(GetId(theObj), theGuid, theValue);
 }
 
-Standard_Boolean LODoc_Attribute::SetInteger(const LODoc_Id &theId,
+Standard_Boolean LODoc_Attribute::SetInteger(const TDF_Label &theId,
                                              const Standard_GUID &theGuid,
                                              Standard_Integer theValue) {
   if (theId.IsNull())

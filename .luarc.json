@@ -1,11 +1,15 @@
 {
-  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
-  "runtime.version": "LuaJIT",
-  "workspace.library": "",
-  "workspace.checkThirdParty": false,
-  "telemetry.enable": false,
-  "format.defaultConfig": {
-    "indent_style": "space",
-    "indent_size": "2"
-  }
+    "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+    "runtime.version": "LuaJIT",
+    "workspace.library": [
+        "./build/binder-gen/"
+    ],
+    "diagnostics.globals": [
+        "LuaOCCT"
+    ],
+    "telemetry.enable": false,
+    "format.defaultConfig": {
+        "indent_style": "space",
+        "indent_size": "2"
+    }
 }
