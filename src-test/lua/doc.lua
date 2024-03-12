@@ -6,14 +6,20 @@ local util = require("util")
 
 --------------------------------------------------------------------------------
 
-local aDoc = LODoc.LODoc_Document()
-aDoc:ImportStep("../../../src-test/stp/geometry.step")
-aDoc:DumpXcafDocumentTree()
+local test_import_step = util.make_test("import_step", function()
+  local aDoc = LODoc.LODoc_Document()
+  aDoc:ImportStep("../../../src-test/stp/geometry.step")
+  aDoc:DumpXcafDocumentTree()
 
-local e = aDoc:DocumentExplorer(0)
-while e:More() do
-  print(e:Current().Id)
-  e:Next()
-end
+  local e = aDoc:DocumentExplorer(1)
+  while e:More() do
+    -- print(e:GetRefCount())
+    e:Next()
+  end
 
-aDoc:Close()
+  aDoc:Close()
+end)
+
+--------------------------------------------------------------------------------
+
+test_import_step();

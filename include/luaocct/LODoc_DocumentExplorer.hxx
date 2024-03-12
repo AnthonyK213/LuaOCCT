@@ -11,6 +11,11 @@ class LODoc_DocumentExplorer : public Standard_Transient {
 public:
   Standard_EXPORT LODoc_DocumentExplorer();
 
+  LODoc_DocumentExplorer(const LODoc_DocumentExplorer &theOther) = delete;
+
+  LODoc_DocumentExplorer &
+  operator=(const LODoc_DocumentExplorer &theOther) = delete;
+
   Standard_EXPORT Standard_Boolean More() const;
 
   Standard_EXPORT const XCAFPrs_DocumentNode &Current() const;
@@ -31,7 +36,6 @@ private:
                             const Standard_Integer theFlags);
 
 private:
-  Handle(LODoc_Document) myDoc;
   XCAFPrs_DocumentExplorer myE;
 };
 

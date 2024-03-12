@@ -24,6 +24,9 @@ if(WIN32)
     COMMAND ${CMAKE_COMMAND} -E copy_directory
       "$<TARGET_PROPERTY:luaocct,BINARY_DIR>/$<CONFIG>"
       "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+      "${OpenCASCADE_LIBRARY_DIR}/../bin$<$<CONFIG:Debug>:d>"
+      "$<TARGET_PROPERTY:${PROJECT_NAME}-repl,BINARY_DIR>/$<CONFIG>"
     )
 elseif(UNIX AND NOT APPLE)
   add_custom_command(

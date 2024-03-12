@@ -30,10 +30,8 @@ void LODoc_Document::SetContext(const Handle(AIS_InteractiveContext) &
   LOUtil_OCAF::InitAISViewer(myDoc, myContext);
 }
 
-Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
-  createXcafApp();
-  Handle(TDocStd_Document) aDoc = newDocument(Standard_True);
-
+static Standard_Boolean importStep(Handle(TDocStd_Document) & aDoc,
+                                   Standard_CString theFilePath) {
   if (aDoc.IsNull()) {
     std::cout << "Error: The document is null\n";
     return Standard_False;
@@ -41,9 +39,7 @@ Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
 
   STEPCAFControl_Controller::Init();
   STEPControl_Controller::Init();
-
   STEPCAFControl_Reader aReader;
-
   aReader.SetColorMode(Standard_True);
   aReader.SetNameMode(Standard_True);
   aReader.SetLayerMode(Standard_True);
@@ -62,20 +58,28 @@ Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
   } catch (const Standard_Failure &theFailure) {
     std::cout << "Exception raised during STEP import: "
               << theFailure.GetMessageString() << '\n';
-
     return Standard_False;
   }
-
-  std::swap(myDoc, aDoc);
-  closeDocument(aDoc);
-  displayXcafDoc();
 
   return Standard_True;
 }
 
+Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
+  createXcafApp();
+  Handle(TDocStd_Document) aDoc = newDocument(Standard_True);
+  Standard_Boolean ok = importStep(aDoc, theFilePath);
+
+  if (ok) {
+    std::swap(myDoc, aDoc);
+    displayXcafDoc();
+  }
+
+  closeDocument(aDoc);
+  return ok;
+}
+
 Standard_Boolean LODoc_Document::ExportStep(Standard_CString theFilePath) {
   STEPCAFControl_Writer aWriter;
-
   aWriter.SetColorMode(Standard_True);
   aWriter.SetNameMode(Standard_True);
   aWriter.SetLayerMode(Standard_True);
@@ -94,7 +98,6 @@ Standard_Boolean LODoc_Document::ExportStep(Standard_CString theFilePath) {
   } catch (const Standard_Failure &theFailure) {
     std::cout << "Exception raised during STEP export: "
               << theFailure.GetMessageString() << '\n';
-
     return Standard_False;
   }
 
@@ -105,12 +108,10 @@ Handle(Poly_Triangulation)
     LODoc_Document::ImportStl(Standard_CString theFilePath) {
   try {
     Handle(Poly_Triangulation) aStlMesh = RWStl::ReadFile(theFilePath);
-
     return aStlMesh;
   } catch (const Standard_Failure &theFailure) {
     std::cout << "Exception raised during STL import: "
               << theFailure.GetMessageString() << '\n';
-
     return nullptr;
   }
 }

@@ -9,10 +9,10 @@ LODoc_DocumentExplorer::LODoc_DocumentExplorer() {}
 LODoc_DocumentExplorer::LODoc_DocumentExplorer(const Handle(LODoc_Document) &
                                                    theDocument,
                                                const Standard_Integer theFlags)
-    : myDoc(theDocument) {
-  if (!myDoc.IsNull())
-    myE = XCAFPrs_DocumentExplorer(myDoc->Document(), theFlags);
-}
+    : myE(theDocument->Document(),
+          theFlags) /* NOTE: **DO NOT** use copy ctor/assignment of
+                       |XCAFPrs_DocumentExplorer|! */
+{}
 
 void LODoc_DocumentExplorer::init(const Handle(LODoc_Document) & theDocument,
                                   const TDF_Label &theRoot,
