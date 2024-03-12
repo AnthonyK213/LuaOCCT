@@ -48,7 +48,7 @@ TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
 
   LO_COMMIT_COMMAND();
 
-  myDoc->AddObjectEvent(myDoc);
+  myDoc->AddObjectEvent();
 
   return aLabel;
 }
@@ -70,7 +70,7 @@ TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
 
   LO_COMMIT_COMMAND();
 
-  myDoc->AddObjectEvent(myDoc);
+  myDoc->AddObjectEvent();
 
   return {};
 }

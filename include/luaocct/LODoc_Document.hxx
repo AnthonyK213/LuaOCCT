@@ -43,7 +43,10 @@ class LODoc_Document : public Standard_Transient {
 public:
   Standard_EXPORT LODoc_Document();
 
-public:
+  Standard_EXPORT void
+  Init(const Handle(AIS_InteractiveContext) & theContext,
+       const Standard_Boolean theHeadless = Standard_False);
+
   Standard_EXPORT const Handle(LODoc_ObjectTable) & Objects() const {
     return myObjects;
   }
@@ -51,9 +54,6 @@ public:
   Standard_EXPORT const Handle(AIS_InteractiveContext) & Context() const {
     return myContext;
   }
-
-  Standard_EXPORT void SetContext(const Handle(AIS_InteractiveContext) &
-                                  theContext);
 
   Standard_EXPORT const Handle(TDocStd_Document) & Document() const {
     return myDoc;
@@ -89,8 +89,7 @@ public:
   DEFINE_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
 public:
-  Standard_EXPORT virtual void AddObjectEvent(const Handle(LODoc_Document) &
-                                              theDoc) {}
+  Standard_EXPORT virtual void AddObjectEvent() {}
 
   Standard_EXPORT virtual void DeleteObjectEvent() {}
 

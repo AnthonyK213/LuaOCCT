@@ -18,17 +18,21 @@
 
 IMPLEMENT_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
-LODoc_Document::LODoc_Document() {
+LODoc_Document::LODoc_Document() {}
+
+void LODoc_Document::Init(const Handle(AIS_InteractiveContext) & theContext,
+                          const Standard_Boolean theHeadless) {
   createXcafApp();
   initDriverID();
   myDoc = newDocument();
   myObjects = new LODoc_ObjectTable(this);
-}
 
-void LODoc_Document::SetContext(const Handle(AIS_InteractiveContext) &
-                                theContext) {
-  myContext = theContext;
-  LOUtil_OCAF::InitAISViewer(myDoc, myContext);
+  if (theHeadless) {
+    // TODO: Headless context?
+  } else {
+    myContext = theContext;
+    LOUtil_OCAF::InitAISViewer(myDoc, myContext);
+  }
 }
 
 static Standard_Boolean importStep(Handle(TDocStd_Document) & aDoc,
@@ -272,7 +276,10 @@ void LODoc_Document::Redo() {
     UpdateView();
 }
 
-void LODoc_Document::UpdateView() { Context()->UpdateCurrentViewer(); }
+void LODoc_Document::UpdateView() {
+  if (!myContext.IsNull())
+    myContext->UpdateCurrentViewer();
+}
 
 void LODoc_Document::Close() { closeDocument(myDoc); }
 
