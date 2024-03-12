@@ -31,7 +31,7 @@ message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
 set(LUAJIT_DIR ${CMAKE_BINARY_DIR}/deps/LuaJIT_Source CACHE STRING "Path of LuaJIT 2.1 source dir")
 set(LUAJIT_BUILD_EXE ON CACHE BOOL "")
-option(LUAOCCT_BINDER_SUPPRESS_REGENERATION "Suppress regeneration of LuaOCCT-binder" ON)
+option(LUAOCCT_BINDER_SUPPRESS_REGENERATION "Suppress regeneration of LuaOCCT-binder" OFF)
 
 include(cmake/FetchBinder.cmake)
 include(cmake/FetchLuaBridge3.cmake)

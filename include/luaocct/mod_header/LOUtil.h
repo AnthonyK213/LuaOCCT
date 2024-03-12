@@ -3,6 +3,7 @@
 
 #include "../LOUtil_Curve.hxx"
 #include "../LOUtil_Math.hxx"
+#include "../LOUtil_OCAF.hxx"
 #include "../LOUtil_Shape.hxx"
 
 #endif
