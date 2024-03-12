@@ -29,6 +29,14 @@
 #include "LODoc_Object.hxx"
 #include "LODoc_ObjectTable.hxx"
 
+#include <map>
+
+enum {
+  LODoc_IDefaultDriver = 0,
+  LODoc_IBRepDriver,
+  LODoc_IMeshDriver,
+};
+
 using LODoc_DocumentNode = XCAFPrs_DocumentNode;
 
 class LODoc_Document : public Standard_Transient {
@@ -75,6 +83,9 @@ public:
   Standard_EXPORT Handle(LODoc_DocumentExplorer)
       DocumentExplorer(const Standard_Integer theFlags) const;
 
+  Standard_EXPORT const Standard_GUID &
+  GetDriverID(const Standard_Integer theDriverIndex) const;
+
   DEFINE_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
 public:
@@ -97,11 +108,14 @@ protected:
 
   Standard_EXPORT void displayXcafDoc();
 
+  Standard_EXPORT virtual void initDriverID();
+
 protected:
   Handle(LOApp_Application) myApp;
   Handle(TDocStd_Document) myDoc;
   Handle(AIS_InteractiveContext) myContext;
   Handle(LODoc_ObjectTable) myObjects;
+  std::map<Standard_Integer, Standard_GUID> myDriverIDMap{};
 };
 
 DEFINE_STANDARD_HANDLE(LODoc_Document, Standard_Transient)

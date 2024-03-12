@@ -21,9 +21,9 @@ class LODoc_ObjectTable : public Standard_Transient {
 protected:
   Standard_EXPORT explicit LODoc_ObjectTable(LODoc_Document *theDoc = nullptr);
 
-public:
-  Standard_EXPORT const Handle(AIS_InteractiveContext) & Context() const;
+  Standard_EXPORT const Handle(AIS_InteractiveContext) & context() const;
 
+public:
   Standard_EXPORT TDF_Label AddShape(const TopoDS_Shape &theShape,
                                      Standard_Boolean theToUpdate);
 

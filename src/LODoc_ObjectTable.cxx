@@ -30,7 +30,7 @@ IMPLEMENT_STANDARD_RTTIEXT(LODoc_ObjectTable, Standard_Transient)
 
 LODoc_ObjectTable::LODoc_ObjectTable(LODoc_Document *theDoc) : myDoc(theDoc) {}
 
-const Handle(AIS_InteractiveContext) & LODoc_ObjectTable::Context() const {
+const Handle(AIS_InteractiveContext) & LODoc_ObjectTable::context() const {
   return myDoc->Context();
 }
 
@@ -41,8 +41,8 @@ TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
   TDF_Label aLabel = anAsm->AddShape(theShape, Standard_True);
   anAsm->UpdateAssemblies();
-  // TODO: Driver map.
-  auto aPrs = TPrsStd_AISPresentation::Set(aLabel, Standard_GUID());
+  auto aPrs = TPrsStd_AISPresentation::Set(
+      aLabel, myDoc->GetDriverID(LODoc_IBRepDriver));
   aPrs->SetMode(AIS_Shaded);
   aPrs->Display();
 
@@ -63,8 +63,8 @@ TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
       anAsm->AddShape(BRepBuilderAPI_MakeVertex({}), Standard_True);
   TDataXtd_Triangulation::Set(aLabel, theMesh);
   anAsm->UpdateAssemblies();
-  // TODO: Driver map.
-  auto aPrs = TPrsStd_AISPresentation::Set(aLabel, Standard_GUID());
+  auto aPrs = TPrsStd_AISPresentation::Set(
+      aLabel, myDoc->GetDriverID(LODoc_IMeshDriver));
   aPrs->SetMode(MeshVS_DMF_Shading);
   aPrs->Display();
 
@@ -316,11 +316,11 @@ Standard_Boolean LODoc_ObjectTable::SelectObject(const Handle(LODoc_Object) &
                                                      theObject,
                                                  Standard_Boolean theSelect,
                                                  Standard_Boolean theToUpdate) {
-  if (theObject.IsNull() || !Context()->IsDisplayed(theObject))
+  if (theObject.IsNull() || !context()->IsDisplayed(theObject))
     return Standard_False;
 
-  if (Context()->IsSelected(theObject) != theSelect)
-    Context()->AddOrRemoveSelected(theObject, theToUpdate);
+  if (context()->IsSelected(theObject) != theSelect)
+    context()->AddOrRemoveSelected(theObject, theToUpdate);
 
   return Standard_True;
 }
@@ -360,7 +360,7 @@ LODoc_ObjectTable::SelectObjects(const LODoc_ObjectList &theObjects,
 }
 
 Standard_Integer LODoc_ObjectTable::SelectAll(Standard_Boolean theToUpdate) {
-  Context()->ClearSelected(Standard_False);
+  context()->ClearSelected(Standard_False);
   Standard_Integer nbSelect = 0;
 
   for (auto anIter = myDoc->DocumentExplorer(0); anIter->More();
@@ -371,7 +371,7 @@ Standard_Integer LODoc_ObjectTable::SelectAll(Standard_Boolean theToUpdate) {
     Handle(LODoc_Object) anObj = aPrs->GetAIS();
     if (anObj.IsNull())
       continue;
-    Context()->AddOrRemoveSelected(anObj, Standard_False);
+    context()->AddOrRemoveSelected(anObj, Standard_False);
     ++nbSelect;
   }
 
@@ -382,11 +382,11 @@ Standard_Integer LODoc_ObjectTable::SelectAll(Standard_Boolean theToUpdate) {
 }
 
 Standard_Integer LODoc_ObjectTable::UnselectAll(Standard_Boolean theToUpdate) {
-  Standard_Integer nbSelected = Context()->NbSelected();
+  Standard_Integer nbSelected = context()->NbSelected();
 
-  for (Context()->InitSelected(); Context()->MoreSelected();
-       Context()->NextSelected()) {
-    Context()->AddOrRemoveSelected(Context()->SelectedInteractive(),
+  for (context()->InitSelected(); context()->MoreSelected();
+       context()->NextSelected()) {
+    context()->AddOrRemoveSelected(context()->SelectedInteractive(),
                                    Standard_False);
   }
 
@@ -397,5 +397,5 @@ Standard_Integer LODoc_ObjectTable::UnselectAll(Standard_Boolean theToUpdate) {
 }
 
 LODoc_ObjectList LODoc_ObjectTable::SelectedObjects() const {
-  return LOUtil_AIS::GetSelections(Context());
+  return LOUtil_AIS::GetSelections(context());
 }

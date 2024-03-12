@@ -20,6 +20,7 @@ IMPLEMENT_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
 LODoc_Document::LODoc_Document() {
   createXcafApp();
+  initDriverID();
   myDoc = newDocument();
   myObjects = new LODoc_ObjectTable(this);
 }
@@ -279,3 +280,13 @@ Handle(LODoc_DocumentExplorer)
     LODoc_Document::DocumentExplorer(const Standard_Integer theFlags) const {
   return new LODoc_DocumentExplorer(this, theFlags);
 }
+
+const Standard_GUID &
+LODoc_Document::GetDriverID(const Standard_Integer theDriverIndex) const {
+  auto it = myDriverIDMap.find(theDriverIndex);
+  if (it == myDriverIDMap.end())
+    return XCAFPrs_Driver::GetID();
+  return it->second;
+}
+
+void LODoc_Document::initDriverID() {}
