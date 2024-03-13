@@ -43,9 +43,9 @@ class LODoc_Document : public Standard_Transient {
 public:
   Standard_EXPORT LODoc_Document();
 
-  Standard_EXPORT void
-  Init(const Handle(AIS_InteractiveContext) & theContext,
-       const Standard_Boolean theHeadless = Standard_False);
+  Standard_EXPORT void InitHeadless();
+
+  Standard_EXPORT void Init(const Handle(AIS_InteractiveContext) & theContext);
 
   Standard_EXPORT const Handle(LODoc_ObjectTable) & Objects() const {
     return myObjects;
@@ -96,6 +96,8 @@ public:
   Standard_EXPORT virtual void UndeleteObjectEvent() {}
 
 protected:
+  Standard_EXPORT void initCommon();
+
   Standard_EXPORT Standard_Boolean createXcafApp();
 
   Standard_EXPORT Handle(TDocStd_Document)

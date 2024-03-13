@@ -9,10 +9,18 @@ LODoc_DocumentExplorer::LODoc_DocumentExplorer() {}
 LODoc_DocumentExplorer::LODoc_DocumentExplorer(const Handle(LODoc_Document) &
                                                    theDocument,
                                                const Standard_Integer theFlags)
-    : myE(theDocument->Document(),
-          theFlags) /* NOTE: **DO NOT** use copy ctor/assignment of
-                       |XCAFPrs_DocumentExplorer|! */
-{}
+    : myE(theDocument->Document(), theFlags) {
+  if (theDocument.IsNull())
+    return;
+  Handle(TDocStd_Document) aDoc = theDocument->Document();
+  if (aDoc.IsNull())
+    return;
+  Handle(XCAFDoc_ShapeTool) aST = XCAFDoc_DocumentTool::ShapeTool(aDoc->Main());
+  TDF_LabelSequence aRootLabels;
+  aST->GetFreeShapes(aRootLabels);
+  // NOTE: **DO NOT** use copy ctor/assignment of |XCAFPrs_DocumentExplorer|!
+  myE.Init(aDoc, aRootLabels, theFlags, XCAFPrs_Style());
+}
 
 void LODoc_DocumentExplorer::init(const Handle(LODoc_Document) & theDocument,
                                   const TDF_Label &theRoot,

@@ -20,16 +20,14 @@ IMPLEMENT_STANDARD_RTTIEXT(LODoc_Document, Standard_Transient)
 
 LODoc_Document::LODoc_Document() {}
 
-void LODoc_Document::Init(const Handle(AIS_InteractiveContext) & theContext,
-                          const Standard_Boolean theHeadless) {
-  createXcafApp();
-  initDriverID();
-  myDoc = newDocument();
-  myObjects = new LODoc_ObjectTable(this);
+void LODoc_Document::InitHeadless() {
+  initCommon();
+  // TODO: Headless context.
+}
 
-  if (theHeadless) {
-    // TODO: Headless context?
-  } else {
+void LODoc_Document::Init(const Handle(AIS_InteractiveContext) & theContext) {
+  initCommon();
+  if (!theContext.IsNull()) {
     myContext = theContext;
     LOUtil_OCAF::InitAISViewer(myDoc, myContext);
   }
@@ -70,7 +68,6 @@ static Standard_Boolean importStep(Handle(TDocStd_Document) & aDoc,
 }
 
 Standard_Boolean LODoc_Document::ImportStep(Standard_CString theFilePath) {
-  createXcafApp();
   Handle(TDocStd_Document) aDoc = newDocument(Standard_True);
   Standard_Boolean ok = importStep(aDoc, theFilePath);
 
@@ -285,6 +282,8 @@ void LODoc_Document::Close() { closeDocument(myDoc); }
 
 Handle(LODoc_DocumentExplorer)
     LODoc_Document::DocumentExplorer(const Standard_Integer theFlags) const {
+  if (myDoc.IsNull())
+    return nullptr;
   return new LODoc_DocumentExplorer(this, theFlags);
 }
 
@@ -297,3 +296,10 @@ LODoc_Document::GetDriverID(const Standard_Integer theDriverIndex) const {
 }
 
 void LODoc_Document::initDriverID() {}
+
+void LODoc_Document::initCommon() {
+  createXcafApp();
+  initDriverID();
+  myDoc = newDocument();
+  myObjects = new LODoc_ObjectTable(this);
+}
