@@ -93,7 +93,7 @@ method = [
   "TDF_Label::ExtendedDump",
   "TDF_Label::EntryDump",
 ]
-copyable = ["Geom_SweptSurface"]
+copyable = ["Geom_SweptSurface", "LODoc_DocumentExplorer"]
 
 [extra_method]
 gp_XYZ = '''
