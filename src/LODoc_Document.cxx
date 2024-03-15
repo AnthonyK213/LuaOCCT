@@ -1,5 +1,7 @@
 #include <luaocct/LODoc_Document.hxx>
 
+#include <Aspect_DisplayConnection.hxx>
+#include <OpenGl_GraphicDriver.hxx>
 #include <TDF_LabelMap.hxx>
 #include <TDataStd_Name.hxx>
 #include <TNaming_NamedShape.hxx>
@@ -22,15 +24,21 @@ LODoc_Document::LODoc_Document() {}
 
 void LODoc_Document::InitHeadless() {
   initCommon();
-  // TODO: Headless context.
+
+  // Headless context.
+  Handle(Aspect_DisplayConnection) aDisp = new Aspect_DisplayConnection();
+  Handle(OpenGl_GraphicDriver) aDriver = new OpenGl_GraphicDriver(aDisp, true);
+  aDriver->ChangeOptions().swapInterval = 0; // no window, no swap
+  Handle(V3d_Viewer) myViewer = new V3d_Viewer(aDriver);
+  myContext = new AIS_InteractiveContext(myViewer);
+
+  LOUtil_OCAF::InitAISViewer(myDoc, myContext);
 }
 
 void LODoc_Document::Init(const Handle(AIS_InteractiveContext) & theContext) {
   initCommon();
-  if (!theContext.IsNull()) {
-    myContext = theContext;
-    LOUtil_OCAF::InitAISViewer(myDoc, myContext);
-  }
+  myContext = theContext;
+  LOUtil_OCAF::InitAISViewer(myDoc, myContext);
 }
 
 static Standard_Boolean importStep(Handle(TDocStd_Document) & aDoc,

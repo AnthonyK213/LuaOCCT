@@ -1,12 +1,13 @@
 #include <luaocct/LODoc_ObjectTable.hxx>
 
-#include <BRepBuilderAPI_MakeVertex.hxx>
+#include <BRep_Builder.hxx>
 #include <MeshVS_DisplayModeFlags.hxx>
 #include <TDataXtd_Triangulation.hxx>
 #include <TNaming_Builder.hxx>
 #include <TNaming_NamedShape.hxx>
 #include <TPrsStd_AISPresentation.hxx>
 #include <TPrsStd_AISViewer.hxx>
+#include <TopoDS_Compound.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
 #include <XCAFPrs_AISObject.hxx>
 
@@ -41,6 +42,7 @@ TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
   TDF_Label aLabel = anAsm->AddShape(theShape, Standard_True);
   anAsm->UpdateAssemblies();
+  // FIXME: |TPrsStd_DriverTable| should be initialized.
   auto aPrs = TPrsStd_AISPresentation::Set(
       aLabel, myDoc->GetDriverID(LODoc_IBRepDriver));
   aPrs->SetMode(AIS_Shaded);
@@ -58,9 +60,11 @@ TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
   LO_OPEN_COMMAND({});
 
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
-  // TODO: Shape?
-  TDF_Label aLabel =
-      anAsm->AddShape(BRepBuilderAPI_MakeVertex({}), Standard_True);
+  // TODO: Better solution?
+  TopoDS_Compound aCompound{};
+  BRep_Builder aBuilder{};
+  aBuilder.MakeCompound(aCompound);
+  TDF_Label aLabel = anAsm->AddShape(aCompound, Standard_True);
   TDataXtd_Triangulation::Set(aLabel, theMesh);
   anAsm->UpdateAssemblies();
   auto aPrs = TPrsStd_AISPresentation::Set(
