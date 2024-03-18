@@ -108,6 +108,13 @@ public:
   DEFINE_STANDARD_RTTIEXT(LODoc_ObjectTable, Standard_Transient)
 
 protected:
+  Standard_EXPORT Standard_Boolean deleteObjectRaw(const TDF_Label &theId);
+
+  Standard_EXPORT Standard_Boolean showObjectRaw(const TDF_Label &theId);
+
+  Standard_EXPORT Standard_Boolean hideObjectRaw(const TDF_Label &theId);
+
+protected:
   LODoc_Document *myDoc;
 };
 

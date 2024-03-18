@@ -79,7 +79,17 @@ TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
   return {};
 }
 
-void LODoc_ObjectTable::Clear(Standard_Boolean theToUpdate) {}
+void LODoc_ObjectTable::Clear(Standard_Boolean theToUpdate) {
+  LO_OPEN_COMMAND();
+
+  for (auto anIter = myDoc->DocumentExplorer(0); anIter->More();
+       anIter->Next()) {
+    const XCAFPrs_DocumentNode &aNode = anIter->Current();
+    deleteObjectRaw(aNode.Label);
+  }
+
+  LO_COMMIT_COMMAND();
+}
 
 Handle(LODoc_Object) LODoc_ObjectTable::Find(const TDF_Label &theId) const {
   Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(theId);
@@ -110,14 +120,9 @@ LODoc_ObjectTable::DeleteObjects(const TDF_LabelList &theIds,
   Standard_Integer nbDelete = 0;
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
 
-  for (const TDF_Label &theId : theIds) {
-    auto aPrs = LODoc_Attribute::GetPrs(theId);
-    if (aPrs.IsNull())
-      continue;
-
-    aPrs->Erase(Standard_True);
-    anAsm->RemoveComponent(theId);
-    ++nbDelete;
+  for (const TDF_Label &anId : theIds) {
+    if (deleteObjectRaw(anId))
+      ++nbDelete;
   }
 
   anAsm->UpdateAssemblies();
@@ -135,18 +140,10 @@ LODoc_ObjectTable::DeleteObjects(const LODoc_ObjectList &theObjects,
   Standard_Integer nbDelete = 0;
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
 
-  for (const auto &theObject : theObjects) {
-    TDF_Label anId = LODoc_Attribute::GetId(theObject);
-    if (anId.IsNull())
-      continue;
-
-    auto aPrs = LODoc_Attribute::GetPrs(anId);
-    if (aPrs.IsNull())
-      continue;
-
-    aPrs->Erase(Standard_True);
-    anAsm->RemoveComponent(anId);
-    ++nbDelete;
+  for (const auto &anObject : theObjects) {
+    TDF_Label anId = LODoc_Attribute::GetId(anObject);
+    if (deleteObjectRaw(anId))
+      ++nbDelete;
   }
 
   anAsm->UpdateAssemblies();
@@ -175,16 +172,9 @@ Standard_Integer LODoc_ObjectTable::ShowObjects(const TDF_LabelList &theIds,
 
   Standard_Integer nbShow = 0;
 
-  for (const TDF_Label &theId : theIds) {
-    auto aPrs = LODoc_Attribute::GetPrs(theId);
-    if (aPrs.IsNull())
-      continue;
-
-    if (aPrs->IsDisplayed())
-      continue;
-
-    aPrs->Display();
-    ++nbShow;
+  for (const TDF_Label &anId : theIds) {
+    if (showObjectRaw(anId))
+      ++nbShow;
   }
 
   LO_COMMIT_COMMAND();
@@ -199,16 +189,10 @@ LODoc_ObjectTable::ShowObjects(const LODoc_ObjectList &theObjects,
 
   Standard_Integer nbShow = 0;
 
-  for (const auto &theObject : theObjects) {
-    auto aPrs = LODoc_Attribute::GetPrs(theObject);
-    if (aPrs.IsNull())
-      continue;
-
-    if (aPrs->IsDisplayed())
-      continue;
-
-    aPrs->Display();
-    ++nbShow;
+  for (const auto &anObject : theObjects) {
+    TDF_Label anId = LODoc_Attribute::GetId(anObject);
+    if (showObjectRaw(anId))
+      ++nbShow;
   }
 
   LO_COMMIT_COMMAND();
@@ -223,15 +207,8 @@ Standard_Integer LODoc_ObjectTable::ShowAll(Standard_Boolean theToUpdate) {
 
   for (auto anIter = myDoc->DocumentExplorer(0); anIter->More();
        anIter->Next()) {
-    auto aPrs = LODoc_Attribute::GetPrs(anIter->Current().Label);
-    if (aPrs.IsNull())
-      continue;
-
-    if (aPrs->IsDisplayed())
-      continue;
-
-    aPrs->Display();
-    ++nbShow;
+    if (showObjectRaw(anIter->Current().Label))
+      ++nbShow;
   }
 
   LO_COMMIT_COMMAND();
@@ -260,12 +237,8 @@ Standard_Integer LODoc_ObjectTable::HideObjects(const TDF_LabelList &theIds,
   Standard_Integer nbHide = 0;
 
   for (const TDF_Label &anId : theIds) {
-    Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(anId);
-    if (aPrs.IsNull())
-      continue;
-
-    aPrs->Erase();
-    ++nbHide;
+    if (hideObjectRaw(anId))
+      ++nbHide;
   }
 
   LO_COMMIT_COMMAND();
@@ -280,16 +253,10 @@ LODoc_ObjectTable::HideObjects(const LODoc_ObjectList &theObjects,
 
   Standard_Integer nbHide = 0;
 
-  for (const auto &anObj : theObjects) {
-    Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(anObj);
-    if (aPrs.IsNull())
-      continue;
-
-    /// https://tracker.dev.opencascade.org/view.php?id=30142
-    /// The AISObject is recreated during UNDO even if this is an ERASE
-    /// operation?
-    aPrs->Erase();
-    ++nbHide;
+  for (const auto &anObject : theObjects) {
+    TDF_Label anId = LODoc_Attribute::GetId(anObject);
+    if (hideObjectRaw(anId))
+      ++nbHide;
   }
 
   LO_COMMIT_COMMAND();
@@ -402,4 +369,41 @@ Standard_Integer LODoc_ObjectTable::UnselectAll(Standard_Boolean theToUpdate) {
 
 LODoc_ObjectList LODoc_ObjectTable::SelectedObjects() const {
   return LOUtil_AIS::GetSelections(context());
+}
+
+Standard_Boolean LODoc_ObjectTable::deleteObjectRaw(const TDF_Label &theId) {
+  if (theId.IsNull())
+    return Standard_False;
+
+  auto aPrs = LODoc_Attribute::GetPrs(theId);
+  Standard_Boolean hasDisp = !aPrs.IsNull();
+  if (hasDisp)
+    aPrs->Erase(Standard_True);
+
+  theId.ForgetAllAttributes();
+  return hasDisp;
+}
+
+Standard_Boolean LODoc_ObjectTable::showObjectRaw(const TDF_Label &theId) {
+  auto aPrs = LODoc_Attribute::GetPrs(theId);
+  if (aPrs.IsNull())
+    return Standard_False;
+
+  if (aPrs->IsDisplayed())
+    return Standard_False;
+
+  aPrs->Display();
+  return Standard_True;
+}
+
+Standard_Boolean LODoc_ObjectTable::hideObjectRaw(const TDF_Label &theId) {
+  Handle(TPrsStd_AISPresentation) aPrs = LODoc_Attribute::GetPrs(theId);
+  if (aPrs.IsNull())
+    return Standard_False;
+
+  /// https://tracker.dev.opencascade.org/view.php?id=30142
+  /// The AISObject is recreated during UNDO even if this is an ERASE
+  /// operation?
+  aPrs->Erase();
+  return Standard_True;
 }
