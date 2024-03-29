@@ -2,6 +2,7 @@
 #define _LuaOCCT_mod_header_BRepBuilderAPI_HeaderFile
 
 #include <BRepBuilderAPI.hxx>
+#include <BRepBuilderAPI_Copy.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeShell.hxx>
