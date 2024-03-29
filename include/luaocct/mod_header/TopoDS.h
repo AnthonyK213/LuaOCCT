@@ -3,6 +3,7 @@
 
 // clang-format off
 #include <TopAbs.hxx>
+#include <TopoDS_Builder.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Edge.hxx>
