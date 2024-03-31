@@ -27,6 +27,7 @@ modules = [
   "BRepGProp",
   "GProp",
   "GeomLib",
+  "GeomProjLib",
   # "TDocStd",
   "TDF",
   "XCAFPrs",
