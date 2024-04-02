@@ -3,6 +3,8 @@
 
 #include <Geom_Line.hxx>
 #include <IFSelect_ReturnStatus.hxx>
+#include <Message_ProgressRange.hxx>
+#include <TDocStd_Document.hxx>
 #include <gp_Pnt.hxx>
 
 typedef enum {
@@ -30,7 +32,7 @@ typedef enum {
 } LODXF_Units;
 
 typedef enum {
-  LODXF_Version_Unknown,
+  LODXF_Version_Unknown = 0,
   LODXF_Version_Older,
   LODXF_Version_R10,
   LODXF_Version_R11_12,
@@ -47,11 +49,68 @@ typedef enum {
 
 class LODXF_Reader {
 public:
-  LODXF_Reader();
+  Standard_EXPORT LODXF_Reader();
 
-  IFSelect_ReturnStatus ReadFile(const Standard_CString theFileName);
+  Standard_EXPORT IFSelect_ReturnStatus
+  ReadFile(const Standard_CString theFileName);
+
+  Standard_EXPORT Standard_Boolean
+  Transfer(Handle(TDocStd_Document) & theDoc,
+           const Message_ProgressRange &theProgress = Message_ProgressRange());
 
 private:
+  Standard_Boolean readHeaderSection();
+
+  Standard_Boolean readTablesSection();
+
+  Standard_Boolean readBlocksSection();
+
+  Standard_Boolean readEntitiesSection();
+
+  Standard_Boolean readIgnoredSection();
+
+  Standard_Boolean readLayerTable();
+
+  Standard_Boolean readIgnoredTable();
+
+  Standard_Boolean readUnits();
+
+  Standard_Boolean readLayer();
+
+  Standard_Boolean readEntity();
+
+  Standard_Boolean readLine();
+
+  Standard_Boolean readText();
+
+  Standard_Boolean readArc();
+
+  Standard_Boolean readCircle();
+
+  Standard_Boolean readEllipse();
+
+  Standard_Boolean readPoint();
+
+  Standard_Boolean readSpline();
+
+  Standard_Boolean readLWPolyline();
+
+  Standard_Boolean readPolyline();
+
+  Standard_Boolean readMultiLeader();
+
+  Standard_Boolean readInsert();
+
+  Standard_Boolean readDimension();
+
+  Standard_Boolean readUnknownEntity();
+
+  Standard_Boolean readBlockInfo();
+
+  Standard_Boolean readBlockVersion();
+
+  Standard_Boolean readDWGCodePage();
+
 private:
 };
 
