@@ -62,6 +62,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
+  "Standard_UUID", # FIXME: Array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
