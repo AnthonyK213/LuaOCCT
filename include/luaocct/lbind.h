@@ -17,9 +17,12 @@
 #include "mod_header/BRepBuilderAPI.h"
 #include "mod_header/BRepGProp.h"
 #include "mod_header/BRepLib.h"
+#include "mod_header/BRepPrim.h"
+#include "mod_header/BRepPrimAPI.h"
 #include "mod_header/Bnd.h"
 #include "mod_header/CPnts.h"
 #include "mod_header/Convert.h"
+#include "mod_header/GC.h"
 #include "mod_header/GProp.h"
 #include "mod_header/Geom.h"
 #include "mod_header/Geom2d.h"
@@ -28,6 +31,7 @@
 #include "mod_header/GeomAbs.h"
 #include "mod_header/GeomAdaptor.h"
 #include "mod_header/GeomConvert.h"
+#include "mod_header/GeomFill.h"
 #include "mod_header/GeomLib.h"
 #include "mod_header/GeomProjLib.h"
 #include "mod_header/IMeshTools.h"
@@ -55,6 +59,7 @@
 #include <NCollection_Array1.hxx>
 #include <NCollection_Array2.hxx>
 #include <NCollection_List.hxx>
+#include <NCollection_Sequence.hxx>
 #include <OSD_FileSystem.hxx>
 
 #include <tuple>
@@ -296,6 +301,54 @@ template <class T> struct Stack<NCollection_List<T>> {
     }
 
     return list;
+  }
+};
+
+template <class T> struct Stack<NCollection_Sequence<T>> {
+  static Result push(lua_State *L, const NCollection_Sequence<T> &seq) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, seq.Size(), 0);
+
+    for (Standard_Integer i = 0; i < seq.Size(); ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+
+      auto result = Stack<T>::push(L, seq.Value(i + seq.Lower()));
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
+    return {};
+  }
+
+  static TypeResult<NCollection_Sequence<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    const int init_stack_size = lua_gettop(L);
+    NCollection_Sequence<T> seq{};
+    const int abs_index = lua_absindex(L, index);
+    lua_pushnil(L);
+
+    while (lua_next(L, abs_index) != 0) {
+      auto item = Stack<T>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      seq.Append(*item);
+      lua_pop(L, 1);
+    }
+
+    return seq;
   }
 };
 

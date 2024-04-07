@@ -5,6 +5,10 @@
 #include <XCAFDoc_ShapeTool.hxx>
 #include <XCAFPrs_AISObject.hxx>
 
+IMPLEMENT_STANDARD_RTTIEXT(LODoc_Attribute, Standard_Transient)
+
+LODoc_Attribute::LODoc_Attribute() {}
+
 TDF_Label LODoc_Attribute::GetId(const Handle(LODoc_Object) & theObj) {
   Handle(TPrsStd_AISPresentation) aPrs = GetPrs(theObj);
   if (aPrs.IsNull())
@@ -38,7 +42,8 @@ LODoc_Attribute::GetName(const Handle(LODoc_Object) & theObj,
   return GetName(GetId(theObj), theIsInstanceName);
 }
 
-Handle(TPrsStd_AISPresentation) LODoc_Attribute::GetPrs(const TDF_Label &theId) {
+Handle(TPrsStd_AISPresentation)
+    LODoc_Attribute::GetPrs(const TDF_Label &theId) {
   if (theId.IsNull())
     return nullptr;
 

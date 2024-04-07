@@ -36,6 +36,7 @@ const Handle(AIS_InteractiveContext) & LODoc_ObjectTable::context() const {
 }
 
 TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
+                                      const Handle(LODoc_Attribute) & theAttr,
                                       Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND({});
 
@@ -56,6 +57,7 @@ TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
 }
 
 TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
+                                     const Handle(LODoc_Attribute) & theAttr,
                                      Standard_Boolean theToUpdate) {
   LO_OPEN_COMMAND({});
 

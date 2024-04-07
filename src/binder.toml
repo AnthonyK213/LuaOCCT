@@ -14,6 +14,10 @@ modules = [
   "Poly",
   "Message",
   "BRepBuilderAPI",
+  "BRepPrim",
+  "BRepPrimAPI",
+  "GC",
+  "GeomFill",
   "IntTools",
   "BOPDS",
   "BOPAlgo",
@@ -44,6 +48,7 @@ immutable_type = [
   "NCollection_Array1",
   "NCollection_Array2",
   "NCollection_List",
+  "NCollection_Sequence",
   "NCollection_Map",
   "handle",
   "TCollection_AsciiString",
@@ -62,7 +67,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID", # FIXME: Array field.
+  "Standard_UUID",         # FIXME: Array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",

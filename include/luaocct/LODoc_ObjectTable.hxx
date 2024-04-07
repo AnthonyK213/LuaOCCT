@@ -13,6 +13,7 @@
 
 #include "LODoc_Object.hxx"
 
+class LODoc_Attribute;
 class LODoc_Document;
 
 class LODoc_ObjectTable : public Standard_Transient {
@@ -24,11 +25,14 @@ protected:
   Standard_EXPORT const Handle(AIS_InteractiveContext) & context() const;
 
 public:
-  Standard_EXPORT TDF_Label AddShape(const TopoDS_Shape &theShape,
-                                     Standard_Boolean theToUpdate);
+  Standard_EXPORT TDF_Label AddShape(
+      const TopoDS_Shape &theShape, const Handle(LODoc_Attribute) & theAttr,
+      Standard_Boolean theToUpdate = Standard_False);
 
-  Standard_EXPORT TDF_Label AddMesh(const Handle(Poly_Triangulation) & theMesh,
-                                    Standard_Boolean theToUpdate);
+  Standard_EXPORT TDF_Label
+  AddMesh(const Handle(Poly_Triangulation) & theMesh,
+          const Handle(LODoc_Attribute) & theAttr,
+          Standard_Boolean theToUpdate = Standard_False);
 
   Standard_EXPORT void Clear(Standard_Boolean theToUpdate);
 

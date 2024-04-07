@@ -33,6 +33,7 @@
 #include <Geom_SurfaceOfLinearExtrusion.hxx>
 #include <Geom_SurfaceOfRevolution.hxx>
 #include <Geom_OsculatingSurface.hxx>
+#include <Geom_Transformation.hxx>
 // clang-format on
 
 #endif

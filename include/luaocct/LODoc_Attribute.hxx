@@ -6,7 +6,12 @@
 
 #include "LODoc_Object.hxx"
 
-class LODoc_Attribute {
+class LODoc_Attribute : public Standard_Transient {
+public:
+  LODoc_Attribute();
+
+  DEFINE_STANDARD_RTTIEXT(LODoc_Attribute, Standard_Transient)
+
 public:
   Standard_EXPORT static TDF_Label GetId(const Handle(LODoc_Object) & theObj);
 
@@ -44,6 +49,12 @@ public:
   Standard_EXPORT static Standard_Boolean
   SetInteger(const Handle(LODoc_Object) & theObj, const Standard_GUID &theGuid,
              Standard_Integer theValue);
+
+protected:
+  TCollection_ExtendedString aName;
+  Quantity_Color aColor;
 };
+
+DEFINE_STANDARD_HANDLE(LODoc_Attribute, Standard_Transient)
 
 #endif

@@ -7,6 +7,8 @@ local Poly_Triangulation = LuaOCCT.Poly.Poly_Triangulation
 
 local util = require("util")
 
+local attr = LuaOCCT.LODoc.LODoc_Attribute()
+
 --------------------------------------------------------------------------------
 
 local test_import_step = util.make_test("import_step", function()
@@ -27,9 +29,9 @@ end)
 local test_add_shape = util.make_test("add_shape", function()
   local aDoc = LODoc.LODoc_Document()
   aDoc:InitHeadless()
-  local aLabVert = aDoc:Objects():AddShape(BRepBuilderAPI_MakeVertex(gp_Pnt(1, 2, 3)):Shape(), true)
+  local aLabVert = aDoc:Objects():AddShape(BRepBuilderAPI_MakeVertex(gp_Pnt(1, 2, 3)):Shape(), attr, true)
   local aMesh = Poly_Triangulation()
-  local aLabMesh = aDoc:Objects():AddMesh(aMesh, true)
+  local aLabMesh = aDoc:Objects():AddMesh(aMesh, attr, true)
 
   print(LODoc.LODoc_Attribute.GetName(aLabVert, true))
   print(LODoc.LODoc_Attribute.GetName(aLabMesh, true))
