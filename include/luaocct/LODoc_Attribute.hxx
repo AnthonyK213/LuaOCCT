@@ -8,7 +8,15 @@
 
 class LODoc_Attribute : public Standard_Transient {
 public:
-  LODoc_Attribute();
+  Standard_EXPORT LODoc_Attribute();
+
+  inline const TCollection_ExtendedString &Name() const { return myName; }
+
+  Standard_EXPORT void SetName(const TCollection_ExtendedString &aName);
+
+  inline const Quantity_Color &Color() const { return myColor; }
+
+  Standard_EXPORT void SetColor(const Quantity_Color &aColor);
 
   DEFINE_STANDARD_RTTIEXT(LODoc_Attribute, Standard_Transient)
 
@@ -51,8 +59,8 @@ public:
              Standard_Integer theValue);
 
 protected:
-  TCollection_ExtendedString aName;
-  Quantity_Color aColor;
+  TCollection_ExtendedString myName;
+  Quantity_Color myColor;
 };
 
 DEFINE_STANDARD_HANDLE(LODoc_Attribute, Standard_Transient)

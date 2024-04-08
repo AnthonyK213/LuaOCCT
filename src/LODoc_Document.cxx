@@ -184,6 +184,8 @@ Handle(TDocStd_Document)
           XCAFDoc_DocumentTool::ShapeTool(aDoc->Main());
       TDF_Label aLabel = anAsm->NewShape();
       TDataStd_Name::Set(aLabel, "0");
+      anAsm->UpdateAssemblies();
+      AddObjectEvent();
     }
 
     LOUtil_OCAF::InitAISViewer(aDoc, myContext);

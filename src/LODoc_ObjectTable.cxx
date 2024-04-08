@@ -17,9 +17,9 @@
 #include <luaocct/LODoc_ObjectTable.hxx>
 #include <luaocct/LOUtil_AIS.hxx>
 
-#define LO_OPEN_COMMAND(R)                                                     \
+#define LO_OPEN_COMMAND(...)                                                   \
   if (myDoc->Document()->HasOpenCommand())                                     \
-    return R;                                                                  \
+    return __VA_ARGS__;                                                        \
   myDoc->Document()->OpenCommand();
 
 #define LO_COMMIT_COMMAND()                                                    \

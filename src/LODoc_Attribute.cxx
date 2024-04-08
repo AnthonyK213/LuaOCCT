@@ -7,7 +7,16 @@
 
 IMPLEMENT_STANDARD_RTTIEXT(LODoc_Attribute, Standard_Transient)
 
-LODoc_Attribute::LODoc_Attribute() {}
+LODoc_Attribute::LODoc_Attribute()
+    : myName("UNNAMED"), myColor(Quantity_NOC_GRAY) {}
+
+void LODoc_Attribute::SetName(const TCollection_ExtendedString &aName) {
+  myName = aName;
+}
+
+void LODoc_Attribute::SetColor(const Quantity_Color &aColor) {
+  myColor = aColor;
+}
 
 TDF_Label LODoc_Attribute::GetId(const Handle(LODoc_Object) & theObj) {
   Handle(TPrsStd_AISPresentation) aPrs = GetPrs(theObj);
