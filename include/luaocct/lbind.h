@@ -348,6 +348,57 @@ template <class T> struct Stack<NCollection_Sequence<T>> {
   }
 };
 
+template <class T> struct Stack<NCollection_Vec2<T>> {
+  static Result push(lua_State *L, const NCollection_Vec2<T> &vec2) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, 2, 0);
+
+    for (Standard_Integer i = 0; i < 2; ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+      auto result = Stack<T>::push(L, vec2.GetData()[i]);
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
+    return {};
+  }
+
+  static TypeResult<NCollection_Vec2<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    const int init_stack_size = lua_gettop(L);
+    const int abs_index = lua_absindex(L, index);
+
+    lua_pushnil(L);
+    NCollection_Vec2<T> vec2{};
+
+    for (Standard_Integer i = 0; i < 2; ++i) {
+      lua_pushinteger(L, i + 1);
+      lua_gettable(L, abs_index);
+      auto item = Stack<T>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      vec2.ChangeData()[i] = *item;
+
+      lua_pop(L, -1);
+    }
+
+    return vec2;
+  }
+};
+
 template <class T> struct Stack<NCollection_Vec3<T>> {
   static Result push(lua_State *L, const NCollection_Vec3<T> &vec3) {
     const int init_stack_size = lua_gettop(L);
@@ -399,6 +450,57 @@ template <class T> struct Stack<NCollection_Vec3<T>> {
   }
 };
 
+template <class T> struct Stack<NCollection_Vec4<T>> {
+  static Result push(lua_State *L, const NCollection_Vec4<T> &vec4) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, 4, 0);
+
+    for (Standard_Integer i = 0; i < 4; ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+      auto result = Stack<T>::push(L, vec4.GetData()[i]);
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
+    return {};
+  }
+
+  static TypeResult<NCollection_Vec4<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    const int init_stack_size = lua_gettop(L);
+    const int abs_index = lua_absindex(L, index);
+
+    lua_pushnil(L);
+    NCollection_Vec4<T> vec4{};
+
+    for (Standard_Integer i = 0; i < 4; ++i) {
+      lua_pushinteger(L, i + 1);
+      lua_gettable(L, abs_index);
+      auto item = Stack<T>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      vec4.ChangeData()[i] = *item;
+
+      lua_pop(L, -1);
+    }
+
+    return vec4;
+  }
+};
+
 } // namespace luabridge
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
@@ -419,7 +521,9 @@ template <class T> struct Stack<NCollection_Vec3<T>> {
 #define Begin_Derive(D, B) deriveClass<D, B>(#D)
 #define End_Derive() End_Class()
 
-#define Bind_Enum(E, V) addProperty(#V, +[]() { return E::V; })
+#define Bind_Enum(E, V)                                                        \
+  addProperty(                                                                 \
+      #V, +[]() { return E::V; })
 
 #define Bind_Property(T, G, S)                                                 \
   addProperty(#G "_", &T::G, &T::S)                                            \
