@@ -4,6 +4,7 @@ modules = [
   "GeomAbs",
   "TopAbs",
   "Precision",
+  # "NCollection",
   # "TCollection",
   "gp",
   "Geom2d",
@@ -32,6 +33,7 @@ modules = [
   "GProp",
   "GeomLib",
   "GeomProjLib",
+  "Quantity",
   # "TDocStd",
   "TDF",
   "XCAFPrs",
@@ -50,6 +52,9 @@ immutable_type = [
   "NCollection_List",
   "NCollection_Sequence",
   "NCollection_Map",
+  "NCollection_Vec2",
+  "NCollection_Vec3",
+  "NCollection_Vec4",
   "handle",
   "TCollection_AsciiString",
   "TCollection_ExtendedString",
@@ -171,4 +176,12 @@ Standard_GUID = '''
   catch (...) { throw std::runtime_error("Unkonw error"); }
   TColGeom_Array1OfBSplineCurve result = arrayOfConcatenated->Array1();
   return {result, closedG1Flag};
+}'''
+"Quantity_Color::Convert_LinearRGB_To_sRGB" = '''
++[](Standard_Real theLinearValue) -> Standard_Real {
+  return Quantity_Color::Convert_LinearRGB_To_sRGB(theLinearValue);
+}'''
+"Quantity_Color::Convert_sRGB_To_LinearRGB" = '''
++[](Standard_Real theRGBValue) -> Standard_Real {
+  return Quantity_Color::Convert_sRGB_To_LinearRGB(theRGBValue);
 }'''

@@ -37,8 +37,11 @@
 #include "mod_header/IMeshTools.h"
 #include "mod_header/IntTools.h"
 #include "mod_header/Message.h"
+#include "mod_header/NCollection.h"
+#include "mod_header/OSD.h"
 #include "mod_header/Poly.h"
 #include "mod_header/Precision.h"
+#include "mod_header/Quantity.h"
 #include "mod_header/Standard.h"
 #include "mod_header/TCollection.h"
 #include "mod_header/TDF.h"
@@ -54,13 +57,6 @@
 #include "mod_header/LOAbs.h"
 #include "mod_header/LODoc.h"
 #include "mod_header/LOUtil.h"
-
-#include <Geom2d_Curve.hxx>
-#include <NCollection_Array1.hxx>
-#include <NCollection_Array2.hxx>
-#include <NCollection_List.hxx>
-#include <NCollection_Sequence.hxx>
-#include <OSD_FileSystem.hxx>
 
 #include <tuple>
 #include <vector>
@@ -352,6 +348,57 @@ template <class T> struct Stack<NCollection_Sequence<T>> {
   }
 };
 
+template <class T> struct Stack<NCollection_Vec3<T>> {
+  static Result push(lua_State *L, const NCollection_Vec3<T> &vec3) {
+    const int init_stack_size = lua_gettop(L);
+
+    lua_createtable(L, 3, 0);
+
+    for (Standard_Integer i = 0; i < 3; ++i) {
+      lua_pushinteger(L, static_cast<lua_Integer>(i + 1));
+      auto result = Stack<T>::push(L, vec3.GetData()[i]);
+
+      if (!result) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return result;
+      }
+
+      lua_settable(L, -3);
+    }
+
+    return {};
+  }
+
+  static TypeResult<NCollection_Vec3<T>> get(lua_State *L, int index) {
+    if (!lua_istable(L, index)) {
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+    }
+
+    const int init_stack_size = lua_gettop(L);
+    const int abs_index = lua_absindex(L, index);
+
+    lua_pushnil(L);
+    NCollection_Vec3<T> vec3{};
+
+    for (Standard_Integer i = 0; i < 3; ++i) {
+      lua_pushinteger(L, i + 1);
+      lua_gettable(L, abs_index);
+      auto item = Stack<T>::get(L, -1);
+
+      if (!item) {
+        lua_pop(L, lua_gettop(L) - init_stack_size);
+        return item.error();
+      }
+
+      vec3.ChangeData()[i] = *item;
+
+      lua_pop(L, -1);
+    }
+
+    return vec3;
+  }
+};
+
 } // namespace luabridge
 
 #define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
@@ -372,9 +419,7 @@ template <class T> struct Stack<NCollection_Sequence<T>> {
 #define Begin_Derive(D, B) deriveClass<D, B>(#D)
 #define End_Derive() End_Class()
 
-#define Bind_Enum(E, V)                                                        \
-  addProperty(                                                                 \
-      #V, +[]() { return E::V; })
+#define Bind_Enum(E, V) addProperty(#V, +[]() { return E::V; })
 
 #define Bind_Property(T, G, S)                                                 \
   addProperty(#G "_", &T::G, &T::S)                                            \
