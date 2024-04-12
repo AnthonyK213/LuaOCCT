@@ -15,12 +15,16 @@
 #include "mod_header/BRep.h"
 #include "mod_header/BRepAlgoAPI.h"
 #include "mod_header/BRepBuilderAPI.h"
+#include "mod_header/BRepFeat.h"
+#include "mod_header/BRepFilletAPI.h"
 #include "mod_header/BRepGProp.h"
 #include "mod_header/BRepLib.h"
+#include "mod_header/BRepOffsetAPI.h"
 #include "mod_header/BRepPrim.h"
 #include "mod_header/BRepPrimAPI.h"
 #include "mod_header/Bnd.h"
 #include "mod_header/CPnts.h"
+#include "mod_header/ChFi2d.h"
 #include "mod_header/Convert.h"
 #include "mod_header/GC.h"
 #include "mod_header/GProp.h"
@@ -36,6 +40,7 @@
 #include "mod_header/GeomProjLib.h"
 #include "mod_header/IMeshTools.h"
 #include "mod_header/IntTools.h"
+#include "mod_header/Law.h"
 #include "mod_header/Message.h"
 #include "mod_header/NCollection.h"
 #include "mod_header/OSD.h"
@@ -49,6 +54,8 @@
 #include "mod_header/TopAbs.h"
 #include "mod_header/TopExp.h"
 #include "mod_header/TopLoc.h"
+#include "mod_header/TopOpeBRepBuild.h"
+#include "mod_header/TopOpeBRepDS.h"
 #include "mod_header/TopoDS.h"
 #include "mod_header/XCAFDoc.h"
 #include "mod_header/XCAFPrs.h"
@@ -521,9 +528,7 @@ template <class T> struct Stack<NCollection_Vec4<T>> {
 #define Begin_Derive(D, B) deriveClass<D, B>(#D)
 #define End_Derive() End_Class()
 
-#define Bind_Enum(E, V)                                                        \
-  addProperty(                                                                 \
-      #V, +[]() { return E::V; })
+#define Bind_Enum(E, V) addProperty(#V, +[]() { return E::V; })
 
 #define Bind_Property(T, G, S)                                                 \
   addProperty(#G "_", &T::G, &T::S)                                            \

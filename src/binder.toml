@@ -14,15 +14,22 @@ modules = [
   "TopExp",
   "Poly",
   "Message",
+  "ChFi2d",
+  "Law",
+  "TopOpeBRepDS",
+  "TopOpeBRepBuild",
   "BRepBuilderAPI",
-  "BRepPrim",
-  "BRepPrimAPI",
-  "GC",
-  "GeomFill",
-  "IntTools",
   "BOPDS",
   "BOPAlgo",
   "BRepAlgoAPI",
+  "BRepOffsetAPI",
+  "BRepFilletAPI",
+  "BRepPrim",
+  "BRepPrimAPI",
+  "BRepFeat",
+  "GC",
+  "GeomFill",
+  "IntTools",
   "BRep",
   "BRepLib",
   "Bnd",
@@ -72,7 +79,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID",         # FIXME: Array field.
+  "Standard_UUID",               # FIXME: Handle array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
@@ -81,6 +88,7 @@ class = [
   "TDF_LabelNode",
   "TDF_TagSource",
   "XCAFPrs_Style",
+  "BRepFeat_MakeRevolutionForm", # FIXME: Evil constructor!
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -90,6 +98,11 @@ method = [
   "IntTools_PntOnFace::IsValid",
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
+  "BRepOffsetAPI_FindContigousEdges::NbEdges", # Symbol cannot be resolved
+  "BRepFeat::IsInOut",                         # Symbol cannot be resolved
+  "BRepFeat_MakeLinearForm::TransformShapeFU", # Symbol cannot be resolved
+  "Law_Interpolate::ClearTangents",            # Symbol cannot be resolved
+  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",  # Symbol cannot be resolved
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
