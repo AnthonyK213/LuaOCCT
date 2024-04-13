@@ -510,45 +510,4 @@ template <class T> struct Stack<NCollection_Vec4<T>> {
 
 } // namespace luabridge
 
-#define LuaBridge__G(L) luabridge::getGlobalNamespace(L)
-
-#define Begin_Namespace(N) beginNamespace(#N)
-#define Begin_Namespace0() beginNamespace("LuaOCCT")
-#define Begin_Namespace1(U) beginNamespace("LuaOCCT").beginNamespace(#U)
-#define Begin_Namespace2(U, V)                                                 \
-  beginNamespace("LuaOCCT").beginNamespace(#U).beginNamespace(#V)
-#define End_Namespace() endNamespace()
-#define End_Namespace0() endNamespace()
-#define End_Namespace1() endNamespace().endNamespace()
-#define End_Namespace2() endNamespace().endNamespace().endNamespace()
-
-#define Begin_Class(T) beginClass<T>(#T)
-#define End_Class() endClass()
-
-#define Begin_Derive(D, B) deriveClass<D, B>(#D)
-#define End_Derive() End_Class()
-
-#define Bind_Enum(E, V) addProperty(#V, +[]() { return E::V; })
-
-#define Bind_Property(T, G, S)                                                 \
-  addProperty(#G "_", &T::G, &T::S)                                            \
-      .addFunction(#G, &T::G)                                                  \
-      .addFunction(#S, &T::S)
-#define Bind_Property_Readonly(T, G)                                           \
-  addProperty(#G "_", &T::G).addFunction(#G, &T::G)
-
-#define Bind_Method(T, M) addFunction(#M, &T::M)
-#define Bind_Method_Static(T, M) addStaticFunction(#M, &T::M)
-
-#define Bind_DownCast(D)                                                       \
-  addStaticFunction(                                                           \
-      "DownCast", +[](const Handle(Standard_Transient) & h) -> Handle(D) {     \
-        return Handle(D)::DownCast(h);                                         \
-      })
-#define Bind_DownCast1(D, B)                                                   \
-  addStaticFunction(                                                           \
-      "DownCast", +[](const Handle(B) & h) -> Handle(D) {                      \
-        return Handle(D)::DownCast(h);                                         \
-      })
-
 #endif
