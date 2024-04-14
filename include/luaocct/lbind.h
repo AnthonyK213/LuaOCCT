@@ -13,6 +13,7 @@
 #include "mod_header/BOPAlgo.h"
 #include "mod_header/BOPDS.h"
 #include "mod_header/BRep.h"
+#include "mod_header/BRepAdaptor.h"
 #include "mod_header/BRepAlgoAPI.h"
 #include "mod_header/BRepBuilderAPI.h"
 #include "mod_header/BRepFeat.h"
