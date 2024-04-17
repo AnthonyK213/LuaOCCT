@@ -4,9 +4,8 @@ modules = [
   "GeomAbs",
   "TopAbs",
   "Precision",
-  # "NCollection",
-  # "TCollection",
   "gp",
+  "math",
   "Geom2d",
   "Geom",
   "TopLoc",
@@ -18,6 +17,7 @@ modules = [
   "Law",
   "TopOpeBRepDS",
   "TopOpeBRepBuild",
+  "BRepTools",
   "BRepBuilderAPI",
   "BOPDS",
   "BOPAlgo",
@@ -46,7 +46,10 @@ modules = [
   "GeomLib",
   "GeomProjLib",
   "Quantity",
-  # "TDocStd",
+  "Approx",
+  "CSLib",
+  "BRepExtrema",
+  "GeomAPI",
   "TDF",
   "XCAFPrs",
   "LOAbs",
@@ -84,7 +87,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID",               # FIXME: Handle array field.
+  "Standard_UUID",                 # FIXME: Handle array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
@@ -93,7 +96,8 @@ class = [
   "TDF_LabelNode",
   "TDF_TagSource",
   "XCAFPrs_Style",
-  "BRepFeat_MakeRevolutionForm", # FIXME: Evil constructor!
+  "BRepFeat_MakeRevolutionForm",   # FIXME: Evil constructor!
+  "BRepExtrema_OverlapTool",
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -103,11 +107,13 @@ method = [
   "IntTools_PntOnFace::IsValid",
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
-  "BRepOffsetAPI_FindContigousEdges::NbEdges", # Symbol cannot be resolved
-  "BRepFeat::IsInOut",                         # Symbol cannot be resolved
-  "BRepFeat_MakeLinearForm::TransformShapeFU", # Symbol cannot be resolved
-  "Law_Interpolate::ClearTangents",            # Symbol cannot be resolved
-  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",  # Symbol cannot be resolved
+  "BRepOffsetAPI_FindContigousEdges::NbEdges",            # Symbol cannot be resolved
+  "BRepFeat::IsInOut",                                    # Symbol cannot be resolved
+  "BRepFeat_MakeLinearForm::TransformShapeFU",            # Symbol cannot be resolved
+  "Law_Interpolate::ClearTangents",                       # Symbol cannot be resolved
+  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",             # Symbol cannot be resolved
+  "GeomAPI_Interpolate::ClearTangents",                   # Symbol cannot be resolved
+  "BRepTools_PurgeLocations::ModifiedShape",              # Symbol cannot be resolved
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
@@ -122,8 +128,21 @@ method = [
   "TDF_Label::Dump",
   "TDF_Label::ExtendedDump",
   "TDF_Label::EntryDump",
+  "BRepExtrema_ProximityDistTool::ProximityPointsStatus", # Interval enum
 ]
-copyable = ["Geom_SweptSurface", "LODoc_DocumentExplorer"]
+copyable = [
+  "Geom_SweptSurface",
+  "LODoc_DocumentExplorer",
+  "Approx_SameParameter",
+  "GeomAPI_ProjectPointOnSurf",
+  "GeomAPI_ExtremaCurveSurface",
+  "GeomAPI_ExtremaCurveCurve",
+  "BRepExtrema_ExtPF",
+  "BRepExtrema_ExtCF",
+  "BRepExtrema_ExtCC",
+  "BRepExtrema_ExtPC",
+  "BRepExtrema_ExtFF",
+]
 
 [extra_method]
 gp_XYZ = '''
@@ -203,3 +222,8 @@ Standard_GUID = '''
 +[](Standard_Real theRGBValue) -> Standard_Real {
   return Quantity_Color::Convert_sRGB_To_LinearRGB(theRGBValue);
 }'''
+"BRepTools_History::Merge" = '''
++[](BRepTools_History &self, const Handle(BRepTools_History) &theH) {
+  self.Merge(theH);
+}
+'''
