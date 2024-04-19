@@ -73,6 +73,7 @@ immutable_type = [
   "handle",
   "TCollection_AsciiString",
   "TCollection_ExtendedString",
+  "BVH_Vec3d",
 ]
 
 extra_modules = []
