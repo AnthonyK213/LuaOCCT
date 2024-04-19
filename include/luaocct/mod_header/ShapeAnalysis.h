@@ -3,7 +3,9 @@
 
 #include <ShapeAnalysis.hxx>
 #include <ShapeAnalysis_BoxBndTree.hxx>
+#if (OCC_VERSION_MAJOR > 7 || (OCC_VERSION_MAJOR == 7 && OCC_VERSION_MINOR > 6))
 #include <ShapeAnalysis_CanonicalRecognition.hxx>
+#endif
 #include <ShapeAnalysis_CheckSmallFace.hxx>
 #include <ShapeAnalysis_Curve.hxx>
 #include <ShapeAnalysis_DataMapIteratorOfDataMapOfShapeListOfReal.hxx>
