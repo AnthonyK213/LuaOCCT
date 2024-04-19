@@ -49,6 +49,10 @@ modules = [
   "Approx",
   "CSLib",
   "BRepExtrema",
+  "ShapeExtend",
+  "ShapeConstruct",
+  "ShapeAnalysis",
+  "ShapeFix",
   "GeomAPI",
   "TDF",
   "XCAFPrs",
@@ -88,7 +92,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID",                 # FIXME: Handle array field.
+  "Standard_UUID",                    # FIXME: Handle array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
@@ -97,8 +101,10 @@ class = [
   "TDF_LabelNode",
   "TDF_TagSource",
   "XCAFPrs_Style",
-  "BRepFeat_MakeRevolutionForm",   # FIXME: Evil constructor!
+  "BRepFeat_MakeRevolutionForm",      # FIXME: Evil constructor!
   "BRepExtrema_OverlapTool",
+  "ShapeFix_WireSegment",             # FIXME: Unimplemented constructor.
+  "ShapeAnalysis_BoxBndTreeSelector", # Symbol cannot be resolved 
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -115,6 +121,8 @@ method = [
   "TopOpeBRepBuild_Builder1::GFillSplitsPVS",             # Symbol cannot be resolved
   "GeomAPI_Interpolate::ClearTangents",                   # Symbol cannot be resolved
   "BRepTools_PurgeLocations::ModifiedShape",              # Symbol cannot be resolved
+  "ShapeAnalysis_BoxBndTreeSelector::Accept",             # Symbol cannot be resolved
+  "ShapeAnalysis_BoxBndTreeSelector::Reject",             # Symbol cannot be resolved
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
@@ -143,6 +151,7 @@ copyable = [
   "BRepExtrema_ExtCC",
   "BRepExtrema_ExtPC",
   "BRepExtrema_ExtFF",
+  "ShapeAnalysis_Surface",
 ]
 
 [extra_method]
