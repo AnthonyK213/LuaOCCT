@@ -138,6 +138,7 @@ method = [
   "TDF_Label::ExtendedDump",
   "TDF_Label::EntryDump",
   "BRepExtrema_ProximityDistTool::ProximityPointsStatus", # Interval enum
+  "BRepExtrema_TriangleSet::Box",                         # WTF
 ]
 copyable = [
   "Geom_SweptSurface",
