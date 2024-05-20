@@ -8,6 +8,8 @@
 #include <LuaBridge/Vector.h>
 // clang-format on
 
+#include <Standard_Version.hxx>
+
 #include "mod_header/Adaptor2d.h"
 #include "mod_header/Adaptor3d.h"
 #include "mod_header/Approx.h"

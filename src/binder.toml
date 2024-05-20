@@ -114,15 +114,15 @@ method = [
   "IntTools_PntOnFace::IsValid",
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
-  "BRepOffsetAPI_FindContigousEdges::NbEdges",            # Symbol cannot be resolved
-  "BRepFeat::IsInOut",                                    # Symbol cannot be resolved
-  "BRepFeat_MakeLinearForm::TransformShapeFU",            # Symbol cannot be resolved
-  "Law_Interpolate::ClearTangents",                       # Symbol cannot be resolved
-  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",             # Symbol cannot be resolved
-  "GeomAPI_Interpolate::ClearTangents",                   # Symbol cannot be resolved
-  "BRepTools_PurgeLocations::ModifiedShape",              # Symbol cannot be resolved
-  "ShapeAnalysis_BoxBndTreeSelector::Accept",             # Symbol cannot be resolved
-  "ShapeAnalysis_BoxBndTreeSelector::Reject",             # Symbol cannot be resolved
+  "BRepOffsetAPI_FindContigousEdges::NbEdges",                   # Symbol cannot be resolved
+  "BRepFeat::IsInOut",                                           # Symbol cannot be resolved
+  "BRepFeat_MakeLinearForm::TransformShapeFU",                   # Symbol cannot be resolved
+  "Law_Interpolate::ClearTangents",                              # Symbol cannot be resolved
+  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",                    # Symbol cannot be resolved
+  "GeomAPI_Interpolate::ClearTangents",                          # Symbol cannot be resolved
+  "BRepTools_PurgeLocations::ModifiedShape",                     # Symbol cannot be resolved
+  "ShapeAnalysis_BoxBndTreeSelector::Accept",                    # Symbol cannot be resolved
+  "ShapeAnalysis_BoxBndTreeSelector::Reject",                    # Symbol cannot be resolved
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
@@ -137,8 +137,9 @@ method = [
   "TDF_Label::Dump",
   "TDF_Label::ExtendedDump",
   "TDF_Label::EntryDump",
-  "BRepExtrema_ProximityDistTool::ProximityPointsStatus", # Interval enum
-  "BRepExtrema_TriangleSet::Box",                         # WTF
+  "BRepExtrema_ProximityDistTool::ProximityPointsStatus",        # Interval enum
+  "BRepExtrema_ProximityDistTool::LoadAdditionalPointsFirstSet", # Not exported
+  "BRepExtrema_TriangleSet::Box",                                # WTF
 ]
 copyable = [
   "Geom_SweptSurface",
