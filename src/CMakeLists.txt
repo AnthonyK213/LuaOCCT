@@ -28,9 +28,9 @@ if(NOT LUAOCCT_BINDER_SUPPRESS_REGENERATION OR BINDER_GEN_DIR_LENGTH EQUAL 0)
   execute_process(
     COMMAND ${BINDER_EXEC}
         ${OpenCASCADE_INCLUDE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/mod_header
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct_bind/mod_header
         ${BINDER_GEN_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/binder.toml
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct_bind/binder.toml
     )
 endif()
 
@@ -57,8 +57,16 @@ target_include_directories(
   luaocct
   PRIVATE
   ${BINDER_GEN_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../include/
+  ${OpenCASCADE_INCLUDE_DIR}
+  ${luabridge3_SOURCE_DIR}/Source
   )
+
+target_link_directories(
+  luaocct
+  PRIVATE
+  ${OpenCASCADE_LIBRARY_DIR}
+)
 
 target_link_libraries(
   luaocct
@@ -78,7 +86,7 @@ install(
   )
 
 install(
-  DIRECTORY ${BINDER_GEN_DIR}/ ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct/
   DESTINATION include/luaocct
   COMPONENT header_files
   FILES_MATCHING

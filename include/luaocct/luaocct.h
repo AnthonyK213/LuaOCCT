@@ -1,5 +1,5 @@
-#ifndef _LuaOCCT_Header
-#define _LuaOCCT_Header
+#ifndef _LuaOCCT_HeaderFile
+#define _LuaOCCT_HeaderFile
 
 #include <cstdint>
 #include <lua.hpp>

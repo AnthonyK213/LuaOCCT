@@ -1,6 +1,5 @@
+#include <luaocct/LODoc_Document.hxx>
 #include <luaocct/LODoc_DocumentExplorer.hxx>
-
-#include "LODoc_Document.hxx"
 
 IMPLEMENT_STANDARD_RTTIEXT(LODoc_DocumentExplorer, Standard_Transient)
 

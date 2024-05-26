@@ -1,4 +1,4 @@
-#include "LODXF_Reader.hxx"
+#include <luaocct/LODXF_Reader.hxx>
 
 LODXF_Reader::LODXF_Reader() {}
 

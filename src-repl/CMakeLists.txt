@@ -5,6 +5,18 @@ add_executable(
   ${LUAOCCT_REPL_SRCS}
   )
 
+target_include_directories(
+  ${PROJECT_NAME}-repl
+  PRIVATE
+  ${OpenCASCADE_INCLUDE_DIR}
+  )
+
+target_link_directories(
+  ${PROJECT_NAME}-repl
+  PRIVATE
+  ${OpenCASCADE_LIBRARY_DIR}
+)
+
 target_link_libraries(
   ${PROJECT_NAME}-repl
   PRIVATE

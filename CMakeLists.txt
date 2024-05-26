@@ -51,17 +51,7 @@ message("binder_BINARY_DIR: ${binder_BINARY_DIR}")
 message("luajit_SOURCE_DIR: ${luajit_SOURCE_DIR}")
 message("luajit_BINARY_DIR: ${luajit_BINARY_DIR}")
 
-include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/luaocct/
-  ${OpenCASCADE_INCLUDE_DIR}
-  ${luabridge3_SOURCE_DIR}/Source
-  ${luajit_BINARY_DIR}
-  )
-
-link_directories(
-  ${OpenCASCADE_LIBRARY_DIR}
-  )
+include_directories(${luajit_BINARY_DIR})
 
 add_subdirectory(src)
 add_subdirectory(src-repl)

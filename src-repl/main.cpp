@@ -1,7 +1,5 @@
 #include <lua.hpp>
 
-#include <LuaBridge/LuaBridge.h>
-
 #include <iostream>
 
 #include <Geom_Line.hxx>
