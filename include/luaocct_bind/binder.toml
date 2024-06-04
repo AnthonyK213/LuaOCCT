@@ -123,6 +123,7 @@ method = [
   "BRepTools_PurgeLocations::ModifiedShape",                     # Symbol cannot be resolved
   "ShapeAnalysis_BoxBndTreeSelector::Accept",                    # Symbol cannot be resolved
   "ShapeAnalysis_BoxBndTreeSelector::Reject",                    # Symbol cannot be resolved
+  "BRepGProp_VinertGK::GetAbsolutError",                         # Symbol cannot be resolved
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
