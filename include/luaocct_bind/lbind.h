@@ -19,6 +19,7 @@
 #include "mod_header/BRepAdaptor.h"
 #include "mod_header/BRepAlgoAPI.h"
 #include "mod_header/BRepBuilderAPI.h"
+#include "mod_header/BRepClass3d.h"
 #include "mod_header/BRepExtrema.h"
 #include "mod_header/BRepFeat.h"
 #include "mod_header/BRepFilletAPI.h"

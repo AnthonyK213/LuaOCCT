@@ -27,6 +27,7 @@ modules = [
   "BRepPrim",
   "BRepPrimAPI",
   "BRepFeat",
+  "BRepClass3d",
   "GC",
   "GeomFill",
   "IntTools",
@@ -92,7 +93,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID",                    # FIXME: Handle array field.
+  "Standard_UUID",                       # FIXME: Handle array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
@@ -101,10 +102,12 @@ class = [
   "TDF_LabelNode",
   "TDF_TagSource",
   "XCAFPrs_Style",
-  "BRepFeat_MakeRevolutionForm",      # FIXME: Evil constructor!
+  "BRepFeat_MakeRevolutionForm",         # FIXME: Evil constructor!
   "BRepExtrema_OverlapTool",
-  "ShapeFix_WireSegment",             # FIXME: Unimplemented constructor.
-  "ShapeAnalysis_BoxBndTreeSelector", # Symbol cannot be resolved 
+  "ShapeFix_WireSegment",                # FIXME: Unimplemented constructor.
+  "ShapeAnalysis_BoxBndTreeSelector",    # Symbol cannot be resolved.
+  "BRepClass3d_BndBoxTreeSelectorLine",  # No need to expose to public.
+  "BRepClass3d_BndBoxTreeSelectorPoint", # No need to expose to public.
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -155,6 +158,8 @@ copyable = [
   "BRepExtrema_ExtPC",
   "BRepExtrema_ExtFF",
   "ShapeAnalysis_Surface",
+  "BRepClass3d_SolidClassifier",
+  "BRepClass3d_SolidExplorer",
 ]
 
 [extra_method]
