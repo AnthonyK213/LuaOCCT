@@ -17,6 +17,7 @@ modules = [
   "Law",
   "TopOpeBRepDS",
   "TopOpeBRepBuild",
+  "TopTools",
   "BRepTools",
   "BRepBuilderAPI",
   "BOPDS",
@@ -71,7 +72,6 @@ immutable_type = [
   "NCollection_Array2",
   "NCollection_List",
   "NCollection_Sequence",
-  "NCollection_Map",
   "NCollection_Vec2",
   "NCollection_Vec3",
   "NCollection_Vec4",
@@ -81,7 +81,7 @@ immutable_type = [
   "BVH_Vec3d",
 ]
 
-extra_modules = []
+extra_modules = ["Map"]
 
 [lua_operators]
 "operator+" = "__add"

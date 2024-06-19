@@ -1,8 +1,5 @@
-#include <lua.hpp>
-
 #include <iostream>
-
-#include <Geom_Line.hxx>
+#include <lua.hpp>
 
 int main() {
   std::cout << "Hello, LuaOCCT!\n" << std::endl;

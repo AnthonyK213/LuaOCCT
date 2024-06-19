@@ -69,6 +69,7 @@
 #include "mod_header/TopLoc.h"
 #include "mod_header/TopOpeBRepBuild.h"
 #include "mod_header/TopOpeBRepDS.h"
+#include "mod_header/TopTools.h"
 #include "mod_header/TopoDS.h"
 #include "mod_header/XCAFDoc.h"
 #include "mod_header/XCAFPrs.h"
