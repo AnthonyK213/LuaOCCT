@@ -4,6 +4,7 @@ modules = [
   "GeomAbs",
   "TopAbs",
   "Precision",
+  "NCollection",
   "gp",
   "math",
   "Geom2d",
@@ -80,6 +81,8 @@ immutable_type = [
   "TCollection_ExtendedString",
   "BVH_Vec3d",
 ]
+
+template_class = []
 
 extra_modules = ["Map"]
 
