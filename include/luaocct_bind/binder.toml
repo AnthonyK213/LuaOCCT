@@ -102,7 +102,7 @@ extra_modules = []
 [black_list]
 class = [
   "Standard",
-  "Standard_UUID",                       # FIXME: Handle array field.
+  "Standard_UUID",                           # FIXME: Handle array field.
   "CPnts_MyGaussFunction",
   "CPnts_MyRootFunction",
   "Message_ProgressScope",
@@ -111,13 +111,18 @@ class = [
   "TDF_LabelNode",
   "TDF_TagSource",
   "XCAFPrs_Style",
-  "BRepFeat_MakeRevolutionForm",         # FIXME: Evil constructor!
+  "BRepFeat_MakeRevolutionForm",             # FIXME: Evil constructor!
   "BRepExtrema_OverlapTool",
-  "ShapeFix_WireSegment",                # FIXME: Unimplemented constructor.
-  "ShapeAnalysis_BoxBndTreeSelector",    # Symbol cannot be resolved.
-  "BRepClass3d_BndBoxTreeSelectorLine",  # No need to expose to public.
-  "BRepClass3d_BndBoxTreeSelectorPoint", # No need to expose to public.
-  "BRepClass3d_MapOfInter",              # Fuck pointers.
+  "ShapeFix_WireSegment",                    # FIXME: Unimplemented constructor.
+  "ShapeAnalysis_BoxBndTreeSelector",        # Symbol cannot be resolved.
+  "BRepClass3d_BndBoxTreeSelectorLine",      # No need to expose to public.
+  "BRepClass3d_BndBoxTreeSelectorPoint",     # Same.
+  "BRepClass3d_MapOfInter",                  # Fuck pointers.
+  "BRepTools_MapOfVertexPnt2d",              # Don't know how to deal with template parameters, needs manual methods?
+  "TopOpeBRepDS_ShapeSurface",               # Same.
+  "ShapeAnalysis_DataMapOfShapeListOfReal",  # Same.
+  "ShapeExtend_DataMapOfTransientListOfMsg", # Same.
+  "ShapeExtend_DataMapOfShapeListOfMsg",     # Same.
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -128,15 +133,15 @@ method = [
   "IntTools_PntOn2Faces::IsValid",
   "BOPAlgo_PaveFiller::Iterator",
   "BRepOffsetAPI_FindContigousEdges::NbEdges",                   # Symbol cannot be resolved
-  "BRepFeat::IsInOut",                                           # Symbol cannot be resolved
-  "BRepFeat_MakeLinearForm::TransformShapeFU",                   # Symbol cannot be resolved
-  "Law_Interpolate::ClearTangents",                              # Symbol cannot be resolved
-  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",                    # Symbol cannot be resolved
-  "GeomAPI_Interpolate::ClearTangents",                          # Symbol cannot be resolved
-  "BRepTools_PurgeLocations::ModifiedShape",                     # Symbol cannot be resolved
-  "ShapeAnalysis_BoxBndTreeSelector::Accept",                    # Symbol cannot be resolved
-  "ShapeAnalysis_BoxBndTreeSelector::Reject",                    # Symbol cannot be resolved
-  "BRepGProp_VinertGK::GetAbsolutError",                         # Symbol cannot be resolved
+  "BRepFeat::IsInOut",                                           # Same.
+  "BRepFeat_MakeLinearForm::TransformShapeFU",                   # Same.
+  "Law_Interpolate::ClearTangents",                              # Same.
+  "TopOpeBRepBuild_Builder1::GFillSplitsPVS",                    # Same.
+  "GeomAPI_Interpolate::ClearTangents",                          # Same.
+  "BRepTools_PurgeLocations::ModifiedShape",                     # Same.
+  "ShapeAnalysis_BoxBndTreeSelector::Accept",                    # Same.
+  "ShapeAnalysis_BoxBndTreeSelector::Reject",                    # Same.
+  "BRepGProp_VinertGK::GetAbsolutError",                         # Same.
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
@@ -154,6 +159,7 @@ method = [
   "BRepExtrema_ProximityDistTool::ProximityPointsStatus",        # Interval enum
   "BRepExtrema_ProximityDistTool::LoadAdditionalPointsFirstSet", # Not exported
   "BRepExtrema_TriangleSet::Box",                                # WTF
+  "TopTools_IndexedDataMapOfShapeListOfShape::FindFromKey",      # Fuck templates!
 ]
 copyable = [
   "Geom_SweptSurface",
