@@ -82,9 +82,15 @@ immutable_type = [
   "BVH_Vec3d",
 ]
 
-template_class = []
+template_class = [
+  "NCollection_DataMap",
+  "NCollection_DoubleMap",
+  "NCollection_IndexedDataMap",
+  "NCollection_IndexedMap",
+  "NCollection_Map",
+]
 
-extra_modules = ["Map"]
+extra_modules = []
 
 [lua_operators]
 "operator+" = "__add"
@@ -111,6 +117,7 @@ class = [
   "ShapeAnalysis_BoxBndTreeSelector",    # Symbol cannot be resolved.
   "BRepClass3d_BndBoxTreeSelectorLine",  # No need to expose to public.
   "BRepClass3d_BndBoxTreeSelectorPoint", # No need to expose to public.
+  "BRepClass3d_MapOfInter",              # Fuck pointers.
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
