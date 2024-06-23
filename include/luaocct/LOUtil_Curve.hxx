@@ -10,10 +10,10 @@
 #include <Geom_Curve.hxx>
 #include <Geom_Line.hxx>
 #include <Geom_TrimmedCurve.hxx>
-#include <TColGeom_Array1OfCurve.hxx>
+#include <TColGeom_SequenceOfBoundedCurve.hxx>
+#include <TColStd_SequenceOfReal.hxx>
 
 #include "LOAbs_CurveEnd.hxx"
-#include <vector>
 
 class LOUtil_Curve {
 public:
@@ -62,7 +62,7 @@ public:
   IsLinear(const Handle(Geom_Curve) & theCurve,
            const Standard_Real theTolerance = Precision::Confusion());
 
-  Standard_EXPORT static std::vector<Standard_Real>
+  Standard_EXPORT static TColStd_SequenceOfReal
   ClosestParameters(const Handle(Geom_Curve) & theCurve,
                     const gp_Pnt &thePoint);
 
@@ -71,7 +71,7 @@ public:
                 const Standard_Integer &theNbSegments,
                 const Standard_Boolean theIncludeEnds);
 
-  Standard_EXPORT static std::vector<Handle(Geom_BoundedCurve)>
+  Standard_EXPORT static TColGeom_SequenceOfBoundedCurve
   Explode(const Handle(Geom_Curve) & theCurve);
 };
 

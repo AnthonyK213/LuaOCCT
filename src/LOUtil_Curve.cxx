@@ -86,7 +86,7 @@ static Handle(Geom_Curve)
   }
 
   Standard_Real t = theSide == LOAbs_AtStart ? theCurve->FirstParameter()
-                                           : theCurve->LastParameter();
+                                             : theCurve->LastParameter();
 
   gp_Pnt pntEnd;
   gp_Vec dirEnd;
@@ -117,7 +117,8 @@ Handle(Geom_Curve) LOUtil_Curve::Extend(const Handle(Geom_Curve) & theCurve,
 
   switch (theSide) {
   case LOAbs_AtBoth: {
-    Handle(Geom_Curve) aCrv = extend(theCurve, LOAbs_AtStart, theLength, theCont);
+    Handle(Geom_Curve) aCrv =
+        extend(theCurve, LOAbs_AtStart, theLength, theCont);
     return extend(aCrv, LOAbs_AtEnd, theLength, theCont);
   }
 
@@ -143,8 +144,9 @@ static Handle(Geom_TrimmedCurve)
                  const Standard_Real theLength) {
   GeomAdaptor_Curve aCurve(theCurve);
   Standard_Real abscissa =
-      theSide == LOAbs_AtStart ? theLength
-                             : (LOUtil_Curve::GetLength(theCurve) - theLength);
+      theSide == LOAbs_AtStart
+          ? theLength
+          : (LOUtil_Curve::GetLength(theCurve) - theLength);
   GCPnts_AbscissaPoint aPnt{aCurve, abscissa, aCurve.FirstParameter()};
 
   if (!aPnt.IsDone())
@@ -252,10 +254,10 @@ Standard_Boolean LOUtil_Curve::IsLinear(const Handle(Geom_Curve) & theCurve,
   return Standard_True;
 }
 
-std::vector<Standard_Real>
+TColStd_SequenceOfReal
 LOUtil_Curve::ClosestParameters(const Handle(Geom_Curve) & theCurve,
                                 const gp_Pnt &thePoint) {
-  std::vector<Standard_Real> aResult{};
+  TColStd_SequenceOfReal aResult{};
 
   Standard_Real t0 = theCurve->FirstParameter();
   Standard_Real t1 = theCurve->LastParameter();
@@ -280,11 +282,11 @@ LOUtil_Curve::ClosestParameters(const Handle(Geom_Curve) & theCurve,
         aSqrtDistTemp = anExtrema.SquareDistance(i);
 
         if (aSqrtDistTemp == aSqrDist) {
-          aResult.push_back(aParam);
+          aResult.Append(aParam);
         } else if (aSqrtDistTemp < aSqrDist) {
           aSqrDist = aSqrtDistTemp;
-          aResult.clear();
-          aResult.push_back(aParam);
+          aResult.Clear();
+          aResult.Append(aParam);
         }
       }
     }
@@ -298,22 +300,29 @@ LOUtil_Curve::ClosestParameters(const Handle(Geom_Curve) & theCurve,
   if (aDist0 <= aSqrDist || aDist1 <= aSqrDist) {
     if (aDist0 < aDist1) {
       if (aDist0 < aSqrDist) {
-        return {t0};
+        aResult = {};
+        aResult.Append(t0);
+        return aResult;
       } else {
-        aResult.push_back(t0);
+        aResult.Append(t0);
       }
     } else if (aDist0 > aDist1) {
       if (aDist1 < aSqrDist) {
-        return {t1};
+        aResult = {};
+        aResult.Append(t1);
+        return aResult;
       } else {
-        aResult.push_back(t1);
+        aResult.Append(t1);
       }
     } else {
       if (aDist0 < aSqrDist) {
-        return {t0, t1};
+        aResult = {};
+        aResult.Append(t0);
+        aResult.Append(t1);
+        return aResult;
       } else {
-        aResult.push_back(t0);
-        aResult.push_back(t1);
+        aResult.Append(t0);
+        aResult.Append(t1);
       }
     }
   }
@@ -371,9 +380,9 @@ isG2(const gp_Pnt &thisStart, const gp_Dir &thisTangentStart,
                                     Precision::Confusion());
 }
 
-std::vector<Handle(Geom_BoundedCurve)>
-LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
-  std::vector<Handle(Geom_BoundedCurve)> aResult{};
+TColGeom_SequenceOfBoundedCurve LOUtil_Curve::Explode(const Handle(Geom_Curve) &
+                                                      theCurve) {
+  TColGeom_SequenceOfBoundedCurve aResult{};
 
   ShapeUpgrade_SplitCurve3dContinuity aSplitter{};
   aSplitter.Init(theCurve);
@@ -381,11 +390,8 @@ LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
   aSplitter.Perform(Standard_True);
   const Handle(TColGeom_HArray1OfCurve) &theCurves = aSplitter.GetCurves();
 
-  if (theCurves.IsNull()) {
+  if (theCurves.IsNull())
     return aResult;
-  }
-
-  aResult.reserve(theCurves->Size());
 
   // Connection buffer.
   GeomConvert_CompCurveToBSplineCurve aBuffer{};
@@ -436,14 +442,14 @@ LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
     // If not G2, which means theCurve needs to "explode" here, so just submit
     // aBuffer to aResult, clear aBuffer, push current curve to aBuffer, build
     // another curve in the next loop.
-    aResult.push_back(aBuffer.BSplineCurve());
+    aResult.Append(aBuffer.BSplineCurve());
     aBuffer.Clear();
     aBuffer.Add(aBndCrv, Precision::Confusion(), Standard_True);
   }
 
   // Check if the first and the last curve are able to connect.
-  if (!aResult.empty()) {
-    Handle(Geom_BoundedCurve) firstCurve = aResult[0];
+  if (!aResult.IsEmpty()) {
+    Handle(Geom_BoundedCurve) firstCurve = aResult.First();
 
     // Start point of the first curve.
     aProps.SetCurve(firstCurve);
@@ -457,7 +463,7 @@ LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
       if (aBuffer.Add(firstCurve, Precision::Confusion(), Standard_True)) {
         // If succeed to connect, replace the first curve with the connected
         // curve.
-        aResult[0] = aBuffer.BSplineCurve();
+        aResult.ChangeFirst() = aBuffer.BSplineCurve();
         return aResult;
       }
     }
@@ -466,7 +472,7 @@ LOUtil_Curve::Explode(const Handle(Geom_Curve) & theCurve) {
   // If the last curve cannot connect to the first curve, push it to aResult.
   Handle(Geom_BoundedCurve) lastCurve = aBuffer.BSplineCurve();
   if (!lastCurve.IsNull())
-    aResult.push_back(lastCurve);
+    aResult.Append(lastCurve);
 
   return aResult;
 }
