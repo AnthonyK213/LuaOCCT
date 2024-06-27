@@ -68,13 +68,23 @@ target_link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
 )
 
-target_link_libraries(
-  luaocct
-  PRIVATE
-  ${OpenCASCADE_LIBRARIES}
-  luajit::lib
-  luajit::header
-  )
+if(WIN32)
+  # Win32 modules need to be linked to the Lua library.
+  target_link_libraries(
+    luaocct
+    PRIVATE
+    ${OpenCASCADE_LIBRARIES}
+    luajit::lib
+    luajit::header
+    )
+else(WIN32)
+  target_link_libraries(
+    luaocct
+    PRIVATE
+    ${OpenCASCADE_LIBRARIES}
+    luajit::header
+    )
+endif(WIN32)
 
 install(
   TARGETS ${PROJECT_NAME}
