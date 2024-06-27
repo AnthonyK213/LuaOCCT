@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
   LuaJIT_Source
   GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT
-  GIT_TAG origin/v2.1
+  GIT_TAG 0d313b243194a0b8d2399d8b549ca5a0ff234db5
   SOURCE_DIR ${CMAKE_BINARY_DIR}/deps/LuaJIT_Source
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
@@ -38,5 +38,5 @@ if(NOT luajit_POPULATED)
     ${luajit_BINARY_DIR}
     )
 
-  set_target_properties(libluajit PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  # set_target_properties(libluajit PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()

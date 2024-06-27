@@ -48,7 +48,7 @@ target_compile_options(
   luaocct
   PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
-  $<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
+  # $<$<CXX_COMPILER_ID:GNU>:-Wa,-mbig-obj>
   )
 
 add_dependencies(luaocct luaocct-binder)
