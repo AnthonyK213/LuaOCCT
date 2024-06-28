@@ -46,6 +46,9 @@ if(WIN32)
   add_custom_command(
     TARGET ${PROJECT_NAME}-repl POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
+      "$<TARGET_PROPERTY:libluajit,BINARY_DIR>/$<CONFIG>"
+      "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
       "$<TARGET_PROPERTY:luaocct,BINARY_DIR>/$<CONFIG>"
       "$<TARGET_PROPERTY:luaocct-repl,BINARY_DIR>/$<CONFIG>"
     COMMAND ${CMAKE_COMMAND} -E copy_directory

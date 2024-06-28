@@ -22,6 +22,10 @@ if(NOT luajit_source_POPULATED)
   FetchContent_Populate(LuaJIT_Source)
 endif()
 
+if(WIN32)
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "")
+endif(WIN32)
+
 # FetchContent_MakeAvailable(LuaJIT)
 FetchContent_GetProperties(LuaJIT)
 if(NOT luajit_POPULATED)
@@ -39,4 +43,7 @@ if(NOT luajit_POPULATED)
     )
 
   # set_target_properties(libluajit PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  if(WIN32)
+    set_target_properties(libluajit PROPERTIES OUTPUT_NAME "lua51")
+  endif(WIN32)
 endif()
