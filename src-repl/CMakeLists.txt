@@ -17,13 +17,25 @@ target_link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
 )
 
-target_link_libraries(
-  ${PROJECT_NAME}-repl
-  PRIVATE
-  ${OpenCASCADE_LIBRARIES}
-  luajit::lib
-  luajit::header
-  )
+if(WIN32)
+  target_link_libraries(
+    ${PROJECT_NAME}-repl
+    PRIVATE
+    ${OpenCASCADE_LIBRARIES}
+    luajit::lib
+    luajit::header
+    )
+else(WIN32)
+  target_link_libraries(
+    ${PROJECT_NAME}-repl
+    PRIVATE
+    ${OpenCASCADE_LIBRARIES}
+    # https://luajit.org/install.html#:~:text=In%20the%20latter%20case%20you%27ll%20need%20to%20export%20all%20public%20symbols%20from%20your%20main%20executable
+    -Wl,-E
+    luajit::lib
+    luajit::header
+    )
+endif(WIN32)
 
 add_dependencies(
   ${PROJECT_NAME}-repl
