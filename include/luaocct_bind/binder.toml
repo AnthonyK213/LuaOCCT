@@ -51,6 +51,7 @@ modules = [
   "Quantity",
   "Approx",
   "CSLib",
+  "Extrema",
   "BRepExtrema",
   "ShapeExtend",
   "ShapeConstruct",
@@ -176,6 +177,14 @@ copyable = [
   "ShapeAnalysis_Surface",
   "BRepClass3d_SolidClassifier",
   "BRepClass3d_SolidExplorer",
+  "Extrema_GenLocateExtPS",
+  "Extrema_GenLocateExtSS",
+  "Extrema_GenExtSS",
+  "Extrema_GenExtCS",
+  "Extrema_FuncPSDist",
+  "Extrema_ExtPS",
+  "Extrema_ExtPRevS",
+  "Extrema_ExtPExtS",
 ]
 
 [extra_method]

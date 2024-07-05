@@ -34,6 +34,7 @@
 #include "mod_header/CSLib.h"
 #include "mod_header/ChFi2d.h"
 #include "mod_header/Convert.h"
+#include "mod_header/Extrema.h"
 #include "mod_header/GC.h"
 #include "mod_header/GProp.h"
 #include "mod_header/Geom.h"
