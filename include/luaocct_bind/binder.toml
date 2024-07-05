@@ -48,6 +48,7 @@ modules = [
   "GProp",
   "GeomLib",
   "GeomProjLib",
+  "GeomLProp",
   "Quantity",
   "Approx",
   "CSLib",

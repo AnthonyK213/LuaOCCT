@@ -46,6 +46,7 @@
 #include "mod_header/GeomAdaptor.h"
 #include "mod_header/GeomConvert.h"
 #include "mod_header/GeomFill.h"
+#include "mod_header/GeomLProp.h"
 #include "mod_header/GeomLib.h"
 #include "mod_header/GeomProjLib.h"
 #include "mod_header/IMeshTools.h"
