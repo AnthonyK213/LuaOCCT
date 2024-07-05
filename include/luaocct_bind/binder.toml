@@ -125,6 +125,8 @@ class = [
   "ShapeAnalysis_DataMapOfShapeListOfReal",  # Same.
   "ShapeExtend_DataMapOfTransientListOfMsg", # Same.
   "ShapeExtend_DataMapOfShapeListOfMsg",     # Same.
+  "math_Vector",
+  "math_IntegerVector",
 ]
 method_by_name = ["DumpJson", "get_type_name", "get_type_descriptor"]
 method = [
@@ -182,7 +184,10 @@ copyable = [
   "Extrema_GenLocateExtSS",
   "Extrema_GenExtSS",
   "Extrema_GenExtCS",
+  "Extrema_GenExtPS",
   "Extrema_FuncPSDist",
+  "Extrema_ExtCC",
+  "Extrema_ExtCS",
   "Extrema_ExtPS",
   "Extrema_ExtPRevS",
   "Extrema_ExtPExtS",
@@ -271,3 +276,7 @@ Standard_GUID = '''
   self.Merge(theH);
 }
 '''
+"math_Vector::Value" = '''
++[](const math_Vector &self, const Standard_Real theNum) -> Standard_Real { return self.Value(theNum); }'''
+"math_IntegerVector::Value" = '''
++[](const math_IntegerVector &self, const Standard_Integer theNum) -> Standard_Integer { return self.Value(theNum); }'''
