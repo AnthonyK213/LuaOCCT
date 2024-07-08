@@ -9,8 +9,8 @@
 #include <ProjLib_ComputeApproxOnPolarSurface.hxx>
 #include <ProjLib_Cone.hxx>
 #include <ProjLib_Cylinder.hxx>
-#include <ProjLib_HCompProjectedCurve.hxx>
-#include <ProjLib_HProjectedCurve.hxx>
+// #include <ProjLib_HCompProjectedCurve.hxx>
+// #include <ProjLib_HProjectedCurve.hxx>
 #include <ProjLib_HSequenceOfHSequenceOfPnt.hxx>
 #include <ProjLib_Plane.hxx>
 #include <ProjLib_PrjFunc.hxx>
