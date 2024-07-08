@@ -23,6 +23,7 @@ modules = [
   "BRepBuilderAPI",
   "BRepPrim",
   "BRepPrimAPI",
+  "BRepSweep",
   "BRepOffsetAPI",
   "BRepFilletAPI",
   "BOPDS",
@@ -36,6 +37,7 @@ modules = [
   "Adaptor2d",
   "Adaptor3d",
   "Geom2dAdaptor",
+  "Geom2dAPI",
   "GeomAdaptor",
   "BRepAdaptor",
   "BRep",
@@ -47,6 +49,8 @@ modules = [
   "BRepGProp",
   "GProp",
   "GeomLib",
+  "ProjLib",
+  "BRepProj",
   "GeomProjLib",
   "GeomLProp",
   "Quantity",
@@ -146,6 +150,7 @@ method = [
   "ShapeAnalysis_BoxBndTreeSelector::Accept",                    # Same.
   "ShapeAnalysis_BoxBndTreeSelector::Reject",                    # Same.
   "BRepGProp_VinertGK::GetAbsolutError",                         # Same.
+  "Geom2dAPI_Interpolate::ClearTangents",                        # Same.
   "LODoc_Document::Context",
   "LODoc_Document::SetContext",
   "LODoc_Document::Document",
