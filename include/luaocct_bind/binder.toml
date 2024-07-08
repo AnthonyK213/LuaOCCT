@@ -233,6 +233,19 @@ Standard_GUID = '''
   theSelf.ToCString(s);
   return s;
 })'''
+# Multiple inheritance (protected) from BOPAlgo_Options
+BRepAlgoAPI_Algo = '''
+.addFunction("Clear",+[](BRepAlgoAPI_Algo &self) { self.Clear(); })
+.addFunction("ClearWarnings",+[](BRepAlgoAPI_Algo &self) { self.ClearWarnings(); })
+.addFunction("HasError",+[](const BRepAlgoAPI_Algo &self,const opencascade::handle<Standard_Type> &theType) { return self.HasError(theType); })
+.addFunction("HasErrors",+[](const BRepAlgoAPI_Algo &self) { return self.HasErrors(); })
+.addFunction("HasWarning",+[](const BRepAlgoAPI_Algo &self,const opencascade::handle<Standard_Type> &theType) { return self.HasWarning(theType); })
+.addFunction("HasWarnings",+[](const BRepAlgoAPI_Algo &self) { return self.HasWarnings(); })
+.addFunction("FuzzyValue",+[](const BRepAlgoAPI_Algo &self) { return self.FuzzyValue(); })
+.addFunction("SetFuzzyValue",+[](BRepAlgoAPI_Algo &self,const Standard_Real theFuzz) { self.SetFuzzyValue(theFuzz); })
+.addFunction("RunParallel",+[](const BRepAlgoAPI_Algo &self) { return self.RunParallel(); })
+.addFunction("SetRunParallel",+[](BRepAlgoAPI_Algo &self,const Standard_Boolean theFlag) { self.SetRunParallel(theFlag); })
+.addFunction("SetUseOBB",+[](BRepAlgoAPI_Algo &self,const Standard_Boolean theUseOBB) { self.SetUseOBB(theUseOBB); })'''
 
 [manual_method]
 "Bnd_OBB::ReBuild" = '''
