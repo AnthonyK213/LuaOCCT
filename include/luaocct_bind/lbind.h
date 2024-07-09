@@ -67,6 +67,8 @@
 #include "mod_header/ShapeExtend.h"
 #include "mod_header/ShapeFix.h"
 #include "mod_header/Standard.h"
+#include "mod_header/TColStd.h"
+#include "mod_header/TColgp.h"
 #include "mod_header/TCollection.h"
 #include "mod_header/TDF.h"
 #include "mod_header/TDocStd.h"
@@ -97,57 +99,6 @@ template <class T> struct ContainerTraits<opencascade::handle<T>> {
   static opencascade::handle<T> construct(T *c) { return c; }
 
   static T *get(const opencascade::handle<T> &c) { return c.get(); }
-};
-
-template <> struct Stack<TCollection_AsciiString> {
-  static Result push(lua_State *L, const TCollection_AsciiString &tStr) {
-    lua_pushstring(L, tStr.ToCString());
-    return {};
-  }
-
-  static TypeResult<TCollection_AsciiString> get(lua_State *L, int index) {
-    if (lua_type(L, index) != LUA_TSTRING)
-      return makeErrorCode(ErrorCode::InvalidTypeCast);
-
-    std::size_t length = 0;
-    const char *str = lua_tolstring(L, index, &length);
-    if (str == nullptr)
-      return makeErrorCode(ErrorCode::InvalidTypeCast);
-
-    return TCollection_AsciiString(str);
-  }
-
-  static bool isInstance(lua_State *L, int index) {
-    return lua_type(L, index) == LUA_TSTRING;
-  }
-};
-
-template <> struct Stack<TCollection_ExtendedString> {
-  static Result push(lua_State *L, const TCollection_ExtendedString &tStr) {
-    Standard_Integer length = tStr.LengthOfCString();
-    std::string str;
-    str.reserve(length);
-    Standard_PCharacter p = str.data();
-    tStr.ToUTF8CString(p);
-    lua_pushstring(L, str.c_str());
-    return {};
-  }
-
-  static TypeResult<TCollection_ExtendedString> get(lua_State *L, int index) {
-    if (lua_type(L, index) != LUA_TSTRING)
-      return makeErrorCode(ErrorCode::InvalidTypeCast);
-
-    std::size_t length = 0;
-    const char *str = lua_tolstring(L, index, &length);
-    if (str == nullptr)
-      return makeErrorCode(ErrorCode::InvalidTypeCast);
-
-    return TCollection_ExtendedString(str);
-  }
-
-  static bool isInstance(lua_State *L, int index) {
-    return lua_type(L, index) == LUA_TSTRING;
-  }
 };
 
 template <class T> struct Stack<NCollection_Array1<T>> {
@@ -528,6 +479,95 @@ template <class T> struct Stack<NCollection_Vec4<T>> {
     return vec4;
   }
 };
+
+template <> struct Stack<TCollection_AsciiString> {
+  static Result push(lua_State *L, const TCollection_AsciiString &tStr) {
+    lua_pushstring(L, tStr.ToCString());
+    return {};
+  }
+
+  static TypeResult<TCollection_AsciiString> get(lua_State *L, int index) {
+    if (lua_type(L, index) != LUA_TSTRING)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    std::size_t length = 0;
+    const char *str = lua_tolstring(L, index, &length);
+    if (str == nullptr)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    return TCollection_AsciiString(str);
+  }
+
+  static bool isInstance(lua_State *L, int index) {
+    return lua_type(L, index) == LUA_TSTRING;
+  }
+};
+
+template <> struct Stack<TCollection_ExtendedString> {
+  static Result push(lua_State *L, const TCollection_ExtendedString &tStr) {
+    Standard_Integer length = tStr.LengthOfCString();
+    std::string str;
+    str.reserve(length);
+    Standard_PCharacter p = str.data();
+    tStr.ToUTF8CString(p);
+    lua_pushstring(L, str.c_str());
+    return {};
+  }
+
+  static TypeResult<TCollection_ExtendedString> get(lua_State *L, int index) {
+    if (lua_type(L, index) != LUA_TSTRING)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    std::size_t length = 0;
+    const char *str = lua_tolstring(L, index, &length);
+    if (str == nullptr)
+      return makeErrorCode(ErrorCode::InvalidTypeCast);
+
+    return TCollection_ExtendedString(str);
+  }
+
+  static bool isInstance(lua_State *L, int index) {
+    return lua_type(L, index) == LUA_TSTRING;
+  }
+};
+
+#define luaocct_STACK_HARRAY(HClassName, _Array1Type_)                         \
+  template <> struct Stack<HClassName> {                                       \
+    static Result push(lua_State *L, const HClassName &harray1) {              \
+      return Stack<_Array1Type_>::push(L, harray1.Array1());                   \
+    }                                                                          \
+                                                                               \
+    static TypeResult<HClassName> get(lua_State *L, int index) {               \
+      auto result = Stack<_Array1Type_>::get(L, index);                        \
+      if (result)                                                              \
+        return result.value();                                                 \
+      else                                                                     \
+        return result.error();                                                 \
+    }                                                                          \
+  };                                                                           \
+  template <> struct Stack<Handle(HClassName)> {                               \
+    static Result push(lua_State *L, const Handle(HClassName) & harray1) {     \
+      if (harray1)                                                             \
+        return Stack<_Array1Type_>::push(L, harray1->Array1());                \
+      else                                                                     \
+        return {};                                                             \
+    }                                                                          \
+                                                                               \
+    static TypeResult<Handle(HClassName)> get(lua_State *L, int index) {       \
+      auto result = Stack<_Array1Type_>::get(L, index);                        \
+      if (result)                                                              \
+        return new HClassName(*result);                                        \
+      else                                                                     \
+        return result.error();                                                 \
+    }                                                                          \
+  }
+
+luaocct_STACK_HARRAY(TColStd_HArray1OfBoolean, TColStd_Array1OfBoolean);
+luaocct_STACK_HARRAY(TColStd_HArray1OfReal, TColStd_Array1OfReal);
+luaocct_STACK_HARRAY(TColgp_HArray1OfPnt, TColgp_Array1OfPnt);
+luaocct_STACK_HARRAY(TColgp_HArray1OfPnt2d, TColgp_Array1OfPnt2d);
+
+#undef luaocct_STACK_HARRAY
 
 } // namespace luabridge
 

@@ -14,6 +14,8 @@ modules = [
   "TopExp",
   "Poly",
   "Message",
+  "TColStd",
+  "TColgp",
   "ChFi2d",
   "Law",
   "TopOpeBRepDS",
