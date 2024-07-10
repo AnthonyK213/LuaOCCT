@@ -2,7 +2,8 @@
 #define _LuaOCCT_mod_header_BRepAlgoAPI_HeaderFile
 
 // clang-format off
-#include <BRepAlgoAPI_BooleanOperation.hxx>
+#include <BRepAlgoAPI_Algo.hxx>
+#include <BRepAlgoAPI_Defeaturing.hxx>
 #include <BRepAlgoAPI_BuilderAlgo.hxx>
 #include <BRepAlgoAPI_BooleanOperation.hxx>
 #include <BRepAlgoAPI_Common.hxx>
