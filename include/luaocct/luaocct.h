@@ -8,6 +8,7 @@
 #include "lualib.h"
 #include "luajit.h"
 /* clang-format on */
+#define LuaOCCT_EXPORT
 #else
 #include <lua.hpp>
 #ifdef _WIN32
