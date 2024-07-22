@@ -1,17 +1,24 @@
 #ifndef _LuaOCCT_HeaderFile
 #define _LuaOCCT_HeaderFile
 
-#include <cstdint>
-#include <lua.hpp>
-
-#ifdef _WIN32
-#define LuaOCCT_Export extern "C" __declspec(dllexport)
+#ifndef __cplusplus
+/* clang-format off */
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+#include "luajit.h"
+/* clang-format on */
 #else
-#define LuaOCCT_Export extern "C"
+#include <lua.hpp>
+#ifdef _WIN32
+#define LuaOCCT_EXPORT extern "C" __declspec(dllexport)
+#else
+#define LuaOCCT_EXPORT extern "C"
+#endif
 #endif
 
-LuaOCCT_Export int32_t luaopen_luaocct(lua_State *L);
+LuaOCCT_EXPORT int luaopen_luaocct(lua_State *L);
 
-#undef LuaOCCT_Export
+#undef LuaOCCT_EXPORT
 
 #endif

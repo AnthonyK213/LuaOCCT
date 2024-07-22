@@ -1,8 +1,8 @@
-#include <iostream>
 #include <lua.hpp>
+#include <stdio.h>
 
 int main() {
-  std::cout << "Hello, LuaOCCT!\n" << std::endl;
+  printf("Hello, LuaOCCT!\n");
 
   lua_State *L = luaL_newstate();
 
@@ -11,7 +11,7 @@ int main() {
   lua_gc(L, LUA_GCRESTART, -1);
 
   if (luaL_dofile(L, "../../../src-test/lua/main.lua") != 0) {
-    std::cout << lua_tostring(L, -1) << '\n';
+    printf("%s\n", lua_tostring(L, -1));
     lua_pop(L, 1);
 
     return 1;
