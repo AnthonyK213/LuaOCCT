@@ -1,12 +1,12 @@
 #ifndef _LuaOCCT_lbind_Header
 #define _LuaOCCT_lbind_Header
 
-// clang-format off
+/* clang-format off */
 #include <lua.hpp>
 #include <LuaBridge/LuaBridge.h>
 #include <LuaBridge/Array.h>
 #include <LuaBridge/Vector.h>
-// clang-format on
+/* clang-format on */
 
 #include <Standard_Version.hxx>
 
@@ -569,6 +569,6 @@ luaocct_STACK_HARRAY(TColgp_HArray1OfPnt2d, TColgp_Array1OfPnt2d);
 
 #undef luaocct_STACK_HARRAY
 
-} // namespace luabridge
+} /* namespace luabridge */
 
 #endif

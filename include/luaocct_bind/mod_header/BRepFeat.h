@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_BRepFeat_HeaderFile
 #define _LuaOCCT_mod_header_BRepFeat_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <BRepFeat.hxx>
 #include <BRepFeat_Builder.hxx>
 #include <BRepFeat_MakeCylindricalHole.hxx>
@@ -18,6 +18,6 @@
 #include <BRepFeat_SplitShape.hxx>
 #include <BRepFeat_Status.hxx>
 #include <BRepFeat_StatusError.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

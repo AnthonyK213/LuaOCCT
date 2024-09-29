@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_ShapeFix_HeaderFile
 #define _LuaOCCT_mod_header_ShapeFix_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <ShapeFix.hxx>
 #include <ShapeFix_Root.hxx>
 #include <ShapeFix_ComposeShell.hxx>
@@ -27,6 +27,6 @@
 #include <ShapeFix_WireSegment.hxx>
 #include <ShapeFix_WireVertex.hxx>
 #include <ShapeFix_Wireframe.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

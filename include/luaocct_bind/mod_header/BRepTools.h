@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_BRepTools_HeaderFile
 #define _LuaOCCT_mod_header_BRepTools_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <BRepTools.hxx>
 #include <BRepTools_Modification.hxx>
 #if (OCC_VERSION_MAJOR > 7 || (OCC_VERSION_MAJOR == 7 && OCC_VERSION_MINOR > 6))
@@ -20,6 +20,6 @@
 #include <BRepTools_Substitution.hxx>
 #include <BRepTools_TrsfModification.hxx>
 #include <BRepTools_WireExplorer.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

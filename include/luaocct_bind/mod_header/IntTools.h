@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_IntTools_HeaderFile
 #define _LuaOCCT_mod_header_IntTools_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <IntTools.hxx>
 #include <IntTools_Context.hxx>
 #include <IntTools_Range.hxx>
@@ -13,6 +13,6 @@
 #include <IntTools_EdgeEdge.hxx>
 #include <IntTools_EdgeFace.hxx>
 #include <IntTools_FaceFace.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

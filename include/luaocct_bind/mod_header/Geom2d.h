@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_Geom2d_HeaderFile
 #define _LuaOCCT_mod_header_Geom2d_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <Geom2d_Geometry.hxx>
 #include <Geom2d_AxisPlacement.hxx>
 #include <Geom2d_Point.hxx>
@@ -21,6 +21,6 @@
 #include <Geom2d_Ellipse.hxx>
 #include <Geom2d_Hyperbola.hxx>
 #include <Geom2d_Parabola.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

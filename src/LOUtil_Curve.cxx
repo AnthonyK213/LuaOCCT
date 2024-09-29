@@ -222,7 +222,8 @@ Standard_Boolean LOUtil_Curve::IsLinear(const Handle(Geom_Curve) & theCurve,
   }
 
   if (nbPoles < 2) {
-    // https://github.com/Open-Cascade-SAS/OCCT/blob/master/src/GeomConvert/GeomConvert_CurveToAnaCurve.cxx#L197
+    /* https://github.com/Open-Cascade-SAS/OCCT/blob/master/src/GeomConvert/GeomConvert_CurveToAnaCurve.cxx#L197
+     */
     nbPoles = 23;
     Standard_Real t0 = theCurve->FirstParameter();
     Standard_Real t1 = theCurve->LastParameter();
@@ -292,7 +293,7 @@ LOUtil_Curve::ClosestParameters(const Handle(Geom_Curve) & theCurve,
     }
   }
 
-  // Check if the ends of the curve is the closest.
+  /* Check if the ends of the curve is the closest. */
 
   Standard_Real aDist0 = thePoint.SquareDistance(theCurve->Value(t0));
   Standard_Real aDist1 = thePoint.SquareDistance(theCurve->Value(t1));
@@ -393,7 +394,7 @@ TColGeom_SequenceOfBoundedCurve LOUtil_Curve::Explode(const Handle(Geom_Curve) &
   if (theCurves.IsNull())
     return aResult;
 
-  // Connection buffer.
+  /* Connection buffer. */
   GeomConvert_CompCurveToBSplineCurve aBuffer{};
 
   GeomLProp_CLProps aProps(2, gp::Resolution());
@@ -409,49 +410,49 @@ TColGeom_SequenceOfBoundedCurve LOUtil_Curve::Explode(const Handle(Geom_Curve) &
 
     aProps.SetCurve(aBndCrv);
 
-    // Start point of the current curve.
+    /* Start point of the current curve. */
     aProps.SetParameter(aBndCrv->FirstParameter());
     thisStart = aProps.Value();
     aProps.Tangent(thisTangentStart);
     thisCurvatureStart = aProps.Curvature();
 
-    // End point of the previous curve.
+    /* End point of the previous curve. */
     prevEnd = thisEnd;
     prevTangentEnd = thisTangentEnd;
     prevCurvatureEnd = thisCurvatureEnd;
 
-    // End point of the current curve.
+    /* End point of the current curve. */
     aProps.SetParameter(aBndCrv->LastParameter());
     thisEnd = aProps.Value();
     aProps.Tangent(thisTangentEnd);
     thisCurvatureEnd = aProps.Curvature();
 
     if (aBuffer.BSplineCurve().IsNull()) {
-      // If aBuffer is empty, pushing current curve to aBuffer is the only
-      // choice. :P
+      /* If aBuffer is empty, pushing current curve to aBuffer is the only
+       * choice. :P */
       aBuffer.Add(aBndCrv, Precision::Confusion(), Standard_True);
       continue;
     } else if (isG2(thisStart, thisTangentStart, thisCurvatureStart, prevEnd,
                     prevTangentEnd, prevCurvatureEnd)) {
-      // If G2, try connect current curve to the buffer.
-      // If success, jump to the next loop directly.
+      /* If G2, try connect current curve to the buffer.
+       * If success, jump to the next loop directly. */
       if (aBuffer.Add(aBndCrv, Precision::Confusion(), Standard_True))
         continue;
     }
 
-    // If not G2, which means theCurve needs to "explode" here, so just submit
-    // aBuffer to aResult, clear aBuffer, push current curve to aBuffer, build
-    // another curve in the next loop.
+    /* If not G2, which means theCurve needs to "explode" here, so just submit
+     * aBuffer to aResult, clear aBuffer, push current curve to aBuffer, build
+     * another curve in the next loop. */
     aResult.Append(aBuffer.BSplineCurve());
     aBuffer.Clear();
     aBuffer.Add(aBndCrv, Precision::Confusion(), Standard_True);
   }
 
-  // Check if the first and the last curve are able to connect.
+  /* Check if the first and the last curve are able to connect. */
   if (!aResult.IsEmpty()) {
     Handle(Geom_BoundedCurve) firstCurve = aResult.First();
 
-    // Start point of the first curve.
+    /* Start point of the first curve. */
     aProps.SetCurve(firstCurve);
     aProps.SetParameter(firstCurve->FirstParameter());
     thisStart = aProps.Value();
@@ -461,15 +462,15 @@ TColGeom_SequenceOfBoundedCurve LOUtil_Curve::Explode(const Handle(Geom_Curve) &
     if (isG2(thisStart, thisTangentStart, thisCurvatureStart, thisEnd,
              thisTangentEnd, thisCurvatureEnd)) {
       if (aBuffer.Add(firstCurve, Precision::Confusion(), Standard_True)) {
-        // If succeed to connect, replace the first curve with the connected
-        // curve.
+        /* If succeed to connect, replace the first curve with the connected
+         * curve. */
         aResult.ChangeFirst() = aBuffer.BSplineCurve();
         return aResult;
       }
     }
   }
 
-  // If the last curve cannot connect to the first curve, push it to aResult.
+  /* If the last curve cannot connect to the first curve, push it to aResult. */
   Handle(Geom_BoundedCurve) lastCurve = aBuffer.BSplineCurve();
   if (!lastCurve.IsNull())
     aResult.Append(lastCurve);

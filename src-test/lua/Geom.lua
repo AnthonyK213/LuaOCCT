@@ -50,19 +50,19 @@ local test_Geom_BSplineCurve = util.make_test("Geom_BSplineCurve", function()
   util.log("a_nurbs:FirstParameter() =", a_nurbs:FirstParameter())
   util.log("a_nurbs:LastParameter() =", a_nurbs:LastParameter())
 
-  local poles1             = { gp.gp_Pnt(0, 1, 0), gp.gp_Pnt(-1, 1, 0), gp.gp_Pnt(-1, 0, 0) }
-  local a_nurbs1           = Geom.Geom_BSplineCurve(poles1, weights, knots, multiplicities, degree, periodic,
+  local poles1 = { gp.gp_Pnt(0, 1, 0), gp.gp_Pnt(-1, 1, 0), gp.gp_Pnt(-1, 0, 0) }
+  local a_nurbs1 = Geom.Geom_BSplineCurve(poles1, weights, knots, multiplicities, degree, periodic,
     check_rational)
 
-  local poles2             = { gp.gp_Pnt(-1, 0, 0), gp.gp_Pnt(-1, -1, 0), gp.gp_Pnt(0, -1, 0) }
-  local a_nurbs2           = Geom.Geom_BSplineCurve(poles2, weights, knots, multiplicities, degree, periodic,
+  local poles2 = { gp.gp_Pnt(-1, 0, 0), gp.gp_Pnt(-1, -1, 0), gp.gp_Pnt(0, -1, 0) }
+  local a_nurbs2 = Geom.Geom_BSplineCurve(poles2, weights, knots, multiplicities, degree, periodic,
     check_rational)
 
-  local poles3             = { gp.gp_Pnt(0, -1, 0), gp.gp_Pnt(1, -1, 0), gp.gp_Pnt(1, 0, 0) }
-  local a_nurbs3           = Geom.Geom_BSplineCurve(poles3, weights, knots, multiplicities, degree, periodic,
+  local poles3 = { gp.gp_Pnt(0, -1, 0), gp.gp_Pnt(1, -1, 0), gp.gp_Pnt(1, 0, 0) }
+  local a_nurbs3 = Geom.Geom_BSplineCurve(poles3, weights, knots, multiplicities, degree, periodic,
     check_rational)
 
-  local tol                = 0.1
+  local tol = 0.1
 
   local result, closedFlag = unpack(GeomConvert.GeomConvert.ConcatG1({ a_nurbs, a_nurbs1, a_nurbs2, a_nurbs3 },
     { tol, tol, tol },

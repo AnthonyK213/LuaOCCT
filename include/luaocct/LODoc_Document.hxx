@@ -109,8 +109,6 @@ protected:
 
   Standard_EXPORT void displayXcafDoc();
 
-  Standard_EXPORT virtual void initDriverID();
-
 protected:
   Handle(LOApp_Application) myApp;
   Handle(TDocStd_Document) myDoc;

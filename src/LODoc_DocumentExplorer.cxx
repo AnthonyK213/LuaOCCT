@@ -17,7 +17,9 @@ LODoc_DocumentExplorer::LODoc_DocumentExplorer(const Handle(LODoc_Document) &
   Handle(XCAFDoc_ShapeTool) aST = XCAFDoc_DocumentTool::ShapeTool(aDoc->Main());
   TDF_LabelSequence aRootLabels;
   aST->GetFreeShapes(aRootLabels);
-  // NOTE: **DO NOT** use copy ctor/assignment of |XCAFPrs_DocumentExplorer|!
+
+  /* NOTE: **DO NOT** use copy ctor/assignment of `XCAFPrs_DocumentExplorer`! */
+
   myE.Init(aDoc, aRootLabels, theFlags, XCAFPrs_Style());
 }
 

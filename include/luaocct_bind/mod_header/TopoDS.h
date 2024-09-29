@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_TopoDS_HeaderFile
 #define _LuaOCCT_mod_header_TopoDS_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <TopAbs.hxx>
 #include <TopoDS_Builder.hxx>
 #include <TopoDS_Shape.hxx>
@@ -14,6 +14,6 @@
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_BRepBuilderAPI_HeaderFile
 #define _LuaOCCT_mod_header_BRepBuilderAPI_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <BRepBuilderAPI.hxx>
 #include <BRepBuilderAPI_ModifyShape.hxx>
 #include <BRepBuilderAPI_Copy.hxx>
@@ -16,6 +16,6 @@
 #include <BRepBuilderAPI_MakeVertex.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

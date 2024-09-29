@@ -17,11 +17,11 @@ Handle(Poly_Triangulation) LOUtil_Shape::ToMesh(
 
   LOUtil_MeshBuilder aMeshBuilder{};
 
-  /// TopoDS_Face mesh backup, to preserve the triangulation in the view.
+  /* TopoDS_Face mesh backup, to preserve the triangulation in the view. */
   std::vector<Poly_ListOfTriangulation> polysBackup{};
   std::vector<Handle(Poly_Triangulation)> activePolyBackup{};
 
-  /// Backup the meshes then clear them, or the param may not take effect.
+  /* Backup the meshes then clear them, or the param may not take effect. */
   for (TopExp_Explorer ex(theShape, TopAbs_FACE); ex.More(); ex.Next()) {
     TopoDS_Face face = TopoDS::Face(ex.Current());
     Handle(BRep_TFace) tFace = Handle(BRep_TFace)::DownCast(face.TShape());
@@ -45,7 +45,7 @@ Handle(Poly_Triangulation) LOUtil_Shape::ToMesh(
     TopLoc_Location loc;
     Handle(Poly_Triangulation) facing = BRep_Tool::Triangulation(face, loc);
 
-    /// Recover the original mesh.
+    /* Recover the original mesh. */
     Handle(BRep_TFace) tFace = Handle(BRep_TFace)::DownCast(face.TShape());
 
     if (!tFace.IsNull()) {

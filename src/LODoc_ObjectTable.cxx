@@ -43,7 +43,7 @@ TDF_Label LODoc_ObjectTable::AddShape(const TopoDS_Shape &theShape,
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
   TDF_Label aLabel = anAsm->AddShape(theShape, Standard_True);
   anAsm->UpdateAssemblies();
-  // FIXME: |TPrsStd_DriverTable| should be initialized.
+  /* FIXME: `TPrsStd_DriverTable` should be initialized. */
   auto aPrs = TPrsStd_AISPresentation::Set(
       aLabel, myDoc->GetDriverID(LODoc_IBRepDriver));
   aPrs->SetMode(AIS_Shaded);
@@ -62,7 +62,7 @@ TDF_Label LODoc_ObjectTable::AddMesh(const Handle(Poly_Triangulation) & theMesh,
   LO_OPEN_COMMAND({});
 
   auto anAsm = XCAFDoc_DocumentTool::ShapeTool(myDoc->Document()->Main());
-  // TODO: Better solution?
+  /* TODO: Better solution? */
   TopoDS_Compound aCompound{};
   BRep_Builder aBuilder{};
   aBuilder.MakeCompound(aCompound);
@@ -403,9 +403,10 @@ Standard_Boolean LODoc_ObjectTable::hideObjectRaw(const TDF_Label &theId) {
   if (aPrs.IsNull())
     return Standard_False;
 
-  /// https://tracker.dev.opencascade.org/view.php?id=30142
-  /// The AISObject is recreated during UNDO even if this is an ERASE
-  /// operation?
+  /* https://tracker.dev.opencascade.org/view.php?id=30142
+   * The AISObject is recreated during UNDO even if this is an ERASE operation?
+   */
+
   aPrs->Erase();
   return Standard_True;
 }

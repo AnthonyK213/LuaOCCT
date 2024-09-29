@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_ProjLib_HeaderFile
 #define _LuaOCCT_mod_header_ProjLib_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <ProjLib.hxx>
 #include <ProjLib_Projector.hxx>
 #include <ProjLib_CompProjectedCurve.hxx>
@@ -21,6 +21,6 @@
 #include <ProjLib_SequenceOfHSequenceOfPnt.hxx>
 #include <ProjLib_Sphere.hxx>
 #include <ProjLib_Torus.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

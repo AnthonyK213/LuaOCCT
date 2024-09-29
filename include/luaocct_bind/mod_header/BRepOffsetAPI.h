@@ -1,7 +1,7 @@
 #ifndef _LuaOCCT_mod_header_BRepOffsetAPI_HeaderFile
 #define _LuaOCCT_mod_header_BRepOffsetAPI_HeaderFile
 
-// clang-format off
+/* clang-format off */
 #include <BRepOffsetAPI_DraftAngle.hxx>
 #include <BRepOffsetAPI_FindContigousEdges.hxx>
 #include <BRepOffsetAPI_MakeDraft.hxx>
@@ -18,6 +18,6 @@
 #include <BRepOffsetAPI_SequenceOfSequenceOfShape.hxx>
 #include <BRepOffsetAPI_Sewing.hxx>
 #include <BRepOffsetAPI_ThruSections.hxx>
-// clang-format on
+/* clang-format on */
 
 #endif

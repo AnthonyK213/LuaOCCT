@@ -25,10 +25,10 @@ LODoc_Document::LODoc_Document() {}
 void LODoc_Document::InitHeadless() {
   initCommon();
 
-  // Headless context.
+  /* Headless context. */
   Handle(Aspect_DisplayConnection) aDisp = new Aspect_DisplayConnection();
   Handle(OpenGl_GraphicDriver) aDriver = new OpenGl_GraphicDriver(aDisp, true);
-  aDriver->ChangeOptions().swapInterval = 0; // no window, no swap
+  aDriver->ChangeOptions().swapInterval = 0; /* no window, no swap */
   Handle(V3d_Viewer) myViewer = new V3d_Viewer(aDriver);
   myContext = new AIS_InteractiveContext(myViewer);
 
@@ -200,9 +200,9 @@ void LODoc_Document::closeDocument(Handle(TDocStd_Document) & theDoc,
     if (theDoc->HasOpenCommand())
       theDoc->AbortCommand();
 
-    /// To keep the TPrsStd_AISViewer alive while removing the
-    /// LODoc_Objects, do ForgetAllAttributes on children before
-    /// the root.
+    /* To keep the TPrsStd_AISViewer alive while removing the LODoc_Objects, do
+     * `ForgetAllAttributes` on children before the root. */
+
     theDoc->Main().ForgetAllAttributes(Standard_True);
     theDoc->Main().Root().ForgetAllAttributes(Standard_True);
     myApp->Close(theDoc);
@@ -225,15 +225,18 @@ void LODoc_Document::displayXcafDoc() {
        aDocExpl.Next()) {
     Standard_Integer aDepth = aDocExpl.CurrentDepth();
 
-    /// To skip assembly instances which have already been visited.
-    /// It seems that FreeCAD makes new copies for the assembly instances, but
-    /// this breaks down the connections between the identical instances.
-    /// The solution below is, at the first time visit one instance, visit its
-    /// children normally; for the rest visits, just display the assembly
-    /// instance and visit its siblings.
-    /// Maybe there is a better solution? Never visit the instance's children
-    /// unless the user enters "assembly editing mode"? This might make more
-    /// sense.
+    /* To skip assembly instances which have already been visited.
+     *
+     * It seems that FreeCAD makes new copies for the assembly instances, but
+     * this breaks down the connections between the identical instances.
+     * 
+     * The solution below is, at the first time visit one instance, visit its
+     * children normally; for the rest visits, just display the assembly
+     * instance and visit its siblings.
+     * 
+     * Maybe there is a better solution? Never visit the instance's children
+     * unless the user enters "assembly editing mode"? This might make more
+     * sense. */
 
     if (skip) {
       if (aDepth > skipDepth)
@@ -305,11 +308,8 @@ LODoc_Document::GetDriverID(const Standard_Integer theDriverIndex) const {
   return it->second;
 }
 
-void LODoc_Document::initDriverID() {}
-
 void LODoc_Document::initCommon() {
   createXcafApp();
-  initDriverID();
   myDoc = newDocument();
   myObjects = new LODoc_ObjectTable(this);
 }
