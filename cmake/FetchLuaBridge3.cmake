@@ -4,6 +4,7 @@ FetchContent_Declare(
   LuaBridge3
   GIT_REPOSITORY https://github.com/kunitoki/LuaBridge3.git
   GIT_TAG origin/master
+  GIT_SHALLOW 1
   SOURCE_DIR ${CMAKE_BINARY_DIR}/deps/LuaBridge3
   )
 

@@ -11,6 +11,7 @@ else()
     binder
     GIT_REPOSITORY https://github.com/AnthonyK213/LuaOCCT-binder
     GIT_TAG origin/master
+    GIT_SHALLOW 1
     SOURCE_DIR ${CMAKE_BINARY_DIR}/deps/binder
     )
 endif()

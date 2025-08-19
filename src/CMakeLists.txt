@@ -68,6 +68,13 @@ target_link_directories(
   ${OpenCASCADE_LIBRARY_DIR}
 )
 
+# target_precompile_headers(
+#   luaocct
+#   PRIVATE
+#   ${BINDER_GEN_DIR}/lenums.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/../include/luaocct_bind/lbind.h
+#   )
+
 if(WIN32)
   # Win32 modules need to be linked to the Lua library.
   target_link_libraries(
